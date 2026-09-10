@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --primary-color: #009CFC;
+  --primary-dark: #0077C8;
+  --primary-light: #EAF7FF;
+  --primary-subtle: #F5FBFF;
+  --primary-ring: rgba(0, 156, 252, 0.3);
+  --primary-shadow: rgba(0, 156, 252, 0.25);
+
+  --primary-blue: #009CFC;
+  --dark-blue: #0077C8;
+  --bg-white: #FFFFFF;
+  --light-blue: #EAF7FF;
+  --very-light-blue: #F5FBFF;
+  --dark-text: #172B3A;
+  --grey-text: #667788;
+}
+
+[data-theme="prayas"],
+body.theme-prayas,
+.theme-prayas {
+  --primary-color: #FF5722;
+  --primary-dark: #E05621;
+  --primary-light: #FFF2EC;
+  --primary-subtle: #FFF8F5;
+  --primary-ring: rgba(255, 87, 34, 0.3);
+  --primary-shadow: rgba(255, 87, 34, 0.25);
+
+  --primary-blue: #FF5722;
+  --dark-blue: #E05621;
+  --light-blue: #FFF2EC;
+  --very-light-blue: #FFF8F5;
+}
+
+/* ============================================================
+   PRAYAS ONE THEME CLASS OVERRIDES
+   Dynamically remaps Taiyariya Cyan (#009CFC) to Prayas Orange (#FF5722)
+   ============================================================ */
+[data-theme="prayas"] .bg-\[\#009CFC\],
+.theme-prayas .bg-\[\#009CFC\] {
+  background-color: #FF5722 !important;
+}
+
+[data-theme="prayas"] .text-\[\#009CFC\],
+.theme-prayas .text-\[\#009CFC\] {
+  color: #FF5722 !important;
+}
+
+[data-theme="prayas"] .border-\[\#009CFC\],
+.theme-prayas .border-\[\#009CFC\] {
+  border-color: #FF5722 !important;
+}
+
+[data-theme="prayas"] .hover\:text-\[\#009CFC\]:hover,
+.theme-prayas .hover\:text-\[\#009CFC\]:hover {
+  color: #FF5722 !important;
+}
+
+[data-theme="prayas"] .hover\:bg-\[\#009CFC\]:hover,
+.theme-prayas .hover\:bg-\[\#009CFC\]:hover {
+  background-color: #FF5722 !important;
+}
+
+[data-theme="prayas"] .hover\:bg-\[\#0077C8\]:hover,
+.theme-prayas .hover\:bg-\[\#0077C8\]:hover {
+  background-color: #E05621 !important;
+}
+
+[data-theme="prayas"] .hover\:border-\[\#009CFC\]:hover,
+.theme-prayas .hover\:border-\[\#009CFC\]:hover {
+  border-color: #FF5722 !important;
+}
+
+[data-theme="prayas"] .focus\:border-\[\#009CFC\]:focus,
+.theme-prayas .focus\:border-\[\#009CFC\]:focus {
+  border-color: #FF5722 !important;
+}
+
+[data-theme="prayas"] .focus\:ring-\[\#009CFC\]:focus,
+.theme-prayas .focus\:ring-\[\#009CFC\]:focus {
+  --tw-ring-color: #FF5722 !important;
+  box-shadow: 0 0 0 1px #FF5722 !important;
+}
+
+[data-theme="prayas"] [class*="ring-\[\#009CFC\]"],
+.theme-prayas [class*="ring-\[\#009CFC\]"] {
+  --tw-ring-color: #FF5722 !important;
+}
+
+[data-theme="prayas"] [class*="shadow-\[\#009CFC\]"],
+.theme-prayas [class*="shadow-\[\#009CFC\]"] {
+  --tw-shadow-color: rgba(255, 87, 34, 0.28) !important;
+}
+
+[data-theme="prayas"] [class*="bg-\[\#009CFC\]\/15"],
+.theme-prayas [class*="bg-\[\#009CFC\]\/15"] {
+  background-color: rgba(255, 87, 34, 0.15) !important;
+}
+
+[data-theme="prayas"] [class*="bg-\[\#009CFC\]\/10"],
+.theme-prayas [class*="bg-\[\#009CFC\]\/10"] {
+  background-color: rgba(255, 87, 34, 0.10) !important;
+}
+
+[data-theme="prayas"] [class*="bg-\[\#009CFC\]\/20"],
+.theme-prayas [class*="bg-\[\#009CFC\]\/20"] {
+  background-color: rgba(255, 87, 34, 0.20) !important;
+}
+
+[data-theme="prayas"] [class*="bg-\[\#009CFC\]\/30"],
+.theme-prayas [class*="bg-\[\#009CFC\]\/30"] {
+  background-color: rgba(255, 87, 34, 0.30) !important;
+}
+
+[data-theme="prayas"] [class*="text-\[\#009CFC\]"],
+.theme-prayas [class*="text-\[\#009CFC\]"] {
+  color: #FF5722 !important;
+}
+
+[data-theme="prayas"] [class*="border-\[\#009CFC\]"],
+.theme-prayas [class*="border-\[\#009CFC\]"] {
+  border-color: #FF5722 !important;
+}
+
+[data-theme="prayas"] [class*="bg-blue-50"],
+.theme-prayas [class*="bg-blue-50"] {
+  background-color: #FFF2EC !important;
+}
+
+[data-theme="prayas"] [class*="text-blue-600"],
+.theme-prayas [class*="text-blue-600"] {
+  color: #FF5722 !important;
+}
+
+[data-theme="prayas"] [class*="text-blue-700"],
+.theme-prayas [class*="text-blue-700"] {
+  color: #E05621 !important;
+}
+
+[data-theme="prayas"] [class*="bg-blue-600"],
+.theme-prayas [class*="bg-blue-600"] {
+  background-color: #FF5722 !important;
+}
+
+[data-theme="prayas"] [class*="hover:bg-blue-700"]:hover,
+.theme-prayas [class*="hover:bg-blue-700"]:hover {
+  background-color: #E05621 !important;
+}
+
+[data-theme="prayas"] [class*="text-blue-500"],
+.theme-prayas [class*="text-blue-500"] {
+  color: #FF5722 !important;
+}
+
+[data-theme="prayas"] [class*="border-blue-200"],
+.theme-prayas [class*="border-blue-200"] {
+  border-color: #FED7C8 !important;
+}
+
+/* Ensure hover buttons with legacy #e05621 hover to #0077C8 in Taiyariya mode */
+:root:not([data-theme="prayas"]) .hover\:bg-\[\#e05621\]:hover,
+:root:not([data-theme="prayas"]) .hover\:bg-\[\#e05626\]:hover,
+:root:not([data-theme="prayas"]) .hover\:bg-\[\#e05a2b\]:hover,
+:root:not([data-theme="prayas"]) .hover\:bg-\[\#e05623\]:hover {
+  background-color: #0077C8 !important;
+}
+
+/* Scrollbars when Prayas One is active */
+[data-theme="prayas"] ::-webkit-scrollbar-thumb,
+.theme-prayas ::-webkit-scrollbar-thumb {
+  background: rgba(255, 87, 34, 0.35) !important;
+}
+
+[data-theme="prayas"] ::-webkit-scrollbar-thumb:hover,
+.theme-prayas ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 87, 34, 0.55) !important;
+}
+
+@theme {
+  --font-sans: "Outfit", "Anek Devanagari", "Anek Devnagari", sans-serif;
+  --font-english: "Outfit", sans-serif;
+  --font-hindi: "Anek Devanagari", "Anek Devnagari", sans-serif;
+  
+  --color-primary-blue: #009CFC;
+  --color-dark-blue: #0077C8;
+  --color-light-blue: #EAF7FF;
+  --color-very-light-blue: #F5FBFF;
+  --color-dark-text: #172B3A;
+  --color-grey-text: #667788;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 156, 252, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 156, 252, 0.45);
+}
+
+/* Mobile touch scrolling utilities */
+.touch-scroll-y {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  overscroll-behavior-y: contain !important;
+}
+
+/* Typography defaults & Dark mode smooth transitions */
+html,
+body {
+  font-family: "Outfit", "Anek Devanagari", "Anek Devnagari", sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+}
+
+.font-hindi,
+[lang="hi"],
+.lang-hi {
+  font-family: "Anek Devanagari", "Anek Devnagari", sans-serif;
+}
+
+.font-english,
+[lang="en"],
+.lang-en {
+  font-family: "Outfit", sans-serif;
+}
