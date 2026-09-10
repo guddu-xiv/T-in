@@ -52,6 +52,11 @@ jobs:
           if [ -f "public/sitemap.xml" ] && [ ! -f "dist/sitemap.xml" ]; then
             cp public/sitemap.xml dist/sitemap.xml
           fi
+          if [ -f "data/db.json" ] && [ ! -f "dist/db.json" ]; then
+            cp data/db.json dist/db.json
+          elif [ -f "public/db.json" ] && [ ! -f "dist/db.json" ]; then
+            cp public/db.json dist/db.json
+          fi
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3

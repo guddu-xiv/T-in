@@ -379,7 +379,14 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: savedToken })
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error("Server not ok");
+          const contentType = res.headers.get("content-type");
+          if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Not JSON");
+          }
+          return res.json();
+        })
         .then((data) => {
           if (data && data.valid) {
             setIsAuthenticated(true);
@@ -391,8 +398,11 @@ export default function App() {
           }
         })
         .catch(() => {
-          setIsAuthenticated(true);
-          setAdminToken(savedToken);
+          // If backend is unreachable (e.g. GitHub Pages static deployment), preserve session
+          if (savedToken && (savedToken.startsWith("p1_token_") || savedToken.length >= 8)) {
+            setIsAuthenticated(true);
+            setAdminToken(savedToken);
+          }
         });
     }
   }, []);
@@ -419,21 +429,50 @@ export default function App() {
     setChangePassStatus({ type: "", message: "" });
 
     try {
-      const res = await fetch("/api/admin/change-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          currentPassword: currentPassInput.trim(),
-          newPassword: newPassInput.trim()
-        })
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setChangePassStatus({ type: "success", message: data.message || t.passwordUpdatedSuccess });
+      let serverUpdated = false;
+      try {
+        const res = await fetch("/api/admin/change-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            currentPassword: currentPassInput.trim(),
+            newPassword: newPassInput.trim()
+          })
+        });
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json();
+          serverUpdated = true;
+          if (res.ok && data.success) {
+            localStorage.setItem("p1_admin_custom_password", newPassInput.trim());
+            setChangePassStatus({ type: "success", message: data.message || t.passwordUpdatedSuccess });
+            setCurrentPassInput("");
+            setNewPassInput("");
+            return;
+          } else {
+            setChangePassStatus({ type: "error", message: data.message || t.passwordChangeError });
+            return;
+          }
+        }
+      } catch (serverErr) {
+        // Backend unavailable (GitHub Pages / static hosting)
+      }
+
+      if (!serverUpdated) {
+        // Static hosting / offline fallback
+        const activePass = localStorage.getItem("p1_admin_custom_password") || "Guddu2005@@";
+        if (currentPassInput.trim() !== activePass) {
+          setChangePassStatus({ type: "error", message: "Current password does not match records." });
+          return;
+        }
+        if (newPassInput.trim().length < 4) {
+          setChangePassStatus({ type: "error", message: "New password must be at least 4 characters." });
+          return;
+        }
+        localStorage.setItem("p1_admin_custom_password", newPassInput.trim());
+        setChangePassStatus({ type: "success", message: t.passwordUpdatedSuccess || "Password successfully changed!" });
         setCurrentPassInput("");
         setNewPassInput("");
-      } else {
-        setChangePassStatus({ type: "error", message: data.message || t.passwordChangeError });
       }
     } catch (err) {
       setChangePassStatus({ type: "error", message: "Network error updating password." });
@@ -747,10 +786,42 @@ export default function App() {
           if (enhanced.themePreset && (enhanced.themePreset === "taiyariya" || enhanced.themePreset === "prayas")) {
             setThemePreset(enhanced.themePreset);
           }
+          return;
         } catch (err) {
           console.error("Failed loading cached state", err);
         }
       }
+
+      // Static hosting fallback (e.g. GitHub Pages / static hosting without server API)
+      fetch("./db.json")
+        .then((res) => {
+          if (!res.ok) throw new Error("No static db.json");
+          return res.json();
+        })
+        .then((staticDb) => {
+          if (staticDb && staticDb.config && Object.keys(staticDb.config).length > 0) {
+            const mergedConfig = {
+              ...INITIAL_STATE,
+              ...staticDb.config,
+              social: { ...INITIAL_STATE.social, ...(staticDb.config?.social || {}) },
+              seo: { ...INITIAL_STATE.seo, ...(staticDb.config?.seo || {}) },
+              adsense: { ...INITIAL_STATE.adsense, ...(staticDb.config?.adsense || {}) },
+              students: staticDb.students || staticDb.config?.students || INITIAL_STATE.students || []
+            };
+            const migrated = applyConfigMigrations(mergedConfig);
+            const enhanced = enhanceAllDbImages(migrated);
+            setAppConfig(enhanced);
+            if (enhanced.themePreset && (enhanced.themePreset === "taiyariya" || enhanced.themePreset === "prayas")) {
+              setThemePreset(enhanced.themePreset);
+            }
+            try {
+              localStorage.setItem("prayas_one_coach_state", JSON.stringify(enhanced));
+            } catch (e) {}
+          }
+        })
+        .catch(() => {
+          // Pure fallback to INITIAL_STATE
+        });
     }
   }, []);
 

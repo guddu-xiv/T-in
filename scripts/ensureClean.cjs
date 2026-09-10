@@ -65,6 +65,13 @@ try {
         console.log("[Integrity] Decompressed and restored db.json");
       }
     }
+
+    // Keep public/db.json in sync for static hosting / GitHub Pages
+    const publicDbFile = path.join(process.cwd(), "public", "db.json");
+    if (fs.existsSync(dbFile)) {
+      fs.copyFileSync(dbFile, publicDbFile);
+      console.log("[Build] Synced data/db.json to public/db.json for static hosting");
+    }
   }
 } catch (err) {
   console.error("[Integrity] Error checking db.json:", err.message);

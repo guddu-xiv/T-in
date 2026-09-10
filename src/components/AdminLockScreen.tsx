@@ -11,6 +11,8 @@ interface AdminLockScreenProps {
   onThemeChange?: (theme: "taiyariya" | "prayas") => void;
 }
 
+const DEFAULT_MASTER_PASSWORD = "Guddu2005@@";
+
 export const AdminLockScreen: React.FC<AdminLockScreenProps> = ({
   currentLang,
   onLanguageChange,
@@ -37,24 +39,60 @@ export const AdminLockScreen: React.FC<AdminLockScreenProps> = ({
     setErrorMessage("");
 
     try {
-      const response = await fetch("/api/admin/verify-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: password.trim() })
-      });
+      let backendHandled = false;
+      try {
+        const response = await fetch("/api/admin/verify-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: password.trim() })
+        });
 
-      const data = await response.json();
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          backendHandled = true;
 
-      if (response.ok && data.success) {
-        sessionStorage.setItem("p1_admin_token", data.token);
-        localStorage.setItem("p1_admin_token", data.token);
-        onAuthenticate(data.token);
-      } else {
-        setErrorMessage(data.message || t.invalidPassword);
+          if (response.ok && data.success) {
+            sessionStorage.setItem("p1_admin_token", data.token);
+            localStorage.setItem("p1_admin_token", data.token);
+            onAuthenticate(data.token);
+            return;
+          } else {
+            setErrorMessage(data.message || t.invalidPassword);
+            return;
+          }
+        }
+      } catch (backendErr) {
+        // Backend not available or route not found (e.g. static hosting on GitHub Pages)
+        console.warn("Backend API not reachable, falling back to local credentials:", backendErr);
+      }
+
+      if (!backendHandled) {
+        // Static hosting fallback (e.g. GitHub Pages / offline / serverless)
+        const customPass = localStorage.getItem("p1_admin_custom_password");
+        const validPassword = customPass ? customPass.trim() : DEFAULT_MASTER_PASSWORD;
+
+        if (password.trim() === validPassword) {
+          const clientToken = "p1_token_client_" + Date.now() + "_" + Math.random().toString(36).substring(2, 8);
+          sessionStorage.setItem("p1_admin_token", clientToken);
+          localStorage.setItem("p1_admin_token", clientToken);
+          onAuthenticate(clientToken);
+        } else {
+          setErrorMessage(t.invalidPassword || "Incorrect Admin Password! Access denied.");
+        }
       }
     } catch (err) {
       console.error("Auth error:", err);
-      setErrorMessage("Could not connect to backend server. Please check internet connection.");
+      const customPass = localStorage.getItem("p1_admin_custom_password");
+      const validPassword = customPass ? customPass.trim() : DEFAULT_MASTER_PASSWORD;
+      if (password.trim() === validPassword) {
+        const clientToken = "p1_token_client_" + Date.now();
+        sessionStorage.setItem("p1_admin_token", clientToken);
+        localStorage.setItem("p1_admin_token", clientToken);
+        onAuthenticate(clientToken);
+      } else {
+        setErrorMessage(t.invalidPassword || "Incorrect Admin Password! Access denied.");
+      }
     } finally {
       setLoading(false);
     }
