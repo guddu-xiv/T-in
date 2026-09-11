@@ -101,21 +101,21 @@ export const AdminLockScreen: React.FC<AdminLockScreenProps> = ({
   const isPrayas = themePreset === "prayas";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B131E] via-[#0F1B2B] to-[#122438] text-slate-100 flex flex-col justify-center items-center p-4 relative overflow-hidden font-sans selection:bg-[#009CFC] selection:text-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#0B131E] via-[#0F1B2B] to-[#122438] text-slate-100 flex flex-col justify-between items-center p-3 sm:p-6 relative overflow-y-auto font-sans selection:bg-[#009CFC] selection:text-white">
       {/* Background Decorative Theme Elements */}
       <div className={`absolute top-0 left-1/4 w-96 h-96 ${isPrayas ? "bg-[#FF5722]/15" : "bg-[#009CFC]/15"} rounded-full blur-3xl pointer-events-none transition-all duration-300`}></div>
       <div className={`absolute bottom-0 right-1/4 w-96 h-96 ${isPrayas ? "bg-[#E05621]/20" : "bg-[#0077C8]/20"} rounded-full blur-3xl pointer-events-none transition-all duration-300`}></div>
       <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 ${isPrayas ? "bg-[#FF5722]/10" : "bg-[#009CFC]/10"} rounded-full blur-2xl pointer-events-none transition-all duration-300`}></div>
 
       {/* Top Header Controls: Theme Switcher & Language Switcher */}
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-2.5 flex-wrap justify-end">
+      <div className="w-full max-w-md flex items-center justify-between gap-2 z-20 mb-3 sm:mb-6 shrink-0 flex-wrap">
         {/* Theme Preset Switcher */}
         {onThemeChange && (
           <div className="flex items-center bg-[#121F2F]/85 border border-[#1E344B] rounded-xl p-1 backdrop-blur-md shadow-lg">
             <button
               type="button"
               onClick={() => onThemeChange("taiyariya")}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 !isPrayas
                   ? "bg-[#009CFC] text-white shadow-xs"
                   : "text-slate-400 hover:text-white hover:bg-slate-800/60"
@@ -123,12 +123,12 @@ export const AdminLockScreen: React.FC<AdminLockScreenProps> = ({
               title="Taiyariya Theme (Sky Blue)"
             >
               <span className="w-2 h-2 rounded-full bg-[#009CFC] border border-white shrink-0"></span>
-              <span>Taiyariya</span>
+              <span className="text-[11px] sm:text-xs">Taiyariya</span>
             </button>
             <button
               type="button"
               onClick={() => onThemeChange("prayas")}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 isPrayas
                   ? "bg-[#FF5722] text-white shadow-xs"
                   : "text-slate-400 hover:text-white hover:bg-slate-800/60"
@@ -136,13 +136,13 @@ export const AdminLockScreen: React.FC<AdminLockScreenProps> = ({
               title="Prayas One Theme (Deep Orange)"
             >
               <span className="w-2 h-2 rounded-full bg-[#FF5722] border border-white shrink-0"></span>
-              <span>Prayas One</span>
+              <span className="text-[11px] sm:text-xs">Prayas One</span>
             </button>
           </div>
         )}
 
-        <div className="flex items-center gap-2 bg-[#121F2F]/85 border border-[#1E344B] rounded-xl px-3 py-1.5 backdrop-blur-md shadow-lg">
-          <Languages className={`w-4 h-4 ${isPrayas ? "text-[#FF5722]" : "text-[#009CFC]"}`} />
+        <div className="flex items-center gap-1.5 bg-[#121F2F]/85 border border-[#1E344B] rounded-xl px-2.5 py-1.5 backdrop-blur-md shadow-lg">
+          <Languages className={`w-3.5 h-3.5 ${isPrayas ? "text-[#FF5722]" : "text-[#009CFC]"}`} />
           <span className="text-xs font-semibold text-slate-300 hidden sm:inline">{t.languageSelect}:</span>
           <select
             value={currentLang}
@@ -159,11 +159,11 @@ export const AdminLockScreen: React.FC<AdminLockScreenProps> = ({
       </div>
 
       {/* Main Login Card */}
-      <div className="w-full max-w-md bg-[#121F2F]/95 border border-[#1E344B] rounded-2xl p-8 shadow-2xl backdrop-blur-xl relative z-10 my-auto">
+      <div className="w-full max-w-md bg-[#121F2F]/95 border border-[#1E344B] rounded-2xl p-4 sm:p-8 shadow-2xl backdrop-blur-xl relative z-10 my-auto">
         {/* Logo & Title Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center mb-4 relative">
-            <div className="w-20 h-20 flex items-center justify-center">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center justify-center mb-3 sm:mb-4 relative">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center">
               {logoUrl ? (
                 <img
                   src={logoUrl}
@@ -172,17 +172,17 @@ export const AdminLockScreen: React.FC<AdminLockScreenProps> = ({
                   referrerPolicy="no-referrer"
                 />
               ) : (
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl tracking-tighter text-white ${isPrayas ? "bg-[#FF5722]" : "bg-[#009CFC]"}`}>
+                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center font-black text-xl sm:text-2xl tracking-tighter text-white ${isPrayas ? "bg-[#FF5722]" : "bg-[#009CFC]"}`}>
                   {isPrayas ? "P1" : "TY"}
                 </div>
               )}
             </div>
-            <div className={`absolute -bottom-1 -right-1 bg-[#0B131E] border ${isPrayas ? "border-[#FF5722]/40" : "border-[#009CFC]/40"} p-1.5 rounded-lg shadow`}>
-              <ShieldCheck className={`w-4 h-4 ${isPrayas ? "text-[#FF5722]" : "text-[#009CFC]"}`} />
+            <div className={`absolute -bottom-1 -right-1 bg-[#0B131E] border ${isPrayas ? "border-[#FF5722]/40" : "border-[#009CFC]/40"} p-1 sm:p-1.5 rounded-lg shadow`}>
+              <ShieldCheck className={`w-3.5 h-3.5 ${isPrayas ? "text-[#FF5722]" : "text-[#009CFC]"}`} />
             </div>
           </div>
 
-          <h1 className="text-2xl font-extrabold tracking-tight text-white mb-1">
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white mb-1">
             {t.adminPanelTitle}
           </h1>
           <p className={`text-xs font-semibold ${isPrayas ? "text-[#FF5722]" : "text-[#009CFC]"} uppercase tracking-wider flex items-center justify-center gap-1.5`}>

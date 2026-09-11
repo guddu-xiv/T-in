@@ -53,6 +53,9 @@ export interface TestMeta {
   questionsCount?: number;
   qVersion?: string;
   updatedAt?: number;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoSlug?: string;
 }
 
 export interface PDFMeta {

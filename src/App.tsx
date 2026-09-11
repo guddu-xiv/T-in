@@ -46,7 +46,9 @@ import {
   Split,
   ChevronDown,
   Palette,
-  Check
+  Check,
+  Edit3,
+  ArrowLeft
 } from "lucide-react";
 import { AppConfig, CategoryNode, SubCategoryNode, TopicNode, StudentUser, NotificationItem, SliderItem, TestMeta, PDFMeta, ParsedQuestion } from "./types";
 import { parseTestText, parseTestTextWithMeta, ParsedTestMeta } from "./utils/parser";
@@ -57,6 +59,7 @@ import { AdminLockScreen } from "./components/AdminLockScreen";
 import { TestImporterModal, BulkSetCreationPayload } from "./components/TestImporterModal";
 import { TestUpdaterModal, BulkTestUpdateEntry } from "./components/TestUpdaterModal";
 import { TestFormatGuideModal } from "./components/TestFormatGuideModal";
+import { SeoGooglePreviewModal } from "./components/SeoGooglePreviewModal";
 import { FormattedText } from "./components/FormattedText";
 import { TRANSLATIONS, LANGUAGES, LanguageCode } from "./translations";
 
@@ -336,6 +339,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>("general");
   const [appConfig, setAppConfig] = useState<AppConfig>(INITIAL_STATE);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [mobileTestView, setMobileTestView] = useState<"tree" | "editor">("tree");
 
   // Admin Authentication & Language Lock State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -494,14 +498,6 @@ export default function App() {
   const [showAddLangInput, setShowAddLangInput] = useState<boolean>(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  // Analytics, Logs, and Backups states (Features 26, 27, 28)
-  const [studentAnalytics, setStudentAnalytics] = useState<Record<string, any>>({});
-  const [activityLogs, setActivityLogs] = useState<any[]>([]);
-  const [backupsList, setBackupsList] = useState<any[]>([]);
-  const [backupNameInput, setBackupNameInput] = useState<string>("");
-  const [restoringBackup, setRestoringBackup] = useState<string | null>(null);
-  const [isBackupLoading, setIsBackupLoading] = useState<boolean>(false);
-  
   // SEO Google Center states
   const [seoLogs, setSeoLogs] = useState<string[]>([]);
   const [isSeoSubmitting, setIsSeoSubmitting] = useState<boolean>(false);
@@ -546,6 +542,8 @@ export default function App() {
   const [updaterModalOpen, setUpdaterModalOpen] = useState<boolean>(false);
   const [updaterTargetNodeId, setUpdaterTargetNodeId] = useState<string>("");
   const [updaterTargetNodeType, setUpdaterTargetNodeType] = useState<"category" | "subcategory" | "topic">("category");
+  const [seoPreviewModalOpen, setSeoPreviewModalOpen] = useState<boolean>(false);
+  const [seoPreviewInitialTestId, setSeoPreviewInitialTestId] = useState<string | undefined>(undefined);
 
   const filteredStudents = React.useMemo(() => {
     const q = studentSearchQuery.toLowerCase().trim();
@@ -567,85 +565,6 @@ export default function App() {
 
   // Debounced server auto-saving reference
   const saveTimeoutRef = React.useRef<any>(null);
-
-  // Synchronize dynamic dynamic data on tab activation
-  useEffect(() => {
-    if (activeTab === "analytics") {
-      fetch("/api/admin/analytics")
-        .then((res) => res.json())
-        .then((data) => setStudentAnalytics(data))
-        .catch((err) => console.error("Error reading admin student analytics", err));
-    } else if (activeTab === "logs") {
-      fetch("/api/admin/logs")
-        .then((res) => res.json())
-        .then((data) => setActivityLogs(data))
-        .catch((err) => console.error("Error reading action logs", err));
-    } else if (activeTab === "backups") {
-      fetch("/api/admin/backups")
-        .then((res) => res.json())
-        .then((data) => setBackupsList(data))
-        .catch((err) => console.error("Error listing backups", err));
-    }
-  }, [activeTab]);
-
-  const handleCreateBackup = () => {
-    if (!backupNameInput.trim()) {
-      alert("Provide a valid snapshot label name.");
-      return;
-    }
-    setIsBackupLoading(true);
-    fetch("/api/admin/backup/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ customName: backupNameInput.trim() })
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      setIsBackupLoading(false);
-      setBackupNameInput("");
-      if (data.success) {
-        alert("Success! Created backup snapshot: " + data.filename);
-        // Refresh backups list
-        fetch("/api/admin/backups")
-          .then((res) => res.json())
-          .then((list) => setBackupsList(list));
-      } else {
-        alert("Backup registration failed.");
-      }
-    })
-    .catch((err) => {
-      setIsBackupLoading(false);
-      console.error(err);
-      alert("Error occurred generating backup.");
-    });
-  };
-
-  const handleRestoreBackup = (filename: string) => {
-    if (!confirm(`WARNING: Are you absolutely confident about RESTORING database from ${filename}?\nThis will revert all questions, student registers, sliders, and active payments configurations across the system.`)) {
-      return;
-    }
-    setRestoringBackup(filename);
-    fetch("/api/admin/backup/restore", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filename })
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      setRestoringBackup(null);
-      if (data.success) {
-        alert("APPROVED: System database state restored successfully. Page will reload.");
-        window.location.reload();
-      } else {
-        alert("Restoration failed structure verification.");
-      }
-    })
-    .catch((err) => {
-      setRestoringBackup(null);
-      console.error(err);
-      alert("Restore operation failed.");
-    });
-  };
 
   // Load from server on mount, fall back to local storage
   useEffect(() => {
@@ -2434,6 +2353,65 @@ export default function App() {
     });
 
     saveState({ ...appConfig, testCategories: currentCategories }, true);
+  };
+
+  const handleSaveSeoFromModal = (
+    updatedSeo: NonNullable<AppConfig["seo"]>,
+    updatedTestMeta?: { testId: string; seoTitle?: string; seoDescription?: string; seoSlug?: string }
+  ) => {
+    let newConfig: AppConfig = { ...appConfig, seo: updatedSeo };
+
+    if (updatedTestMeta && updatedTestMeta.testId) {
+      const updateCats = (cats: CategoryNode[]): CategoryNode[] => {
+        return (cats || []).map((cat) => {
+          let updatedCat = { ...cat };
+          if (updatedCat.test && updatedCat.test.id === updatedTestMeta.testId) {
+            updatedCat.test = {
+              ...updatedCat.test,
+              seoTitle: updatedTestMeta.seoTitle,
+              seoDescription: updatedTestMeta.seoDescription,
+              seoSlug: updatedTestMeta.seoSlug,
+            };
+          }
+          if (updatedCat.subCategories) {
+            updatedCat.subCategories = updatedCat.subCategories.map((sub) => {
+              let updatedSub = { ...sub };
+              if (updatedSub.test && updatedSub.test.id === updatedTestMeta.testId) {
+                updatedSub.test = {
+                  ...updatedSub.test,
+                  seoTitle: updatedTestMeta.seoTitle,
+                  seoDescription: updatedTestMeta.seoDescription,
+                  seoSlug: updatedTestMeta.seoSlug,
+                };
+              }
+              if (updatedSub.topics) {
+                updatedSub.topics = updatedSub.topics.map((topic) => {
+                  let updatedTopic = { ...topic };
+                  if (updatedTopic.test && updatedTopic.test.id === updatedTestMeta.testId) {
+                    updatedTopic.test = {
+                      ...updatedTopic.test,
+                      seoTitle: updatedTestMeta.seoTitle,
+                      seoDescription: updatedTestMeta.seoDescription,
+                      seoSlug: updatedTestMeta.seoSlug,
+                    };
+                  }
+                  return updatedTopic;
+                });
+              }
+              return updatedSub;
+            });
+          }
+          return updatedCat;
+        });
+      };
+
+      newConfig = {
+        ...newConfig,
+        testCategories: updateCats(newConfig.testCategories || []),
+      };
+    }
+
+    saveState(newConfig, true);
   };
 
   const handleBulkCreateTestSets = (payload: BulkSetCreationPayload) => {
@@ -4232,6 +4210,7 @@ FILES LIST IN THIS BUNDLE:
                 onClick={() => { 
                   setEditingNodeId(top.id); 
                   setEditingNodeType("topic"); 
+                  setMobileTestView("editor");
                   if (top.topics && top.topics.length > 0) {
                     toggleSubExpanded(top.id);
                   }
@@ -4363,39 +4342,81 @@ FILES LIST IN THIS BUNDLE:
     <div className="min-h-screen flex flex-col md:flex-row bg-[#F4F7FA] text-slate-800 font-sans antialiased relative">
       
       {/* MOBILE HEADER BAR */}
-      <div className="md:hidden flex items-center justify-between bg-white px-5 py-4 border-b border-gray-200 shadow-xs shrink-0 sticky top-0 z-40">
-        <div className="flex items-center gap-2.5">
-          {appConfig.logoUrl ? (
-            <img src={appConfig.logoUrl} alt="Logo" className="w-8 h-8 object-contain" onError={(e) => { (e.target as any).style.display = 'none'; }} />
-          ) : (
-            <div className="w-8 h-8 bg-[#009CFC] rounded-lg flex items-center justify-center text-white font-bold text-base">
-              {themePreset === "prayas" ? "P1" : "TY"}
+      <div className="md:hidden bg-white border-b border-gray-200 shadow-xs shrink-0 sticky top-0 z-40">
+        <div className="flex items-center justify-between px-3.5 py-2.5">
+          <div className="flex items-center gap-2 min-w-0">
+            {appConfig.logoUrl ? (
+              <img src={appConfig.logoUrl} alt="Logo" className="w-7 h-7 object-contain shrink-0" onError={(e) => { (e.target as any).style.display = 'none'; }} />
+            ) : (
+              <div className={`w-7 h-7 ${themePreset === "prayas" ? "bg-[#FF5722]" : "bg-[#009CFC]"} rounded-lg flex items-center justify-center text-white font-bold text-xs shrink-0`}>
+                {themePreset === "prayas" ? "P1" : "TY"}
+              </div>
+            )}
+            <div className="min-w-0">
+              <span className="font-extrabold text-xs sm:text-sm uppercase tracking-tight text-gray-800 truncate block">
+                {themePreset === "prayas" ? "Prayas One" : (appConfig.appName || "Taiyariya")}
+              </span>
+              <span className="text-[7.5px] text-gray-400 font-mono tracking-wider block">STUDIO ADMIN</span>
             </div>
-          )}
-          <div>
-            <span className="font-extrabold text-sm uppercase tracking-tight text-gray-800 block">
-              {themePreset === "prayas" ? "Prayas One" : (appConfig.appName || "Taiyariya")}
-            </span>
-            <span className="text-[8px] text-gray-400 font-mono tracking-wider -mt-1 block">STUDIO ADMIN</span>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {/* Mobile Quick Theme Switcher */}
+            <button
+              type="button"
+              onClick={() => handleThemeChange(themePreset === "prayas" ? "taiyariya" : "prayas")}
+              className="px-2 py-1 text-xs font-bold rounded-lg border border-gray-200 bg-slate-50 flex items-center gap-1 cursor-pointer"
+              title="Switch Theme"
+            >
+              <span className={`w-2 h-2 rounded-full ${themePreset === "prayas" ? "bg-[#FF5722]" : "bg-[#009CFC]"}`}></span>
+              <span className="text-[9px] text-gray-600 font-bold">{themePreset === "prayas" ? "P1" : "TY"}</span>
+            </button>
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-1.5 text-gray-600 hover:text-gray-900 bg-slate-50 rounded-lg border border-gray-200 outline-none flex items-center justify-center cursor-pointer"
+              aria-label="Navigation Menu"
+            >
+              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            </button>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {/* Mobile Quick Theme Switcher */}
-          <button
-            type="button"
-            onClick={() => handleThemeChange(themePreset === "prayas" ? "taiyariya" : "prayas")}
-            className="p-2 text-xs font-bold rounded-lg border border-gray-200 bg-slate-50 flex items-center gap-1 cursor-pointer"
-            title="Switch Theme"
-          >
-            <span className={`w-2.5 h-2.5 rounded-full ${themePreset === "prayas" ? "bg-[#FF5722]" : "bg-[#009CFC]"}`}></span>
-            <span className="text-[10px] text-gray-600 font-semibold">{themePreset === "prayas" ? "P1" : "TY"}</span>
-          </button>
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-gray-600 hover:text-gray-900 bg-slate-50 rounded-lg border border-gray-200 outline-none flex items-center justify-center cursor-pointer"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+
+        {/* MOBILE HORIZONTAL SCROLLABLE TABS PILLS BAR */}
+        <div className="flex items-center gap-1 px-2.5 py-1.5 overflow-x-auto no-scrollbar border-t border-gray-100 bg-slate-50/70">
+          {[
+            { id: "general", label: "General", icon: Smartphone },
+            { id: "sliders", label: "Sliders", icon: Sliders },
+            { id: "notifications", label: "Notices", icon: Megaphone },
+            { id: "popups", label: "Popups", icon: BadgeAlert },
+            { id: "tests", label: "Tests", icon: BookOpen },
+            { id: "pdfs", label: "PDFs", icon: FileText },
+            { id: "students", label: "Students", icon: Users },
+            { id: "payment", label: "Payments", icon: QrCode },
+            { id: "seo", label: "SEO", icon: Globe },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setMobileMenuOpen(false);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                  isActive
+                    ? themePreset === "prayas"
+                      ? "bg-[#FF5722] text-white shadow-xs"
+                      : "bg-[#009CFC] text-white shadow-xs"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-white bg-slate-100/80"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5 shrink-0" />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -4408,7 +4429,7 @@ FILES LIST IN THIS BUNDLE:
       )}
 
       {/* LEFT PRIMARY STUDIO SIDEBAR */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-80 bg-white border-r border-gray-200 flex flex-col shrink-0 text-slate-800 shadow-lg md:shadow-sm transition-transform duration-300 md:static md:translate-x-0 ${
+      <aside className={`fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[300px] sm:w-80 bg-white border-r border-gray-200 flex flex-col shrink-0 text-slate-800 shadow-lg md:shadow-sm transition-transform duration-300 md:static md:translate-x-0 ${
         mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0 md:flex"
       }`}>
         <div className="p-6 mb-4 border-b border-gray-150 flex items-center justify-between gap-3">
@@ -4521,26 +4542,6 @@ FILES LIST IN THIS BUNDLE:
           </button>
 
           <button
-            onClick={() => { setActiveTab("logs"); setMobileMenuOpen(false); }}
-            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-              activeTab === "logs" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
-            }`}
-          >
-            <History className="w-4.5 h-4.5" />
-            <span>Activity Logs</span>
-          </button>
-
-          <button
-            onClick={() => { setActiveTab("backups"); setMobileMenuOpen(false); }}
-            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-              activeTab === "backups" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
-            }`}
-          >
-            <Database className="w-4.5 h-4.5" />
-            <span>Database Backups</span>
-          </button>
-
-          <button
             onClick={() => { setActiveTab("seo"); setMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
               activeTab === "seo" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
@@ -4548,16 +4549,6 @@ FILES LIST IN THIS BUNDLE:
           >
             <Globe className="w-4.5 h-4.5" />
             <span>SEO Google Center</span>
-          </button>
-
-          <button
-            onClick={() => { setActiveTab("adsense"); setMobileMenuOpen(false); }}
-            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-              activeTab === "adsense" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
-            }`}
-          >
-            <DollarSign className="w-4.5 h-4.5" />
-            <span>Google AdSense</span>
           </button>
         </nav>
 
@@ -4641,14 +4632,14 @@ FILES LIST IN THIS BUNDLE:
 
 
       {/* MAIN STUDIO WORKSPACE */}
-      <main className="flex-grow p-4 md:p-8 overflow-y-auto w-full max-w-full min-w-0">
+      <main className="flex-grow p-2.5 sm:p-5 md:p-8 overflow-y-auto w-full max-w-full min-w-0">
         
         {/* HEADER BRANDING BANNER */}
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-gray-150 pb-5">
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-8 border-b border-gray-150 pb-3 sm:pb-5">
           <div>
-            <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-black text-gray-900 tracking-tight">{t.adminPanelTitle}</h2>
-              <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border ${
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+              <h2 className="text-lg sm:text-2xl font-black text-gray-900 tracking-tight">{t.adminPanelTitle}</h2>
+              <span className={`text-[9px] sm:text-[10px] font-extrabold uppercase px-2 sm:px-2.5 py-0.5 rounded-full border ${
                 themePreset === "prayas" 
                   ? "bg-orange-100 text-orange-800 border-orange-200" 
                   : "bg-blue-100 text-blue-800 border-blue-200"
@@ -4656,7 +4647,7 @@ FILES LIST IN THIS BUNDLE:
                 {themePreset === "prayas" ? "Prayas One Studio" : "Taiyariya Studio"}
               </span>
             </div>
-            <p className="text-xs text-gray-500 font-semibold mt-0.5">
+            <p className="text-[11px] sm:text-xs text-gray-500 font-semibold mt-0.5">
               {themePreset === "prayas" ? "Prayas One Ultimate Edition • Locked Security System" : "Taiyariya Ultimate Builder • Locked Security System"}
             </p>
           </div>
@@ -4725,14 +4716,14 @@ FILES LIST IN THIS BUNDLE:
 
         {/* 1. GENERAL APP IDENTITIES */}
         {activeTab === "general" && (
-          <section className="space-y-6">
+          <section className="space-y-4 sm:space-y-6">
             {/* BRAND THEME COLOR PRESET SELECTOR */}
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4 sm:space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-2.5">
                   <Palette className="w-5 h-5 text-[#009CFC]" />
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">Brand Theme & Color Presets</h3>
+                    <h3 className="text-base sm:text-lg font-bold text-gray-900">Brand Theme & Color Presets</h3>
                     <p className="text-xs text-gray-500 mt-0.5">Switch dynamically between Taiyariya (Sky Blue) and Prayas One (Signature Deep Orange) themes.</p>
                   </div>
                 </div>
@@ -4741,11 +4732,11 @@ FILES LIST IN THIS BUNDLE:
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* 1. TAIYARIYA THEME CARD */}
                 <div
                   onClick={() => handleThemeChange("taiyariya")}
-                  className={`p-6 rounded-2xl border-2 transition-all cursor-pointer relative overflow-hidden ${
+                  className={`p-4 sm:p-6 rounded-2xl border-2 transition-all cursor-pointer relative overflow-hidden ${
                     themePreset === "taiyariya"
                       ? "border-[#009CFC] bg-gradient-to-br from-white to-[#EAF7FF]/60 shadow-md ring-2 ring-[#009CFC]/20"
                       : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-xs"
@@ -4786,7 +4777,7 @@ FILES LIST IN THIS BUNDLE:
                 {/* 2. PRAYAS ONE THEME CARD */}
                 <div
                   onClick={() => handleThemeChange("prayas")}
-                  className={`p-6 rounded-2xl border-2 transition-all cursor-pointer relative overflow-hidden ${
+                  className={`p-4 sm:p-6 rounded-2xl border-2 transition-all cursor-pointer relative overflow-hidden ${
                     themePreset === "prayas"
                       ? "border-[#FF5722] bg-gradient-to-br from-white to-[#FFF2EC]/60 shadow-md ring-2 ring-[#FF5722]/20"
                       : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-xs"
@@ -4826,10 +4817,10 @@ FILES LIST IN THIS BUNDLE:
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
-              <h3 className="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3">Header & Logo Identifiers</h3>
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4 sm:space-y-6">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 border-b border-gray-100 pb-3">Header & Logo Identifiers</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-2">Application Header Logo (URL)</label>
                   <input
@@ -4877,11 +4868,11 @@ FILES LIST IN THIS BUNDLE:
             </div>
 
             {/* ADMIN MASTER PASSWORD SECURITY CARD */}
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4 sm:space-y-6">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <div className="flex items-center gap-2.5">
                   <KeyRound className="w-5 h-5 text-[#009CFC]" />
-                  <h3 className="text-lg font-bold text-gray-900">{t.changePasswordTitle}</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-gray-900">{t.changePasswordTitle}</h3>
                 </div>
                 <span className="text-[10px] bg-slate-100 text-slate-600 font-mono px-2 py-1 rounded-md font-bold">
                   SERVER SECURED
@@ -4944,22 +4935,22 @@ FILES LIST IN THIS BUNDLE:
 
         {/* 2. IMAGE SLIDERS SETUP */}
         {activeTab === "sliders" && (
-          <section className="space-y-6">
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
-              <div className="flex justify-between items-center mb-6">
+          <section className="space-y-4 sm:space-y-6">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">Dynamic 21:9 Landing Sliders</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-gray-900">Dynamic 21:9 Landing Sliders</h3>
                   <p className="text-xs text-gray-500 mt-0.5">Add promotional banners with auto-scroll and customizable touch action redirection links.</p>
                 </div>
                 <button
                   onClick={handleAddSlider}
-                  className="bg-[#111827] hover:bg-black text-white px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 cursor-pointer transition-all shadow-md"
+                  className="bg-[#111827] hover:bg-black text-white px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 cursor-pointer transition-all shadow-md shrink-0"
                 >
                   <Plus className="w-4 h-4" /> Add Banner
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 gap-6">
+              <div className="grid grid-cols-1 gap-4 sm:gap-6">
                 {appConfig.sliders.map((slide, index) => (
                   <div key={slide.id} className="border border-gray-150 rounded-2xl p-5 hover:border-[#009CFC] transition-all bg-slate-50 flex flex-col md:flex-row gap-5 relative">
                     <div className="absolute top-4 right-14 flex items-center gap-1">
@@ -5047,22 +5038,22 @@ FILES LIST IN THIS BUNDLE:
 
         {/* 3. NOTICE BROADCAST LISTS */}
         {activeTab === "notifications" && (
-          <section className="space-y-6">
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
-              <div className="flex justify-between items-center mb-6">
+          <section className="space-y-4 sm:space-y-6">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">Notice Alerts Feed Broadcast</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-gray-900">Notice Alerts Feed Broadcast</h3>
                   <p className="text-xs text-gray-500 mt-0.5 font-medium">Post gorgeous alert notifications featuring imagery banners, custom action buttons, and redirect link cards.</p>
                 </div>
                 <button
                   onClick={handleAddNotification}
-                  className="bg-[#111827] hover:bg-black text-white px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 cursor-pointer transition-all shadow-md"
+                  className="bg-[#111827] hover:bg-black text-white px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 cursor-pointer transition-all shadow-md shrink-0"
                 >
                   <Plus className="w-4 h-4" /> Add Notice Card
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 gap-6">
+              <div className="grid grid-cols-1 gap-4 sm:gap-6">
                 {appConfig.notifications.map((notif, index) => (
                   <div key={notif.id} className="border border-gray-150 rounded-2xl p-5 hover:border-[#009CFC] transition-all bg-slate-50 flex flex-col md:flex-row gap-5 relative">
                     <div className="absolute top-4 right-14 flex items-center gap-1">
@@ -5172,23 +5163,23 @@ FILES LIST IN THIS BUNDLE:
 
         {/* WEBSITE ANNOUNCEMENT POPUPS MANAGEMENT PANEL */}
         {activeTab === "popups" && (
-          <section className="space-y-6">
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
-              <div className="flex justify-between items-center mb-6">
+          <section className="space-y-4 sm:space-y-6">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">Website Announcement Pop-ups</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-gray-900">Website Announcement Pop-ups</h3>
                   <p className="text-xs text-gray-500 mt-0.5 font-medium">Create unlimited, highly converting 1:1 image action pop-ups that load immediately when students boot the app. Schedule active timing windows, specify priority sequence orders, and redirect actions.</p>
                 </div>
                 <button
                   onClick={handleAddWebsitePopup}
-                  className="bg-[#111827] hover:bg-black text-white px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 cursor-pointer transition-all shadow-md animate-fade-in"
+                  className="bg-[#111827] hover:bg-black text-white px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 cursor-pointer transition-all shadow-md animate-fade-in shrink-0"
                 >
                   <Megaphone className="w-4 h-4" />
                   <span>Create Popup Card</span>
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {(appConfig.popups || []).map((popup) => (
                   <div key={popup.id} className="bg-slate-50 border border-gray-200 rounded-3xl p-5 relative flex flex-col justify-between hover:border-gray-300 transition-all duration-300 shadow-xs">
                     <button
@@ -5365,9 +5356,42 @@ FILES LIST IN THIS BUNDLE:
 
         {/* 4. EXAM TESTS AND PDFS HIERARCHICAL TREES CATALOG BUILDERS */}
         {(activeTab === "tests" || activeTab === "pdfs") && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          <div className="space-y-3 sm:space-y-4">
+            {/* Mobile View Switcher (Tree vs Editor) */}
+            <div className="lg:hidden flex items-center bg-white p-1 rounded-2xl border border-gray-200 shadow-xs">
+              <button
+                type="button"
+                onClick={() => setMobileTestView("tree")}
+                className={`flex-1 py-2 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  mobileTestView === "tree"
+                    ? themePreset === "prayas" ? "bg-[#FF5722] text-white shadow-xs" : "bg-[#009CFC] text-white shadow-xs"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-slate-50"
+                }`}
+              >
+                <FolderOpen className="w-4 h-4 shrink-0" />
+                <span>Tree Hierarchy</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setMobileTestView("editor")}
+                className={`flex-1 py-2 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  mobileTestView === "editor"
+                    ? themePreset === "prayas" ? "bg-[#FF5722] text-white shadow-xs" : "bg-[#009CFC] text-white shadow-xs"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-slate-50"
+                }`}
+              >
+                <Edit3 className="w-4 h-4 shrink-0" />
+                <span className="truncate max-w-[130px] sm:max-w-[180px]">
+                  {activeNodeData ? activeNodeData.name : "Node Editor"}
+                </span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-start">
                {/* TREE DIAGRAM SELECTORS */}
-            <div id="tree-hierarchy-panel" className="lg:col-span-7 bg-white p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4">
+            <div id="tree-hierarchy-panel" className={`lg:col-span-7 bg-white p-3 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4 ${
+              mobileTestView === "editor" ? "hidden lg:block" : "block"
+            }`}>
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-gray-100 pb-4">
                 <div>
                   <h3 className="text-base font-bold text-gray-900 uppercase tracking-wider">
@@ -5431,6 +5455,7 @@ FILES LIST IN THIS BUNDLE:
                         onClick={() => { 
                           setEditingNodeId(cat.id); 
                           setEditingNodeType("category"); 
+                          setMobileTestView("editor");
                           toggleCatExpanded(cat.id);
                           if (window.innerWidth < 1024) {
                             document.getElementById("node-editor-panel")?.scrollIntoView({ behavior: "smooth" });
@@ -5536,6 +5561,7 @@ FILES LIST IN THIS BUNDLE:
                                 onClick={() => { 
                                   setEditingNodeId(sub.id); 
                                   setEditingNodeType("subcategory"); 
+                                  setMobileTestView("editor");
                                   toggleSubExpanded(sub.id);
                                   if (window.innerWidth < 1024) {
                                     document.getElementById("node-editor-panel")?.scrollIntoView({ behavior: "smooth" });
@@ -5657,24 +5683,28 @@ FILES LIST IN THIS BUNDLE:
 
 
             {/* SECONDARY SIDE SETTINGS CONFIGURATION PANEL */}
-            <div id="node-editor-panel" className="lg:col-span-5 bg-white p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm min-h-[500px]">
+            <div id="node-editor-panel" className={`lg:col-span-5 bg-white p-3 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm min-h-[300px] lg:min-h-[500px] ${
+              mobileTestView === "tree" ? "hidden lg:block" : "block"
+            }`}>
               {editingNodeId && activeNodeData ? (
-                <div className="space-y-6">
+                <div className="space-y-5 sm:space-y-6">
                   
                   {/* Title identity block */}
-                  <div className="border-b border-gray-100 pb-3 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-black uppercase text-[#009CFC] tracking-wider">Configure Node Selected</span>
-                      <h4 className="text-base font-extrabold text-slate-850">{activeNodeData.name}</h4>
+                  <div className="border-b border-gray-100 pb-3 flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-black uppercase text-[#009CFC] tracking-wider block">Configure Selected Node</span>
+                      <h4 className="text-sm sm:text-base font-extrabold text-slate-850 truncate">{activeNodeData.name}</h4>
                     </div>
                     <button
                       type="button"
                       onClick={() => {
-                        document.getElementById("tree-hierarchy-panel")?.scrollIntoView({ behavior: "smooth" });
+                        setMobileTestView("tree");
+                        window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
-                      className="lg:hidden text-[10px] font-bold text-gray-500 hover:text-[#009CFC] bg-slate-50 hover:bg-slate-100 border border-gray-200 px-2.5 py-1.5 rounded-lg cursor-pointer flex items-center gap-1"
+                      className="lg:hidden text-xs font-bold text-[#009CFC] hover:text-[#0077C8] bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-xl cursor-pointer flex items-center gap-1.5 shrink-0"
                     >
-                      ↑ Back to Tree
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Back to Tree</span>
                     </button>
                   </div>
 
@@ -6745,6 +6775,19 @@ FILES LIST IN THIS BUNDLE:
                                   <Sparkles className="w-3 h-3 text-emerald-600" />
                                   <span>Update Test .txt Studio</span>
                                 </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSeoPreviewInitialTestId(activeNodeData?.test?.id);
+                                    setSeoPreviewModalOpen(true);
+                                  }}
+                                  className="text-[10px] font-bold text-sky-700 hover:text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded px-2 py-0.5 flex items-center gap-1 cursor-pointer transition-colors"
+                                  title="Live visual preview of what this test page will look like in Google search results"
+                                >
+                                  <Search className="w-3 h-3 text-[#009CFC]" />
+                                  <span>Google SERP Preview</span>
+                                </button>
                               </div>
 
                               {/* TXT file upload specifically for selected language! */}
@@ -7205,24 +7248,26 @@ FILES LIST IN THIS BUNDLE:
               )}
             </div>
 
+            </div>
+
           </div>
         )}
 
         {/* 5. STUDENTS ACCOUNTS REGISTER LISTS */}
         {activeTab === "students" && (
-          <section className="space-y-6">
+          <section className="space-y-4 sm:space-y-6">
             {/* Students Import Portal */}
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-4">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4">
               <div>
-                <h3 className="text-lg font-bold text-gray-900">Students Database Import Portal</h3>
+                <h3 className="text-base sm:text-lg font-bold text-gray-900">Students Database Import Portal</h3>
                 <p className="text-xs text-gray-500 mt-1 font-medium">Bulk register aspirants instantly. You can upload a `.csv` file, a `students_db.txt` / `student_db.txt` database backup, or paste raw CSV lines.</p>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* Drag & Drop File Upload Section */}
-                <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl p-6 flex flex-col justify-center items-center text-center relative hover:bg-slate-50/80 hover:border-[#009CFC]/50 transition-all cursor-pointer group min-h-[160px]">
+                <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl p-5 sm:p-6 flex flex-col justify-center items-center text-center relative hover:bg-slate-50/80 hover:border-[#009CFC]/50 transition-all cursor-pointer group min-h-[140px] sm:min-h-[160px]">
                   <div className="space-y-2">
-                    <FileSpreadsheet className="w-10 h-10 mx-auto text-[#009CFC] stroke-[1.5] group-hover:scale-110 transition-transform" />
+                    <FileSpreadsheet className="w-8 h-8 sm:w-10 sm:h-10 mx-auto text-[#009CFC] stroke-[1.5] group-hover:scale-110 transition-transform" />
                     <div>
                       <span className="text-xs font-extrabold text-slate-700 block">Drag & drop or click to upload file</span>
                       <span className="text-[10px] text-slate-400 block mt-1">Accepts `.csv` list or obfuscated `.txt` database backups</span>
@@ -7242,7 +7287,7 @@ FILES LIST IN THIS BUNDLE:
                 </div>
 
                 {/* Textarea Paste Section */}
-                <div className="bg-slate-50 border border-gray-150 rounded-2xl p-5 space-y-3 flex flex-col justify-between">
+                <div className="bg-slate-50 border border-gray-150 rounded-2xl p-4 sm:p-5 space-y-3 flex flex-col justify-between">
                   <div className="space-y-2">
                     <div className="text-xs text-slate-600 font-extrabold">
                       Paste CSV Lines (Format: Name, Email/Mobile, Phone, Password, PurchaseDate, ExpiryDate)
@@ -7264,7 +7309,7 @@ FILES LIST IN THIS BUNDLE:
                         alert("Please paste formatted CSV lines first.");
                       }
                     }}
-                    className="bg-[#111827] hover:bg-black text-white px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase cursor-pointer transition-all shadow-md inline-flex items-center justify-center gap-1.5 self-start"
+                    className="bg-[#111827] hover:bg-black text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase cursor-pointer transition-all shadow-md inline-flex items-center justify-center gap-1.5 self-start"
                   >
                     <Plus className="w-4 h-4" /> Import Pasted Lines
                   </button>
@@ -7272,10 +7317,10 @@ FILES LIST IN THIS BUNDLE:
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-905">Aspirants Database Logs</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-gray-905">Aspirants Database Logs</h3>
                   <p className="text-xs text-gray-500 mt-0.5 font-semibold text-slate-400">Total Registered Subscribers: {appConfig.students.length}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -7344,7 +7389,178 @@ FILES LIST IN THIS BUNDLE:
                 </div>
               </div>
 
-              <div className="overflow-x-auto rounded-xl border border-gray-150 shadow-xs">
+              {/* MOBILE CARDS VIEW FOR STUDENTS (md:hidden) */}
+              <div className="md:hidden space-y-3">
+                {currentPageStudents.map((stu) => {
+                  const unlockedIds = stu.unlockedCategoryIds || [];
+                  const allCategories = [
+                    ...(appConfig.testCategories || []),
+                    ...(appConfig.pdfCategories || [])
+                  ].filter((cat, idx, self) => self.findIndex(c => c.id === cat.id) === idx);
+
+                  return (
+                    <div key={stu.id} className="bg-white border border-gray-200 rounded-2xl p-4 shadow-xs space-y-3">
+                      <div className="flex items-center justify-between gap-2 border-b border-gray-100 pb-2">
+                        <div className="flex-1 min-w-0">
+                          <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider block">Aspirant Name</label>
+                          <input
+                            type="text"
+                            value={stu.name}
+                            onChange={(e) => handleUpdateStudentAccount(stu.id, "name", e.target.value)}
+                            placeholder="Student Name"
+                            className="bg-transparent font-extrabold text-sm text-slate-850 outline-none w-full border-b border-transparent focus:border-[#009CFC]"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteStudentAccount(stu.id)}
+                          className="text-gray-400 hover:text-red-500 p-2 hover:bg-red-50 rounded-xl transition-all cursor-pointer shrink-0"
+                          title="Delete Student"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                          <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider block">Email / Username</label>
+                          <input
+                            type="text"
+                            value={stu.emailOrMobile}
+                            onChange={(e) => handleUpdateStudentAccount(stu.id, "emailOrMobile", e.target.value)}
+                            className="w-full bg-slate-50 border border-gray-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-700 outline-none focus:border-[#009CFC]"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider block">Phone Number</label>
+                          <input
+                            type="text"
+                            value={stu.phoneNo || ""}
+                            onChange={(e) => handleUpdateStudentAccount(stu.id, "phoneNo", e.target.value)}
+                            placeholder="Not linked"
+                            className="w-full bg-slate-50 border border-gray-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-700 outline-none focus:border-[#009CFC]"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider block">Access Password</label>
+                        <input
+                          type="text"
+                          value={stu.password}
+                          onChange={(e) => handleUpdateStudentAccount(stu.id, "password", e.target.value)}
+                          className="w-full bg-slate-50 border border-gray-200 rounded-xl px-2.5 py-1.5 text-xs font-mono text-slate-700 outline-none focus:border-[#009CFC]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider block mb-1">
+                          Category Access ({unlockedIds.length} Unlocked)
+                        </label>
+                        <div className="flex flex-col gap-1.5 max-h-[160px] overflow-y-auto bg-slate-50 p-2 rounded-xl border border-slate-200">
+                          {allCategories.map(cat => {
+                            const isChecked = unlockedIds.includes(cat.id);
+                            return (
+                              <div key={cat.id} className="flex flex-col gap-1 p-2 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700 select-none">
+                                  <input
+                                    type="checkbox"
+                                    checked={isChecked}
+                                    onChange={(e) => {
+                                      const checked = e.target.checked;
+                                      let nextIds = [...unlockedIds];
+                                      if (checked) {
+                                        if (!nextIds.includes(cat.id)) nextIds.push(cat.id);
+                                      } else {
+                                        nextIds = nextIds.filter(id => id !== cat.id);
+                                      }
+                                      handleUpdateStudentAccount(stu.id, "unlockedCategoryIds", nextIds);
+                                    }}
+                                    className="rounded border-gray-300 text-[#009CFC] focus:ring-[#009CFC] w-4 h-4"
+                                  />
+                                  <span className="truncate flex-1" title={cat.name}>{cat.name}</span>
+                                  {cat.isPaid && <span className="text-[9px] text-[#009CFC] bg-[#EAF7FF] px-1.5 py-0.5 rounded font-black border border-[#009CFC]/20 uppercase">Paid</span>}
+                                </label>
+                                {isChecked && (
+                                  <div className="flex flex-col gap-1 pl-4 border-l-2 border-[#009CFC]/40 mt-1">
+                                    <div className="flex items-center gap-1">
+                                      <span className="text-[9px] text-gray-400 w-12 font-medium shrink-0">Purchase:</span>
+                                      <input
+                                        type="date"
+                                        value={stu.categoryDates?.[cat.id]?.purchaseDate || ""}
+                                        onChange={(e) => {
+                                          const updated = { ...(stu.categoryDates || {}) };
+                                          updated[cat.id] = {
+                                            ...(updated[cat.id] || {}),
+                                            purchaseDate: e.target.value
+                                          };
+                                          handleUpdateStudentAccount(stu.id, "categoryDates", updated);
+                                        }}
+                                        className="bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-[9px] w-full outline-none focus:border-[#009CFC]"
+                                      />
+                                    </div>
+                                    <div className="flex items-center gap-1.5 py-0.5">
+                                      <input
+                                        type="checkbox"
+                                        id={`lifetime-m-${stu.id}-${cat.id}`}
+                                        checked={stu.categoryDates?.[cat.id]?.isLifetime || false}
+                                        onChange={(e) => {
+                                          const checked = e.target.checked;
+                                          const updated = { ...(stu.categoryDates || {}) };
+                                          updated[cat.id] = {
+                                            ...(updated[cat.id] || {}),
+                                            isLifetime: checked,
+                                            expiryDate: checked ? "" : (updated[cat.id]?.expiryDate || "")
+                                          };
+                                          handleUpdateStudentAccount(stu.id, "categoryDates", updated);
+                                        }}
+                                        className="rounded border-gray-300 text-[#009CFC] focus:ring-[#009CFC] h-3.5 w-3.5"
+                                      />
+                                      <label htmlFor={`lifetime-m-${stu.id}-${cat.id}`} className="text-[10px] text-gray-500 font-bold select-none cursor-pointer">
+                                        Lifetime Access
+                                      </label>
+                                    </div>
+                                    {!stu.categoryDates?.[cat.id]?.isLifetime && (
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-[9px] text-gray-400 w-12 font-medium shrink-0">Expiry:</span>
+                                        <input
+                                          type="date"
+                                          value={stu.categoryDates?.[cat.id]?.expiryDate || ""}
+                                          onChange={(e) => {
+                                            const updated = { ...(stu.categoryDates || {}) };
+                                            updated[cat.id] = {
+                                              ...(updated[cat.id] || {}),
+                                              expiryDate: e.target.value
+                                            };
+                                            handleUpdateStudentAccount(stu.id, "categoryDates", updated);
+                                          }}
+                                          className="bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-[9px] w-full outline-none focus:border-[#009CFC]"
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                          {allCategories.length === 0 && (
+                            <span className="text-[10px] text-gray-400 font-medium italic text-center py-2">No categories created yet</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {appConfig.students.length === 0 && (
+                  <div className="p-8 text-center text-gray-400 font-bold bg-slate-50 rounded-2xl border border-gray-200">
+                    No standard student accounts registered. Compiled app will let anonymous guests.
+                  </div>
+                )}
+              </div>
+
+              {/* DESKTOP TABLE VIEW (hidden md:block) */}
+              <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-150 shadow-xs">
                 <table className="w-full border-collapse bg-white text-left text-xs font-semibold text-slate-700">
                   <thead className="bg-slate-50 text-gray-500 border-b border-gray-150 text-[10px] font-black uppercase tracking-wider">
                     <tr>
@@ -7582,11 +7798,11 @@ FILES LIST IN THIS BUNDLE:
 
         {/* 6. SOCIAL PORTS AND PAYMENT GATEWAYS */}
         {activeTab === "payment" && (
-          <section className="space-y-6">
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
-              <h3 className="text-lg font-bold text-gray-900">Support Handles & UPI Gateways</h3>
+          <section className="space-y-4 sm:space-y-6">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4 sm:space-y-6">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900">Support Handles & UPI Gateways</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-2">WhatsApp Direct Link</label>
                   <input
@@ -7916,162 +8132,62 @@ FILES LIST IN THIS BUNDLE:
 
 
 
-        {/* 8. AUDIT TRAILS & ADMIN ACTIVITY LOGS (Feature 27) */}
-        {activeTab === "logs" && (
-          <section className="space-y-6 animate-fadeIn">
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-150 pb-5">
-                <div>
-                  <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
-                    <History className="w-5 h-5 text-[#009CFC]" /> Operator Security Activity Logs
-                  </h3>
-                  <p className="text-xs text-gray-500 mt-1 font-medium">Audit trails detailing system manipulations, category additions, mock compiles, and backups restores.</p>
-                </div>
-              </div>
-
-              <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm max-h-[500px] overflow-y-auto">
-                <table className="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr className="bg-slate-50 border-b border-gray-150 text-gray-500 font-extrabold uppercase tracking-widest text-[9px]">
-                      <th className="p-4 w-48">Registered Timestamp</th>
-                      <th className="p-4">Action Summary / Security Detail</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {activityLogs.map((log, idx) => (
-                      <tr key={idx} className="border-b border-gray-100 hover:bg-slate-50/50 transition-all font-semibold text-slate-800">
-                        <td className="p-4 font-mono text-gray-400 text-[10px]">
-                          {log.timestamp ? log.timestamp.replace("T", " ").substring(0, 19) : "N/A"}
-                        </td>
-                        <td className="p-4 text-slate-900">{log.action || "Manipulated dynamic configuration values"}</td>
-                      </tr>
-                    ))}
-                    {activityLogs.length === 0 && (
-                      <tr>
-                        <td colSpan={2} className="p-8 text-center text-gray-400 font-semibold">
-                          No logging items recorded yet. Change or update items to trigger writes.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* 9. SECURE CLOUD DATABASE BACKUP & RESTORE CENTER (Feature 28) */}
-        {activeTab === "backups" && (
-          <section className="space-y-6 animate-fadeIn">
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-150 pb-5">
-                <div>
-                  <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
-                    <Database className="w-5 h-5 text-[#009CFC]" /> Database Snapshot & Recovery Center
-                  </h3>
-                  <p className="text-xs text-gray-500 mt-1 font-medium">Create, download, and restore manual backups of configuration matrices, custom student logins records, and syllabus contents trees.</p>
-                </div>
-              </div>
-
-              <div className="bg-slate-50 border border-gray-200/80 rounded-2xl p-6 space-y-4">
-                <h4 className="font-extrabold text-sm text-slate-800">Take New Database Backup Snapshot</h4>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="text"
-                    value={backupNameInput}
-                    onChange={(e) => setBackupNameInput(e.target.value)}
-                    placeholder="Enter short custom name, e.g. post_reorg"
-                    className="flex-1 bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-[#009CFC] focus:ring-1 focus:ring-[#009CFC] outline-none font-semibold text-slate-800"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleCreateBackup}
-                    disabled={isBackupLoading}
-                    className="bg-[#009CFC] hover:bg-[#e05626] text-white disabled:bg-gray-300 font-bold text-xs px-6 py-3.5 rounded-xl transition-all shadow-md shadow-[#009CFC]/25 cursor-pointer active:scale-95"
-                  >
-                    {isBackupLoading ? "Generating..." : "Generate Cloud Backup"}
-                  </button>
-                </div>
-              </div>
-
-              <div className="overflow-hidden border border-gray-200 rounded-2xl bg-white shadow-sm overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs min-w-[650px]">
-                  <thead>
-                    <tr className="bg-slate-50 border-b border-gray-150 text-gray-500 font-extrabold uppercase tracking-widest text-[9px]">
-                      <th className="p-4">Backup Filename</th>
-                      <th className="p-4 text-center">Filesize</th>
-                      <th className="p-4 text-center">Created At Date</th>
-                      <th className="p-4 text-right">Standard Administration Options</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {backupsList.map((bk) => (
-                      <tr key={bk.filename} className="border-b border-gray-100 hover:bg-slate-50/50 transition-all font-semibold text-slate-800">
-                        <td className="p-4 text-slate-900 font-bold flex items-center gap-2">
-                          <Database className="w-4 h-4 text-gray-400" />
-                          <span>{bk.filename}</span>
-                        </td>
-                        <td className="p-4 text-center text-gray-500 font-mono text-[11px]">{bk.size || "0 KB"}</td>
-                        <td className="p-4 text-center text-gray-400 font-mono text-[11px]">{bk.createdAt || "N/A"}</td>
-                        <td className="p-4 text-right space-x-2">
-                          <a
-                            href={`/api/admin/backup/download/${bk.filename}`}
-                            className="bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-slate-900 border border-gray-250 font-bold text-[10px] px-3.5 py-2.5 rounded-xl transition-all inline-block uppercase tracking-wider text-center"
-                            title="Download backup file to local machine"
-                          >
-                            Download
-                          </a>
-                          <button
-                            type="button"
-                            onClick={() => handleRestoreBackup(bk.filename)}
-                            disabled={restoringBackup !== null}
-                            className="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 hover:text-emerald-800 border border-emerald-250 font-black text-[10px] px-3.5 py-2 rounded-xl transition-all uppercase tracking-wider cursor-pointer"
-                          >
-                            {restoringBackup === bk.filename ? "RESTORING..." : "RESTORE DB"}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                    {backupsList.length === 0 && (
-                      <tr>
-                        <td colSpan={4} className="p-8 text-center text-gray-400 font-bold">
-                          No custom backups catalog found on server. Produce a snapshot using the form above!
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* 10. SEO GOOGLE CENTER */}
         {activeTab === "seo" && (
-          <section className="space-y-6 animate-fadeIn">
+          <section className="space-y-4 sm:space-y-6 animate-fadeIn">
             {/* Header Description */}
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-150 pb-5">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4 sm:space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-gray-150 pb-4 sm:pb-5">
                 <div>
-                  <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg font-black text-gray-900 flex items-center gap-2">
                     <Globe className="w-5 h-5 text-[#009CFC]" /> SEO & Google Search Console Optimization Center
                   </h3>
                   <p className="text-xs text-gray-500 mt-1 font-medium">Configure ultimate search engine ranking identifiers. Dynamic XML sitemaps, OpenGraph image assets, and structured schema metrics are automatically refreshed for top search ranking when new tests or PDFs are published!</p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSeoPreviewInitialTestId(undefined);
+                    setSeoPreviewModalOpen(true);
+                  }}
+                  className="flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 bg-gradient-to-r from-[#009CFC] via-[#008AE6] to-[#0077C8] hover:from-[#008AE6] hover:to-[#006BB5] text-white text-xs font-black rounded-xl sm:rounded-2xl shadow-md shadow-[#009CFC]/30 transition-all cursor-pointer active:scale-95 shrink-0"
+                >
+                  <Search className="w-4 h-4" />
+                  <span>Live Google SERP Test Preview</span>
+                </button>
               </div>
 
               {/* LIVE GOOGLE SERP PREVIEW */}
-              <div className="bg-[#f8fafc] border border-slate-200 rounded-2xl p-6 space-y-3">
-                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Google Search Result Snippet Preview (Real-time mockup)
-                </span>
+              <div className="bg-[#f8fafc] border border-slate-200 rounded-2xl p-3.5 sm:p-6 space-y-3">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Google Search Result Snippet Preview (Real-time mockup)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSeoPreviewInitialTestId(undefined);
+                      setSeoPreviewModalOpen(true);
+                    }}
+                    className="text-xs font-extrabold text-[#009CFC] hover:text-[#0077C8] flex items-center gap-1.5 cursor-pointer bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-xs hover:shadow-sm transition-all"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>Open Interactive SERP Preview & Quick Editor</span>
+                  </button>
+                </div>
                 
-                <div className="bg-white border border-slate-150 rounded-xl p-5 shadow-sm max-w-2xl space-y-1">
+                <div
+                  onClick={() => {
+                    setSeoPreviewInitialTestId(undefined);
+                    setSeoPreviewModalOpen(true);
+                  }}
+                  className="bg-white border border-slate-150 rounded-xl p-5 shadow-sm max-w-2xl space-y-1 cursor-pointer hover:border-[#009CFC] transition-colors group"
+                >
                   <div className="flex items-center gap-2 text-xs text-slate-500">
                     <span className="bg-slate-100 px-2 py-0.5 rounded text-[10px] font-mono">https</span>
                     <span className="truncate">{appConfig.seo?.canonicalUrl || "https://taiyariya.in"}</span>
                   </div>
-                  <h4 className="text-lg text-[#1a0dab] hover:underline font-medium cursor-pointer leading-tight">
+                  <h4 className="text-lg text-[#1a0dab] group-hover:underline font-medium leading-tight">
                     {appConfig.seo?.metaTitle || `${appConfig.appName} - Elite MCQ Practice & Mock Test Portal`}
                   </h4>
                   
@@ -8626,245 +8742,7 @@ FILES LIST IN THIS BUNDLE:
           </section>
         )}
 
-        {/* 11. GOOGLE ADSENSE CENTER */}
-        {activeTab === "adsense" && (
-          <section className="space-y-6 animate-fadeIn">
-            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-150 pb-5">
-                <div>
-                  <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
-                    <DollarSign className="w-5 h-5 text-amber-500" /> Google AdSense Monetization Center
-                  </h3>
-                  <p className="text-xs text-gray-500 mt-1 font-medium">
-                    Configure Google AdSense advertisements on your student exam portal. To protect candidate attention, ads are strictly hidden during active test-taking sessions and only appear for non-logged-in guest users.
-                  </p>
-                </div>
-              </div>
-
-              {/* Status Alert Badge */}
-              <div className={`p-4 rounded-2xl border flex items-start gap-3.5 ${
-                appConfig.adsense?.enabled 
-                  ? "bg-emerald-50 border-emerald-100 text-emerald-800" 
-                  : "bg-gray-50 border-gray-200 text-gray-600"
-              }`}>
-                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-                  appConfig.adsense?.enabled ? "bg-emerald-500 animate-pulse" : "bg-gray-400"
-                }`} />
-                <div className="text-xs">
-                  <p className="font-extrabold uppercase tracking-wide text-[10px] mb-0.5">
-                    AdSense Status: {appConfig.adsense?.enabled ? "Live and Enabled" : "Inactive / Suspended"}
-                  </p>
-                  <p className="leading-relaxed font-medium">
-                    {appConfig.adsense?.enabled 
-                      ? "Your student portal is actively injecting AdSense script loaders and responsive ad-units for guest visitors."
-                      : "AdSense script loaders and advertisement container units are completely omitted from the compiled student portal."}
-                  </p>
-                </div>
-              </div>
-
-              {/* Form Inputs */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                {/* Enabled Toggle */}
-                <div className="space-y-2 md:col-span-2">
-                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
-                    AdSense Placement Status
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAppConfig(prev => {
-                          const updated = {
-                            ...prev,
-                            adsense: {
-                              ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
-                              enabled: !prev.adsense?.enabled
-                            }
-                          };
-                          return updated;
-                        });
-                      }}
-                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                        appConfig.adsense?.enabled ? "bg-[#009CFC]" : "bg-gray-250"
-                      }`}
-                    >
-                      <span
-                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
-                          appConfig.adsense?.enabled ? "translate-x-5" : "translate-x-0"
-                        }`}
-                      />
-                    </button>
-                    <span className="text-xs font-bold text-slate-700">
-                      {appConfig.adsense?.enabled ? "Enable Google AdSense ads on Student App" : "Disable Google AdSense ads on Student App"}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Google AdSense Publisher ID */}
-                <div className="space-y-2">
-                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
-                    Google Publisher ID (ca-pub-xxx) <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={appConfig.adsense?.publisherId || ""}
-                    onChange={(e) => {
-                      setAppConfig(prev => ({
-                        ...prev,
-                        adsense: {
-                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
-                          publisherId: e.target.value.trim()
-                        }
-                      }));
-                    }}
-                    placeholder="ca-pub-1234567890123456"
-                    className="w-full text-xs font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#009CFC] transition-all"
-                  />
-                  <p className="text-[10px] text-gray-400 font-medium">
-                    Your unique AdSense identifier. Must start with "ca-pub-".
-                  </p>
-                </div>
-
-                {/* Home Top Ad Unit Slot ID */}
-                <div className="space-y-2">
-                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
-                    Home Top Ad Slot ID (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={appConfig.adsense?.homeTopSlotId || ""}
-                    onChange={(e) => {
-                      setAppConfig(prev => ({
-                        ...prev,
-                        adsense: {
-                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
-                          homeTopSlotId: e.target.value.trim()
-                        }
-                      }));
-                    }}
-                    placeholder="9876543210"
-                    className="w-full text-xs font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#009CFC] transition-all"
-                  />
-                  <p className="text-[10px] text-gray-400 font-medium">
-                    Leave blank to automatically display a responsive, auto-sized layout in the Top banner container.
-                  </p>
-                </div>
-
-                {/* Home Bottom Ad Unit Slot ID */}
-                <div className="space-y-2">
-                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
-                    Home Bottom Ad Slot ID (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={appConfig.adsense?.homeBottomSlotId || ""}
-                    onChange={(e) => {
-                      setAppConfig(prev => ({
-                        ...prev,
-                        adsense: {
-                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
-                          homeBottomSlotId: e.target.value.trim()
-                        }
-                      }));
-                    }}
-                    placeholder="8765432109"
-                    className="w-full text-xs font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#009CFC] transition-all"
-                  />
-                  <p className="text-[10px] text-gray-400 font-medium">
-                    Leave blank to automatically display a responsive, auto-sized layout in the Bottom banner container.
-                  </p>
-                </div>
-
-                {/* Sidebar Ad Unit Slot ID */}
-                <div className="space-y-2">
-                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
-                    General/Sidebar Ad Slot ID (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={appConfig.adsense?.sidebarSlotId || ""}
-                    onChange={(e) => {
-                      setAppConfig(prev => ({
-                        ...prev,
-                        adsense: {
-                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
-                          sidebarSlotId: e.target.value.trim()
-                        }
-                      }));
-                    }}
-                    placeholder="7654321098"
-                    className="w-full text-xs font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#009CFC] transition-all"
-                  />
-                  <p className="text-[10px] text-gray-400 font-medium">
-                    Ad Slot ID used for supplemental visual placements.
-                  </p>
-                </div>
-
-                {/* ads.txt Content File Customizer */}
-                <div className="space-y-2 md:col-span-2">
-                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide flex items-center justify-between">
-                    <span>ads.txt Content (Google AdSense Verified)</span>
-                    <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Auto-Packaged in ZIP Export</span>
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={
-                      appConfig.adsense?.adsTxtCustom !== undefined
-                        ? appConfig.adsense.adsTxtCustom
-                        : `google.com, ${(appConfig.adsense?.publisherId || 'ca-pub-0000000000000000').replace('ca-', '')}, DIRECT, f08c47fec0942fa0`
-                    }
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setAppConfig(prev => ({
-                        ...prev,
-                        adsense: {
-                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
-                          adsTxtCustom: val
-                        }
-                      }));
-                    }}
-                    placeholder="google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0"
-                    className="w-full text-xs font-mono font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3 focus:outline-none focus:border-[#009CFC] transition-all"
-                  />
-                  <p className="text-[10px] text-gray-400 font-medium">
-                    This file is automatically generated and included as <code className="text-amber-600 font-bold">ads.txt</code> in all exported ZIP packages for Hostinger and GitHub root upload to guarantee instant Google AdSense crawler verification at <code className="text-blue-600 font-bold">taiyariya.in/ads.txt</code>.
-                  </p>
-                </div>
-              </div>
-
-              {/* CTA / Manual Compiler Trigger */}
-              <div className="border-t border-gray-150 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="max-w-xl text-[11px] text-slate-500 font-medium leading-relaxed">
-                  Clicking <strong className="text-slate-800">Save AdSense Changes</strong> will persist AdSense configuration settings. Remember to click <strong className="text-slate-800">COMPILE & RE-BUILD PORTAL</strong> at the top/sidebar to generate and freeze the new HTML client bundle file!
-                </div>
-                <button
-                  onClick={async () => {
-                    try {
-                      // Save configuration settings
-                      const res = await fetch("/api/admin/save", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(appConfig)
-                      });
-                      const rdata = await res.json();
-                      if (rdata.success) {
-                        alert("🎉 AdSense Configuration updated and saved successfully! Please compile/build the portal to see your changes live.");
-                      } else {
-                        alert("⚠️ Error saving AdSense configuration: " + (rdata.error || "Unknown error"));
-                      }
-                    } catch (e) {
-                      console.error(e);
-                      alert("⚠️ Network failure saving AdSense configuration.");
-                    }
-                  }}
-                  className="bg-[#009CFC] text-white hover:bg-[#e05623] active:scale-95 px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider shadow-md hover:shadow-lg transition-all shrink-0 flex items-center justify-center gap-2"
-                >
-                  <DollarSign className="w-4 h-4" /> Save AdSense Changes
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
+        {/* SEO section ends */}
 
       </main>
 
@@ -8921,6 +8799,15 @@ FILES LIST IN THIS BUNDLE:
             });
           }
         }}
+      />
+
+      {/* Live Google Search Results Visual Preview & Quick Editor Modal */}
+      <SeoGooglePreviewModal
+        isOpen={seoPreviewModalOpen}
+        onClose={() => setSeoPreviewModalOpen(false)}
+        appConfig={appConfig}
+        onSaveSeo={handleSaveSeoFromModal}
+        initialSelectedTestId={seoPreviewInitialTestId}
       />
 
       {/* Ultra Smooth ZIP Packaging Progress Modal Overlay */}
