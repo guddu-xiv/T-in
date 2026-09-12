@@ -498,6 +498,14 @@ export default function App() {
   const [showAddLangInput, setShowAddLangInput] = useState<boolean>(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
+  // Analytics, Logs, and Backups states (Features 26, 27, 28)
+  const [studentAnalytics, setStudentAnalytics] = useState<Record<string, any>>({});
+  const [activityLogs, setActivityLogs] = useState<any[]>([]);
+  const [backupsList, setBackupsList] = useState<any[]>([]);
+  const [backupNameInput, setBackupNameInput] = useState<string>("");
+  const [restoringBackup, setRestoringBackup] = useState<string | null>(null);
+  const [isBackupLoading, setIsBackupLoading] = useState<boolean>(false);
+  
   // SEO Google Center states
   const [seoLogs, setSeoLogs] = useState<string[]>([]);
   const [isSeoSubmitting, setIsSeoSubmitting] = useState<boolean>(false);
@@ -565,6 +573,85 @@ export default function App() {
 
   // Debounced server auto-saving reference
   const saveTimeoutRef = React.useRef<any>(null);
+
+  // Synchronize dynamic dynamic data on tab activation
+  useEffect(() => {
+    if (activeTab === "analytics") {
+      fetch("/api/admin/analytics")
+        .then((res) => res.json())
+        .then((data) => setStudentAnalytics(data))
+        .catch((err) => console.error("Error reading admin student analytics", err));
+    } else if (activeTab === "logs") {
+      fetch("/api/admin/logs")
+        .then((res) => res.json())
+        .then((data) => setActivityLogs(data))
+        .catch((err) => console.error("Error reading action logs", err));
+    } else if (activeTab === "backups") {
+      fetch("/api/admin/backups")
+        .then((res) => res.json())
+        .then((data) => setBackupsList(data))
+        .catch((err) => console.error("Error listing backups", err));
+    }
+  }, [activeTab]);
+
+  const handleCreateBackup = () => {
+    if (!backupNameInput.trim()) {
+      alert("Provide a valid snapshot label name.");
+      return;
+    }
+    setIsBackupLoading(true);
+    fetch("/api/admin/backup/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ customName: backupNameInput.trim() })
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setIsBackupLoading(false);
+      setBackupNameInput("");
+      if (data.success) {
+        alert("Success! Created backup snapshot: " + data.filename);
+        // Refresh backups list
+        fetch("/api/admin/backups")
+          .then((res) => res.json())
+          .then((list) => setBackupsList(list));
+      } else {
+        alert("Backup registration failed.");
+      }
+    })
+    .catch((err) => {
+      setIsBackupLoading(false);
+      console.error(err);
+      alert("Error occurred generating backup.");
+    });
+  };
+
+  const handleRestoreBackup = (filename: string) => {
+    if (!confirm(`WARNING: Are you absolutely confident about RESTORING database from ${filename}?\nThis will revert all questions, student registers, sliders, and active payments configurations across the system.`)) {
+      return;
+    }
+    setRestoringBackup(filename);
+    fetch("/api/admin/backup/restore", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ filename })
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setRestoringBackup(null);
+      if (data.success) {
+        alert("APPROVED: System database state restored successfully. Page will reload.");
+        window.location.reload();
+      } else {
+        alert("Restoration failed structure verification.");
+      }
+    })
+    .catch((err) => {
+      setRestoringBackup(null);
+      console.error(err);
+      alert("Restore operation failed.");
+    });
+  };
 
   // Load from server on mount, fall back to local storage
   useEffect(() => {
@@ -4392,6 +4479,9 @@ FILES LIST IN THIS BUNDLE:
             { id: "students", label: "Students", icon: Users },
             { id: "payment", label: "Payments", icon: QrCode },
             { id: "seo", label: "SEO", icon: Globe },
+            { id: "backups", label: "Backups", icon: Database },
+            { id: "logs", label: "Logs", icon: History },
+            { id: "adsense", label: "AdSense", icon: DollarSign },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -4542,6 +4632,26 @@ FILES LIST IN THIS BUNDLE:
           </button>
 
           <button
+            onClick={() => { setActiveTab("logs"); setMobileMenuOpen(false); }}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              activeTab === "logs" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
+            }`}
+          >
+            <History className="w-4.5 h-4.5" />
+            <span>Activity Logs</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab("backups"); setMobileMenuOpen(false); }}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              activeTab === "backups" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
+            }`}
+          >
+            <Database className="w-4.5 h-4.5" />
+            <span>Database Backups</span>
+          </button>
+
+          <button
             onClick={() => { setActiveTab("seo"); setMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
               activeTab === "seo" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
@@ -4549,6 +4659,16 @@ FILES LIST IN THIS BUNDLE:
           >
             <Globe className="w-4.5 h-4.5" />
             <span>SEO Google Center</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab("adsense"); setMobileMenuOpen(false); }}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              activeTab === "adsense" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
+            }`}
+          >
+            <DollarSign className="w-4.5 h-4.5" />
+            <span>Google AdSense</span>
           </button>
         </nav>
 
@@ -8132,6 +8252,136 @@ FILES LIST IN THIS BUNDLE:
 
 
 
+        {/* 8. AUDIT TRAILS & ADMIN ACTIVITY LOGS (Feature 27) */}
+        {activeTab === "logs" && (
+          <section className="space-y-4 sm:space-y-6 animate-fadeIn">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4 sm:space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-gray-150 pb-4 sm:pb-5">
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-gray-900 flex items-center gap-2">
+                    <History className="w-5 h-5 text-[#009CFC]" /> Operator Security Activity Logs
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1 font-medium">Audit trails detailing system manipulations, category additions, mock compiles, and backups restores.</p>
+                </div>
+              </div>
+
+              <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm max-h-[500px] overflow-y-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-gray-150 text-gray-500 font-extrabold uppercase tracking-widest text-[9px]">
+                      <th className="p-3 sm:p-4 w-36 sm:w-48">Registered Timestamp</th>
+                      <th className="p-3 sm:p-4">Action Summary / Security Detail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {activityLogs.map((log, idx) => (
+                      <tr key={idx} className="border-b border-gray-100 hover:bg-slate-50/50 transition-all font-semibold text-slate-800">
+                        <td className="p-3 sm:p-4 font-mono text-gray-400 text-[10px]">
+                          {log.timestamp ? log.timestamp.replace("T", " ").substring(0, 19) : "N/A"}
+                        </td>
+                        <td className="p-3 sm:p-4 text-slate-900">{log.action || "Manipulated dynamic configuration values"}</td>
+                      </tr>
+                    ))}
+                    {activityLogs.length === 0 && (
+                      <tr>
+                        <td colSpan={2} className="p-8 text-center text-gray-400 font-semibold">
+                          No logging items recorded yet. Change or update items to trigger writes.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* 9. SECURE CLOUD DATABASE BACKUP & RESTORE CENTER (Feature 28) */}
+        {activeTab === "backups" && (
+          <section className="space-y-4 sm:space-y-6 animate-fadeIn">
+            <div className="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm space-y-4 sm:space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-gray-150 pb-4 sm:pb-5">
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-gray-900 flex items-center gap-2">
+                    <Database className="w-5 h-5 text-[#009CFC]" /> Database Snapshot & Recovery Center
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1 font-medium">Create, download, and restore manual backups of configuration matrices, custom student logins records, and syllabus contents trees.</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 border border-gray-200/80 rounded-2xl p-4 sm:p-6 space-y-4">
+                <h4 className="font-extrabold text-sm text-slate-800">Take New Database Backup Snapshot</h4>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="text"
+                    value={backupNameInput}
+                    onChange={(e) => setBackupNameInput(e.target.value)}
+                    placeholder="Enter short custom name, e.g. post_reorg"
+                    className="flex-1 bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-[#009CFC] focus:ring-1 focus:ring-[#009CFC] outline-none font-semibold text-slate-800"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleCreateBackup}
+                    disabled={isBackupLoading}
+                    className="bg-[#009CFC] hover:bg-[#e05626] text-white disabled:bg-gray-300 font-bold text-xs px-6 py-3.5 rounded-xl transition-all shadow-md shadow-[#009CFC]/25 cursor-pointer active:scale-95"
+                  >
+                    {isBackupLoading ? "Generating..." : "Generate Cloud Backup"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="overflow-hidden border border-gray-200 rounded-2xl bg-white shadow-sm overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs min-w-[650px]">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-gray-150 text-gray-500 font-extrabold uppercase tracking-widest text-[9px]">
+                      <th className="p-4">Backup Filename</th>
+                      <th className="p-4 text-center">Filesize</th>
+                      <th className="p-4 text-center">Created At Date</th>
+                      <th className="p-4 text-right">Standard Administration Options</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {backupsList.map((bk) => (
+                      <tr key={bk.filename} className="border-b border-gray-100 hover:bg-slate-50/50 transition-all font-semibold text-slate-800">
+                        <td className="p-4 text-slate-900 font-bold flex items-center gap-2">
+                          <Database className="w-4 h-4 text-gray-400" />
+                          <span>{bk.filename}</span>
+                        </td>
+                        <td className="p-4 text-center text-gray-500 font-mono text-[11px]">{bk.size || "0 KB"}</td>
+                        <td className="p-4 text-center text-gray-400 font-mono text-[11px]">{bk.createdAt || "N/A"}</td>
+                        <td className="p-4 text-right space-x-2">
+                          <a
+                            href={`/api/admin/backup/download/${bk.filename}`}
+                            className="bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-slate-900 border border-gray-250 font-bold text-[10px] px-3.5 py-2.5 rounded-xl transition-all inline-block uppercase tracking-wider text-center"
+                            title="Download backup file to local machine"
+                          >
+                            Download
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => handleRestoreBackup(bk.filename)}
+                            disabled={restoringBackup !== null}
+                            className="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 hover:text-emerald-800 border border-emerald-250 font-black text-[10px] px-3.5 py-2 rounded-xl transition-all uppercase tracking-wider cursor-pointer"
+                          >
+                            {restoringBackup === bk.filename ? "RESTORING..." : "RESTORE DB"}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {backupsList.length === 0 && (
+                      <tr>
+                        <td colSpan={4} className="p-8 text-center text-gray-400 font-bold">
+                          No custom backups catalog found on server. Produce a snapshot using the form above!
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* 10. SEO GOOGLE CENTER */}
         {activeTab === "seo" && (
           <section className="space-y-4 sm:space-y-6 animate-fadeIn">
@@ -8742,7 +8992,245 @@ FILES LIST IN THIS BUNDLE:
           </section>
         )}
 
-        {/* SEO section ends */}
+        {/* 11. GOOGLE ADSENSE CENTER */}
+        {activeTab === "adsense" && (
+          <section className="space-y-6 animate-fadeIn">
+            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-150 pb-5">
+                <div>
+                  <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
+                    <DollarSign className="w-5 h-5 text-amber-500" /> Google AdSense Monetization Center
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1 font-medium">
+                    Configure Google AdSense advertisements on your student exam portal. To protect candidate attention, ads are strictly hidden during active test-taking sessions and only appear for non-logged-in guest users.
+                  </p>
+                </div>
+              </div>
+
+              {/* Status Alert Badge */}
+              <div className={`p-4 rounded-2xl border flex items-start gap-3.5 ${
+                appConfig.adsense?.enabled 
+                  ? "bg-emerald-50 border-emerald-100 text-emerald-800" 
+                  : "bg-gray-50 border-gray-200 text-gray-600"
+              }`}>
+                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
+                  appConfig.adsense?.enabled ? "bg-emerald-500 animate-pulse" : "bg-gray-400"
+                }`} />
+                <div className="text-xs">
+                  <p className="font-extrabold uppercase tracking-wide text-[10px] mb-0.5">
+                    AdSense Status: {appConfig.adsense?.enabled ? "Live and Enabled" : "Inactive / Suspended"}
+                  </p>
+                  <p className="leading-relaxed font-medium">
+                    {appConfig.adsense?.enabled 
+                      ? "Your student portal is actively injecting AdSense script loaders and responsive ad-units for guest visitors."
+                      : "AdSense script loaders and advertisement container units are completely omitted from the compiled student portal."}
+                  </p>
+                </div>
+              </div>
+
+              {/* Form Inputs */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                {/* Enabled Toggle */}
+                <div className="space-y-2 md:col-span-2">
+                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
+                    AdSense Placement Status
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAppConfig(prev => {
+                          const updated = {
+                            ...prev,
+                            adsense: {
+                              ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
+                              enabled: !prev.adsense?.enabled
+                            }
+                          };
+                          return updated;
+                        });
+                      }}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        appConfig.adsense?.enabled ? "bg-[#009CFC]" : "bg-gray-250"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                          appConfig.adsense?.enabled ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                    <span className="text-xs font-bold text-slate-700">
+                      {appConfig.adsense?.enabled ? "Enable Google AdSense ads on Student App" : "Disable Google AdSense ads on Student App"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Google AdSense Publisher ID */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
+                    Google Publisher ID (ca-pub-xxx) <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={appConfig.adsense?.publisherId || ""}
+                    onChange={(e) => {
+                      setAppConfig(prev => ({
+                        ...prev,
+                        adsense: {
+                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
+                          publisherId: e.target.value.trim()
+                        }
+                      }));
+                    }}
+                    placeholder="ca-pub-1234567890123456"
+                    className="w-full text-xs font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#009CFC] transition-all"
+                  />
+                  <p className="text-[10px] text-gray-400 font-medium">
+                    Your unique AdSense identifier. Must start with "ca-pub-".
+                  </p>
+                </div>
+
+                {/* Home Top Ad Unit Slot ID */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
+                    Home Top Ad Slot ID (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={appConfig.adsense?.homeTopSlotId || ""}
+                    onChange={(e) => {
+                      setAppConfig(prev => ({
+                        ...prev,
+                        adsense: {
+                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
+                          homeTopSlotId: e.target.value.trim()
+                        }
+                      }));
+                    }}
+                    placeholder="9876543210"
+                    className="w-full text-xs font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#009CFC] transition-all"
+                  />
+                  <p className="text-[10px] text-gray-400 font-medium">
+                    Leave blank to automatically display a responsive, auto-sized layout in the Top banner container.
+                  </p>
+                </div>
+
+                {/* Home Bottom Ad Unit Slot ID */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
+                    Home Bottom Ad Slot ID (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={appConfig.adsense?.homeBottomSlotId || ""}
+                    onChange={(e) => {
+                      setAppConfig(prev => ({
+                        ...prev,
+                        adsense: {
+                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
+                          homeBottomSlotId: e.target.value.trim()
+                        }
+                      }));
+                    }}
+                    placeholder="8765432109"
+                    className="w-full text-xs font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#009CFC] transition-all"
+                  />
+                  <p className="text-[10px] text-gray-400 font-medium">
+                    Leave blank to automatically display a responsive, auto-sized layout in the Bottom banner container.
+                  </p>
+                </div>
+
+                {/* Sidebar Ad Unit Slot ID */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide">
+                    General/Sidebar Ad Slot ID (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={appConfig.adsense?.sidebarSlotId || ""}
+                    onChange={(e) => {
+                      setAppConfig(prev => ({
+                        ...prev,
+                        adsense: {
+                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
+                          sidebarSlotId: e.target.value.trim()
+                        }
+                      }));
+                    }}
+                    placeholder="7654321098"
+                    className="w-full text-xs font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#009CFC] transition-all"
+                  />
+                  <p className="text-[10px] text-gray-400 font-medium">
+                    Ad Slot ID used for supplemental visual placements.
+                  </p>
+                </div>
+
+                {/* ads.txt Content File Customizer */}
+                <div className="space-y-2 md:col-span-2">
+                  <label className="block text-xs font-black text-slate-800 uppercase tracking-wide flex items-center justify-between">
+                    <span>ads.txt Content (Google AdSense Verified)</span>
+                    <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Auto-Packaged in ZIP Export</span>
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={
+                      appConfig.adsense?.adsTxtCustom !== undefined
+                        ? appConfig.adsense.adsTxtCustom
+                        : `google.com, ${(appConfig.adsense?.publisherId || 'ca-pub-0000000000000000').replace('ca-', '')}, DIRECT, f08c47fec0942fa0`
+                    }
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setAppConfig(prev => ({
+                        ...prev,
+                        adsense: {
+                          ...(prev.adsense || { enabled: false, publisherId: "", homeTopSlotId: "", homeBottomSlotId: "", sidebarSlotId: "" }),
+                          adsTxtCustom: val
+                        }
+                      }));
+                    }}
+                    placeholder="google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0"
+                    className="w-full text-xs font-mono font-bold text-slate-800 bg-[#F4F7FA] border border-gray-150 rounded-xl px-4 py-3 focus:outline-none focus:border-[#009CFC] transition-all"
+                  />
+                  <p className="text-[10px] text-gray-400 font-medium">
+                    This file is automatically generated and included as <code className="text-amber-600 font-bold">ads.txt</code> in all exported ZIP packages for Hostinger and GitHub root upload to guarantee instant Google AdSense crawler verification at <code className="text-blue-600 font-bold">taiyariya.in/ads.txt</code>.
+                  </p>
+                </div>
+              </div>
+
+              {/* CTA / Manual Compiler Trigger */}
+              <div className="border-t border-gray-150 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="max-w-xl text-[11px] text-slate-500 font-medium leading-relaxed">
+                  Clicking <strong className="text-slate-800">Save AdSense Changes</strong> will persist AdSense configuration settings. Remember to click <strong className="text-slate-800">COMPILE & RE-BUILD PORTAL</strong> at the top/sidebar to generate and freeze the new HTML client bundle file!
+                </div>
+                <button
+                  onClick={async () => {
+                    try {
+                      // Save configuration settings
+                      const res = await fetch("/api/admin/save", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(appConfig)
+                      });
+                      const rdata = await res.json();
+                      if (rdata.success) {
+                        alert("🎉 AdSense Configuration updated and saved successfully! Please compile/build the portal to see your changes live.");
+                      } else {
+                        alert("⚠️ Error saving AdSense configuration: " + (rdata.error || "Unknown error"));
+                      }
+                    } catch (e) {
+                      console.error(e);
+                      alert("⚠️ Network failure saving AdSense configuration.");
+                    }
+                  }}
+                  className="bg-[#009CFC] text-white hover:bg-[#e05623] active:scale-95 px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider shadow-md hover:shadow-lg transition-all shrink-0 flex items-center justify-center gap-2"
+                >
+                  <DollarSign className="w-4 h-4" /> Save AdSense Changes
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
 
       </main>
 

@@ -803,21 +803,30 @@ ${dynamicBookSchemas}
         }
 
         .dark-mode .analysis-explanation-box {
-            background: #102338 !important;
-            border: 1px solid #1E344B !important;
-            color: #7dd3fc !important;
+            background: #121F2F !important;
+            border: 1.5px solid #1E344B !important;
+            border-left: 4px solid var(--primary) !important;
+            color: #F0F6FC !important;
+            font-weight: 400 !important;
+        }
+
+        .dark-mode .analysis-explanation-content {
+            color: #F0F6FC !important;
+            font-weight: 400 !important;
         }
 
         .dark-mode .analysis-question-box {
             background: #121F2F !important;
             border: 1px solid #1E344B !important;
-            color: #ffffff !important;
+            color: #F0F6FC !important;
+            font-weight: 400 !important;
         }
 
         .dark-mode .analysis-opt-box {
             background: #121F2F !important;
             border-color: #1E344B !important;
-            color: #ffffff !important;
+            color: #F0F6FC !important;
+            font-weight: 400 !important;
         }
 
         .dark-mode .analysis-opt-a,
@@ -827,13 +836,14 @@ ${dynamicBookSchemas}
         .dark-mode .analysis-opt-e {
             background-color: #121F2F !important;
             border-color: #1E344B !important;
-            color: #ffffff !important;
+            color: #F0F6FC !important;
+            font-weight: 400 !important;
         }
 
         .dark-mode .analysis-opt-box.correct {
-            border-color: #2ed573 !important;
-            background-color: rgba(46, 213, 115, 0.15) !important;
-            color: #2ed573 !important;
+            border-color: #22c55e !important;
+            background-color: rgba(34, 197, 94, 0.15) !important;
+            color: #4ade80 !important;
         }
 
         .dark-mode .analysis-opt-box.wrong {
@@ -843,9 +853,11 @@ ${dynamicBookSchemas}
         }
 
         .dark-mode .option-analysis-expandable-box {
-            background-color: #121F2F !important;
+            background-color: #0F1A28 !important;
             border: 1.5px solid #1E344B !important;
-            color: #94A9BE !important;
+            border-left: 3.5px solid #38bdf8 !important;
+            color: #cbd5e1 !important;
+            font-weight: 400 !important;
         }
 
         .dark-mode .oa-box-a,
@@ -853,21 +865,32 @@ ${dynamicBookSchemas}
         .dark-mode .oa-box-c,
         .dark-mode .oa-box-d,
         .dark-mode .oa-box-e {
-            background-color: #121F2F !important;
+            background-color: #0F1A28 !important;
             border: 1.5px solid #1E344B !important;
-            color: #94A9BE !important;
+            border-left: 3.5px solid #38bdf8 !important;
+            color: #cbd5e1 !important;
+            font-weight: 400 !important;
         }
 
         .dark-mode .oa-box-correct {
             background-color: rgba(34, 197, 94, 0.12) !important;
-            border: 1.5px solid rgba(34, 197, 94, 0.3) !important;
+            border: 1.5px solid rgba(34, 197, 94, 0.35) !important;
+            border-left: 3.5px solid #22c55e !important;
             color: #4ade80 !important;
         }
 
         .dark-mode .oa-box-wrong {
             background-color: rgba(239, 68, 68, 0.12) !important;
-            border: 1.5px solid rgba(239, 68, 68, 0.3) !important;
+            border: 1.5px solid rgba(239, 68, 68, 0.35) !important;
+            border-left: 3.5px solid #ef4444 !important;
             color: #f87171 !important;
+        }
+
+        .dark-mode .analysis-source-box {
+            background: rgba(245, 158, 11, 0.12) !important;
+            border-left: 3.5px solid #f59e0b !important;
+            color: #fbbf24 !important;
+            font-weight: 400 !important;
         }
 
         .dark-mode .engine-question-source {
@@ -2094,6 +2117,47 @@ ${dynamicBookSchemas}
             }
         }
 
+        #engineLangToggleBtn {
+            display: none;
+            align-items: center;
+            gap: 3.5px;
+            border: 1px solid var(--border-color);
+            background: var(--light-grey);
+            color: var(--primary);
+            font-size: 8.5px;
+            font-weight: 850;
+            border-radius: 4px;
+            padding: 1.5px 6px;
+            margin-top: 2.5px;
+            cursor: pointer;
+            width: fit-content;
+            font-family: Outfit, sans-serif;
+            transition: all 0.15s ease;
+            user-select: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        #engineLangToggleBtn:hover {
+            background: rgba(255, 107, 53, 0.1);
+            border-color: var(--primary);
+        }
+
+        #engineLangToggleBtn:active {
+            transform: scale(0.93);
+        }
+
+        .dark-mode #engineLangToggleBtn {
+            background: #0B131E !important;
+            border-color: #1E344B !important;
+            color: var(--primary) !important;
+            box-shadow: none !important;
+        }
+
+        .dark-mode #engineLangToggleBtn:hover {
+            background: rgba(255, 107, 53, 0.15) !important;
+            border-color: var(--primary) !important;
+        }
+
         .guidelines-card {
             background: linear-gradient(to bottom, #fafafa, #ffffff);
             border: 1.5px solid var(--border-color);
@@ -2423,14 +2487,908 @@ ${dynamicBookSchemas}
             font-weight: bold;
         }
 
-        /* Scorecard visual block styles */
+        /* Scorecard visual block styles (Responsive Redesign for Mobile, Tablet, Laptop, Desktop) */
+        #scr-results {
+            width: 100% !important;
+            max-width: 1180px !important;
+            margin: 0 auto !important;
+            padding: 14px 14px 160px !important; /* Generous bottom clearance ensuring Back To Dashboard is never obscured by mobile bottom nav */
+            box-sizing: border-box !important;
+        }
+
+        @media (min-width: 640px) {
+            #scr-results {
+                padding: 18px 22px 150px !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            #scr-results {
+                padding: 24px 28px 48px !important;
+            }
+        }
+
+        /* Mock Score Card Container: Day Mode is Pure White, Night Mode matches Dark Theme */
         .scorecard-block {
-            background: var(--dark);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 25px;
+            position: relative !important;
+            background: #ffffff !important;
+            color: var(--dark) !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 22px !important;
+            padding: 20px 16px !important;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
+            margin-bottom: 24px !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+            text-align: left !important;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+        }
+
+        @media (min-width: 640px) {
+            .scorecard-block {
+                border-radius: 26px !important;
+                padding: 26px 24px !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .scorecard-block {
+                border-radius: 28px !important;
+                padding: 32px 32px !important;
+            }
+        }
+
+        /* Ambient subtle glow blobs */
+        .sc-ambient-glow {
+            position: absolute !important;
+            pointer-events: none !important;
+            border-radius: 50% !important;
+            filter: blur(50px) !important;
+            opacity: 0.04 !important;
+        }
+        .sc-glow-1 {
+            top: -60px;
+            right: -40px;
+            width: 220px;
+            height: 220px;
+            background: #ff6b35;
+        }
+        .sc-glow-2 {
+            bottom: -60px;
+            left: -40px;
+            width: 200px;
+            height: 200px;
+            background: #009cfc;
+        }
+
+        /* Header Bar */
+        .sc-header-bar {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+            margin-bottom: 20px !important;
+            position: relative !important;
+            z-index: 2 !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-header-bar {
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 16px !important;
+                margin-bottom: 24px !important;
+            }
+        }
+
+        .sc-header-left {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important;
+        }
+
+        .sc-badge-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            background: rgba(255, 107, 53, 0.09) !important;
+            color: var(--primary) !important;
+            border: 1px solid rgba(255, 107, 53, 0.22) !important;
+            border-radius: 9999px !important;
+            padding: 3px 10px !important;
+            font-size: 10.5px !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.8px !important;
+            text-transform: uppercase !important;
+            width: fit-content !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .sc-main-title {
+            margin: 0 !important;
+            font-size: 19px !important;
+            font-weight: 900 !important;
+            letter-spacing: 0.3px !important;
+            color: var(--dark) !important;
+            font-family: 'Outfit', sans-serif !important;
+            line-height: 1.2 !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-main-title {
+                font-size: 22px !important;
+            }
+        }
+
+        .sc-header-right {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            flex-wrap: wrap !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-header-right {
+                flex-direction: column !important;
+                align-items: flex-end !important;
+                gap: 4px !important;
+            }
+        }
+
+        .sc-topic-header {
+            margin: 0 !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            color: #64748b !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .sc-status-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            background: rgba(34, 197, 94, 0.1) !important;
+            color: #15803d !important;
+            border: 1px solid rgba(34, 197, 94, 0.25) !important;
+            border-radius: 9999px !important;
+            padding: 3px 8px !important;
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        /* Bento Grid Layout */
+        .sc-bento-grid {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+            margin-bottom: 14px !important;
+            position: relative !important;
+            z-index: 2 !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-bento-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .sc-bento-grid {
+                grid-template-columns: 360px 1fr !important;
+                gap: 20px !important;
+            }
+        }
+
+        /* Showcase Score Card (Day Mode: Subtle warm-neutral off-white contrast) */
+        .sc-score-showcase {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 18px !important;
+            padding: 18px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            gap: 14px !important;
+            box-sizing: border-box !important;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-score-showcase {
+                border-radius: 20px !important;
+                padding: 22px !important;
+            }
+        }
+
+        .sc-score-header {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 8px !important;
+        }
+
+        .sc-score-label {
+            font-size: 11px !important;
+            color: #64748b !important;
+            text-transform: uppercase !important;
+            font-weight: 800 !important;
+            letter-spacing: 1px !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        /* Dynamic Performance Badges with High Contrast in Both Modes */
+        .sc-perf-badge {
+            display: inline-block !important;
+            padding: 3px 9px !important;
+            font-size: 10.5px !important;
+            font-weight: 800 !important;
+            border-radius: 9999px !important;
+            background: rgba(34, 197, 94, 0.12) !important;
+            color: #15803d !important;
+            border: 1px solid rgba(34, 197, 94, 0.28) !important;
+            font-family: 'Outfit', sans-serif !important;
+            transition: all 0.2s ease !important;
+        }
+        .sc-perf-badge.badge-outstanding {
+            background: rgba(34, 197, 94, 0.12) !important;
+            color: #15803d !important;
+            border-color: rgba(34, 197, 94, 0.28) !important;
+        }
+        .sc-perf-badge.badge-good {
+            background: rgba(59, 130, 246, 0.12) !important;
+            color: #1d4ed8 !important;
+            border-color: rgba(59, 130, 246, 0.28) !important;
+        }
+        .sc-perf-badge.badge-average {
+            background: rgba(234, 179, 8, 0.14) !important;
+            color: #a16207 !important;
+            border-color: rgba(234, 179, 8, 0.3) !important;
+        }
+        .sc-perf-badge.badge-practice {
+            background: rgba(239, 68, 68, 0.12) !important;
+            color: #b91c1c !important;
+            border-color: rgba(239, 68, 68, 0.28) !important;
+        }
+
+        .sc-score-display {
+            display: flex !important;
+            align-items: baseline !important;
+            justify-content: flex-start !important;
+            gap: 8px !important;
+            margin: 4px 0 !important;
+        }
+
+        .sc-score-number {
+            margin: 0 !important;
+            font-size: 38px !important;
+            font-weight: 950 !important;
+            line-height: 1 !important;
+            color: #16a34a !important;
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.5px !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-score-number {
+                font-size: 46px !important;
+            }
+        }
+
+        .sc-score-max {
+            font-size: 15px !important;
+            color: #94a3b8 !important;
+            font-weight: 700 !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .sc-mini-metrics-row {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
+            padding-top: 12px !important;
+            border-top: 1px solid #e2e8f0 !important;
+        }
+
+        .sc-mini-metric {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+        }
+
+        .sc-mini-icon {
+            width: 34px !important;
+            height: 34px !important;
+            border-radius: 10px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 16px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .sc-mini-label {
+            display: block !important;
+            font-size: 10px !important;
+            color: #64748b !important;
+            text-transform: uppercase !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.5px !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .sc-mini-val {
+            margin: 1px 0 0 0 !important;
+            font-size: 15px !important;
+            font-weight: 800 !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+        #statAccuracyPercent {
+            color: #ca8a04 !important;
+        }
+        #statDurationSpent {
+            color: #7c3aed !important;
+        }
+
+        /* 4 Filters Grid */
+        .sc-filters-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+        }
+
+        @media (min-width: 640px) and (max-width: 1023px) {
+            .sc-filters-grid {
+                grid-column: span 2 !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 12px !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .sc-filters-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+        }
+
+        /* Interactive Stat Card (Day Mode: Crisp White Card) */
+        .sc-stat-card {
+            background: #ffffff !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 18px !important;
+            padding: 14px 14px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            user-select: none !important;
+            box-sizing: border-box !important;
+            position: relative !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+        }
+
+        .sc-stat-card:hover {
+            background: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06) !important;
+        }
+
+        .sc-stat-card.active {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.25), 0 4px 12px rgba(255, 107, 53, 0.12) !important;
+        }
+
+        .sc-stat-top {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+        }
+
+        .sc-stat-icon-wrap {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 9px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 16px !important;
+        }
+
+        .sc-filter-action-tag {
+            font-size: 9.5px !important;
+            color: #94a3b8 !important;
+            text-transform: uppercase !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.5px !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .sc-stat-content {
+            margin-top: 2px !important;
+        }
+
+        .sc-stat-num {
+            margin: 0 !important;
+            font-size: 22px !important;
+            font-weight: 900 !important;
+            line-height: 1.1 !important;
+            font-family: 'Outfit', sans-serif !important;
+            color: var(--dark) !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-stat-num {
+                font-size: 24px !important;
+            }
+        }
+
+        #statTotalItemsText {
+            color: var(--dark) !important;
+        }
+        #statCorrectCountText {
+            color: #16a34a !important;
+        }
+        #statIncorrectCountText {
+            color: #dc2626 !important;
+        }
+        #statUnansweredCountText {
+            color: #2563eb !important;
+        }
+
+        .sc-stat-name {
+            margin: 3px 0 0 0 !important;
+            font-size: 11px !important;
+            color: #64748b !important;
+            text-transform: uppercase !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.4px !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        /* Revealed Banner (Eye Assist in Day Mode) */
+        .sc-revealed-banner {
+            position: relative !important;
+            z-index: 2 !important;
+            background: rgba(16, 185, 129, 0.07) !important;
+            border: 1.5px solid rgba(16, 185, 129, 0.22) !important;
+            border-radius: 16px !important;
+            padding: 12px 14px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            box-sizing: border-box !important;
+        }
+
+        .sc-revealed-banner:hover {
+            background: rgba(16, 185, 129, 0.12) !important;
+            border-color: rgba(16, 185, 129, 0.32) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .sc-revealed-left {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            min-width: 0 !important;
+        }
+
+        .sc-revealed-icon {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 8px !important;
+            background: rgba(16, 185, 129, 0.14) !important;
+            color: #059669 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 18px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .sc-revealed-title-row {
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+        }
+
+        .sc-revealed-label {
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            color: #059669 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .sc-revealed-count {
+            font-size: 13px !important;
+            font-weight: 900 !important;
+            color: var(--dark) !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .sc-revealed-sub {
+            margin: 1px 0 0 0 !important;
+            font-size: 11px !important;
+            color: #047857 !important;
+            opacity: 0.85 !important;
+            font-family: 'Outfit', sans-serif !important;
+            display: none !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-revealed-sub {
+                display: block !important;
+            }
+        }
+
+        .sc-revealed-btn {
+            background: rgba(16, 185, 129, 0.12) !important;
+            color: #047857 !important;
+            border: 1px solid rgba(16, 185, 129, 0.25) !important;
+            padding: 6px 12px !important;
+            border-radius: 8px !important;
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            cursor: pointer !important;
+            white-space: nowrap !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        /* Analysis Section */
+        .sc-analysis-section {
+            margin-top: 24px !important;
+        }
+
+        .sc-analysis-header {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            margin-bottom: 12px !important;
+        }
+
+        .sc-analysis-header-left {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+        }
+
+        .sc-analysis-title {
+            margin: 0 !important;
+            font-size: 18px !important;
+            font-weight: 900 !important;
+            color: var(--dark) !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-analysis-title {
+                font-size: 20px !important;
+            }
+        }
+
+        .sc-analysis-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            padding: 3px 10px !important;
+            border-radius: 9999px !important;
+            background: rgba(255, 107, 53, 0.1) !important;
+            color: var(--primary) !important;
+            border: 1px solid rgba(255, 107, 53, 0.25) !important;
+            font-family: 'Outfit', sans-serif !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .sc-analysis-hint {
+            font-size: 11.5px !important;
+            color: var(--grey-text) !important;
+            font-weight: 600 !important;
+            font-family: 'Outfit', sans-serif !important;
+            display: none !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-analysis-hint {
+                display: block !important;
+            }
+        }
+
+        /* Palette horizontal scroll */
+        .sc-palette-scroll {
+            display: flex !important;
+            gap: 8px !important;
+            overflow-x: auto !important;
+            padding: 10px 8px !important;
+            margin-bottom: 16px !important;
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: thin !important;
+        }
+
+        /* Detail Viewer Card */
+        .sc-detail-viewer-card {
+            background: #ffffff !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 18px !important;
+            padding: 16px !important;
+            margin-bottom: 16px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+            box-sizing: border-box !important;
+        }
+
+        @media (min-width: 640px) {
+            .sc-detail-viewer-card {
+                border-radius: 22px !important;
+                padding: 22px !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .sc-detail-viewer-card {
+                border-radius: 24px !important;
+                padding: 26px !important;
+            }
+        }
+
+        /* Bottom Actions (Comfortable Clearance above bottom navigation) */
+        .sc-bottom-actions {
+            display: flex !important;
+            justify-content: center !important;
+            width: 100% !important;
+            margin: 32px 0 24px 0 !important;
+            position: relative !important;
+            z-index: 50 !important;
+        }
+
+        .sc-btn-dashboard {
+            background: var(--dark) !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 9999px !important;
+            padding: 14px 32px !important;
+            font-size: 14.5px !important;
+            font-weight: 800 !important;
+            width: 100% !important;
+            max-width: 320px !important;
+            min-height: 50px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
+            cursor: pointer !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .sc-btn-dashboard:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2) !important;
+            background: #1e293b !important;
+        }
+
+        /* =========================================================================
+           NIGHT MODE THEME ADAPTATION (Perfect match with dark slate / navy aesthetic)
+           ========================================================================= */
+        .dark-mode .scorecard-block {
+            background: #121F2F !important;
+            color: #f0f6fc !important;
+            border: 1px solid #1E344B !important;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .dark-mode .sc-ambient-glow {
+            opacity: 0.12 !important;
+        }
+
+        .dark-mode .sc-badge-pill {
+            background: rgba(255, 107, 53, 0.16) !important;
+            border-color: rgba(255, 107, 53, 0.35) !important;
+            color: var(--primary) !important;
+        }
+
+        .dark-mode .sc-main-title {
+            color: #ffffff !important;
+        }
+
+        .dark-mode .sc-topic-header {
+            color: #94A9BE !important;
+        }
+
+        .dark-mode .sc-status-pill {
+            background: rgba(34, 197, 94, 0.15) !important;
+            color: #4ade80 !important;
+            border-color: rgba(34, 197, 94, 0.3) !important;
+        }
+
+        .dark-mode .sc-score-showcase {
+            background: #0B131E !important;
+            border: 1px solid #1E344B !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+        }
+
+        .dark-mode .sc-score-label {
+            color: #94A9BE !important;
+        }
+
+        .dark-mode .sc-perf-badge.badge-outstanding {
+            background: rgba(34, 197, 94, 0.18) !important;
+            color: #4ade80 !important;
+            border-color: rgba(34, 197, 94, 0.35) !important;
+        }
+        .dark-mode .sc-perf-badge.badge-good {
+            background: rgba(59, 130, 246, 0.18) !important;
+            color: #60a5fa !important;
+            border-color: rgba(59, 130, 246, 0.35) !important;
+        }
+        .dark-mode .sc-perf-badge.badge-average {
+            background: rgba(234, 179, 8, 0.18) !important;
+            color: #facc15 !important;
+            border-color: rgba(234, 179, 8, 0.35) !important;
+        }
+        .dark-mode .sc-perf-badge.badge-practice {
+            background: rgba(239, 68, 68, 0.18) !important;
+            color: #f87171 !important;
+            border-color: rgba(239, 68, 68, 0.35) !important;
+        }
+
+        .dark-mode .sc-score-number {
+            color: #4ade80 !important;
+        }
+
+        .dark-mode .sc-score-max {
+            color: #64748b !important;
+        }
+
+        .dark-mode .sc-mini-metrics-row {
+            border-top-color: #1E344B !important;
+        }
+
+        .dark-mode .sc-mini-label {
+            color: #94A9BE !important;
+        }
+
+        .dark-mode #statAccuracyPercent {
+            color: #facc15 !important;
+        }
+
+        .dark-mode #statDurationSpent {
+            color: #c084fc !important;
+        }
+
+        .dark-mode .sc-stat-card {
+            background: #0B131E !important;
+            border: 1.5px solid #1E344B !important;
+            box-shadow: none !important;
+        }
+
+        .dark-mode .sc-stat-card:hover {
+            background: #152233 !important;
+            border-color: #274768 !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .dark-mode .sc-stat-card.active {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.35) !important;
+        }
+
+        .dark-mode .sc-filter-action-tag {
+            color: #64748b !important;
+        }
+
+        .dark-mode .sc-stat-num {
+            color: #ffffff !important;
+        }
+
+        .dark-mode #statTotalItemsText {
+            color: #ffffff !important;
+        }
+
+        .dark-mode #statCorrectCountText {
+            color: #4ade80 !important;
+        }
+
+        .dark-mode #statIncorrectCountText {
+            color: #f87171 !important;
+        }
+
+        .dark-mode #statUnansweredCountText {
+            color: #60a5fa !important;
+        }
+
+        .dark-mode .sc-stat-name {
+            color: #94A9BE !important;
+        }
+
+        .dark-mode .sc-revealed-banner {
+            background: rgba(16, 185, 129, 0.1) !important;
+            border: 1px solid rgba(16, 185, 129, 0.25) !important;
+        }
+
+        .dark-mode .sc-revealed-banner:hover {
+            background: rgba(16, 185, 129, 0.16) !important;
+            border-color: rgba(16, 185, 129, 0.38) !important;
+        }
+
+        .dark-mode .sc-revealed-icon {
+            background: rgba(16, 185, 129, 0.18) !important;
+            color: #10b981 !important;
+        }
+
+        .dark-mode .sc-revealed-label {
+            color: #34d399 !important;
+        }
+
+        .dark-mode .sc-revealed-count {
+            color: #ffffff !important;
+        }
+
+        .dark-mode .sc-revealed-sub {
+            color: #6ee7b7 !important;
+            opacity: 0.85 !important;
+        }
+
+        .dark-mode .sc-revealed-btn {
+            background: rgba(16, 185, 129, 0.18) !important;
+            color: #34d399 !important;
+            border-color: rgba(16, 185, 129, 0.32) !important;
+        }
+
+        .dark-mode .sc-analysis-title {
+            color: #f0f6fc !important;
+        }
+
+        .dark-mode .sc-analysis-hint {
+            color: #94A9BE !important;
+        }
+
+        .dark-mode #scorecardGlobalLangBtn {
+            background: #0B131E !important;
+            border-color: #1E344B !important;
+            color: var(--primary) !important;
+            box-shadow: none !important;
+        }
+
+        .dark-mode .sc-detail-viewer-card {
+            background: #121F2F !important;
+            border-color: #1E344B !important;
+            color: #f0f6fc !important;
+        }
+
+        .dark-mode .sc-palette-scroll {
+            background: #0B131E !important;
+            border-color: #1E344B !important;
+        }
+
+        .dark-mode .sc-btn-dashboard {
+            background: var(--primary) !important;
+            color: #ffffff !important;
+            box-shadow: 0 8px 24px rgba(255, 107, 53, 0.25) !important;
+        }
+        .dark-mode .sc-btn-dashboard:hover {
+            background: var(--primary) !important;
+            filter: brightness(1.1) !important;
+            box-shadow: 0 10px 28px rgba(255, 107, 53, 0.35) !important;
         }
 
         .stats-summary-grid {
@@ -2475,20 +3433,42 @@ ${dynamicBookSchemas}
 
         .analysis-question-box {
             background: var(--light-grey);
-            padding: 16px;
-            border-radius: 12px;
+            padding: 16px 18px;
+            border-radius: 14px;
             border: 1px solid var(--border-color);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+            font-size: 15px;
+            line-height: 1.65;
+            font-weight: 400 !important;
+            color: var(--dark);
+        }
+
+        .analysis-question-box strong,
+        .analysis-question-box b {
+            font-weight: 600 !important;
+        }
+
+        .analysis-question-text {
+            font-size: 15px;
+            line-height: 1.65;
+            font-weight: 400 !important;
+            color: inherit;
         }
 
         .analysis-opt-box {
-            padding: 14px;
-            border-radius: 10px;
+            padding: 12px 14px;
+            border-radius: 12px;
             border: 1.5px solid var(--border-color);
             margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: 400 !important;
             background-color: #ffffff !important;
             color: var(--dark) !important;
+            transition: all 0.18s ease;
+        }
+
+        .analysis-opt-box strong,
+        .analysis-opt-box b {
+            font-weight: 600 !important;
         }
 
         .analysis-opt-a,
@@ -2499,33 +3479,42 @@ ${dynamicBookSchemas}
             background-color: #ffffff !important;
             border-color: var(--border-color) !important;
             color: var(--dark) !important;
+            font-weight: 400 !important;
         }
 
         .analysis-opt-box.correct {
-            border-color: #2ecc71 !important;
-            background-color: #eafaf1 !important;
-            color: #155724 !important;
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            color: #15803d !important;
         }
 
         .analysis-opt-box.wrong {
-            border-color: #e74c3c !important;
-            background-color: #fdf2f2 !important;
-            color: #721c24 !important;
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #b91c1c !important;
         }
 
         /* Option analysis expandable box default styles */
         .option-analysis-expandable-box {
-            margin-top: 8px;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            line-height: 1.5;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            font-weight: 400 !important;
+            line-height: 1.6;
             transition: all 0.2s ease;
             background-color: #f8fafc !important;
             border: 1.5px solid #e2e8f0 !important;
+            border-left: 3.5px solid #94a3b8 !important;
             color: #334155 !important;
             font-family: 'Outfit', 'Anek Devanagari', 'Anek Devnagari', sans-serif;
+        }
+
+        .option-analysis-expandable-box strong,
+        .option-analysis-expandable-box b {
+            font-weight: 600 !important;
         }
 
         .oa-box-a,
@@ -2535,48 +3524,91 @@ ${dynamicBookSchemas}
         .oa-box-e {
             background-color: #f8fafc !important;
             border: 1.5px solid #e2e8f0 !important;
+            border-left: 3.5px solid #94a3b8 !important;
             color: #334155 !important;
         }
 
         .oa-box-correct {
-            background-color: #eafaf1 !important;
-            border: 1.5px solid #2ecc71 !important;
-            color: #155724 !important;
+            background-color: #f0fdf4 !important;
+            border: 1.5px solid rgba(34, 197, 94, 0.3) !important;
+            border-left: 3.5px solid #22c55e !important;
+            color: #15803d !important;
         }
 
         .oa-box-wrong {
-            background-color: #fdf2f2 !important;
-            border: 1.5px solid #e74c3c !important;
-            color: #721c24 !important;
+            background-color: #fef2f2 !important;
+            border: 1.5px solid rgba(239, 68, 68, 0.3) !important;
+            border-left: 3.5px solid #ef4444 !important;
+            color: #b91c1c !important;
         }
 
         .oa-box-label {
-            font-size: 10px;
-            font-weight: 800;
+            font-size: 10.5px;
+            font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 5px;
-            opacity: 0.85;
+            margin-bottom: 6px;
+            opacity: 0.9;
             letter-spacing: 0.5px;
             font-family: 'Outfit', sans-serif !important;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .oa-box-content {
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 13.5px;
+            font-weight: 400 !important;
+            line-height: 1.6;
             font-family: 'Outfit', 'Anek Devanagari', 'Anek Devnagari', sans-serif;
         }
 
+        .oa-box-content strong,
+        .oa-box-content b {
+            font-weight: 600 !important;
+        }
+
         .analysis-explanation-box {
-            background: #e1f5fe;
-            border: 1px solid #b3e5fc;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            color: #0277bd;
-            margin-top: 15px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-left: 4px solid var(--primary);
+            padding: 16px 18px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.7;
+            font-weight: 400 !important;
+            color: #1e293b;
+            margin-top: 18px;
             white-space: pre-wrap !important;
             word-break: break-word !important;
             overflow-wrap: break-word !important;
+        }
+
+        .analysis-explanation-box strong,
+        .analysis-explanation-box b {
+            font-weight: 600 !important;
+        }
+
+        .analysis-explanation-content {
+            font-size: 14px;
+            line-height: 1.7;
+            font-weight: 400 !important;
+            color: inherit;
+        }
+
+        .analysis-explanation-content strong,
+        .analysis-explanation-content b {
+            font-weight: 600 !important;
+        }
+
+        .analysis-source-box {
+            margin-top: 14px;
+            padding: 9px 12px;
+            background: rgba(245, 158, 11, 0.08);
+            border-left: 3.5px solid #f59e0b;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 400;
+            color: #b45309;
         }
 
         .analysis-question-box,
@@ -4162,8 +5194,9 @@ ${dynamicBookSchemas}
                     <img id="testEngineLogo" class="app-logo" src="${config.logoUrl}" style="flex-shrink: 0; width: 34px; height: 34px; object-fit: contain;">
                     <div style="min-width: 0; display: flex; flex-direction: column; flex: 1;">
                         <span id="testEngineName" style="margin: 0; font-weight: 850; display: block; line-height: 1.35;">--</span>
-                        <button class="engine-tools-badge" onclick="event.stopPropagation(); handleToggleLanguage()" id="translateBtn" style="margin-top: 1px; height: 18px; padding: 0 5px; font-size: 8px; border-radius: 4px; background: var(--light-grey); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 3px; cursor: pointer;">
-                            <i class="ph ph-translate" style="font-size: 9px;"></i> <span id="translateLabel" style="font-size: 8px;">TRANSLATE</span>
+                        <button class="engine-lang-badge" id="engineLangToggleBtn" onclick="event.stopPropagation(); handleToggleLanguage()" title="Change Language" style="display: none; align-items: center; gap: 3.5px; border: 1px solid var(--border-color); background: var(--light-grey); color: var(--primary); font-size: 8.5px; font-weight: 850; border-radius: 4px; padding: 1.5px 6px; margin-top: 2.5px; cursor: pointer; width: fit-content; font-family: Outfit, sans-serif; transition: all 0.15s ease; user-select: none;">
+                            <i class="ph-bold ph-translate" style="font-size: 10px;"></i>
+                            <span id="engineLangLabel">HINDI</span>
                         </button>
                     </div>
                 </div>
@@ -4230,10 +5263,6 @@ ${dynamicBookSchemas}
             <div class="desktop-nav-link" id="dtab-acc" onclick="handleTabNavigation('acc')">
                 <i class="ph ph-user"></i> <span>Account</span>
             </div>
-            <div class="desktop-nav-link" id="desktopSyncBtn" onclick="handleForceRefreshDatabase(true)" title="Check & Sync Latest Updates (ताज़ा अपडेट रिफ्रेश करें)">
-                <i class="ph ph-arrows-clockwise" id="dSyncIcon" style="font-size: 16px;"></i>
-                <span id="dSyncText">Sync</span>
-            </div>
             <div class="desktop-nav-link desktop-theme-btn" id="desktopThemeToggleBtn" onclick="handleToggleThemeMode()" title="Toggle Dark/Light Mode">
                 <i class="ph ph-sun theme-sun-icon" id="dthemeSunIcon" style="font-size: 16px;"></i>
                 <i class="ph ph-moon theme-moon-icon" id="dthemeMoonIcon" style="font-size: 16px;"></i>
@@ -4241,9 +5270,6 @@ ${dynamicBookSchemas}
             </div>
         </div>
         <div class="mobile-header-actions" id="mobileHeaderActions" style="display: flex; gap: 6px; align-items: center;">
-            <div class="header-action-btn" id="headerSyncBtn" onclick="handleForceRefreshDatabase(true)" title="Check & Sync Latest Updates (ताज़ा अपडेट रिफ्रेश करें)">
-                <i class="ph ph-arrows-clockwise" id="headerSyncIcon" style="font-size: 19px;"></i>
-            </div>
             <div class="header-action-btn" id="themeToggleBtn" onclick="handleToggleThemeMode()" title="Toggle Day/Night Mode">
                 <i class="ph ph-sun theme-sun-icon" id="themeSunIcon" style="font-size: 20px;"></i>
                 <i class="ph ph-moon theme-moon-icon" id="themeMoonIcon" style="font-size: 20px;"></i>
@@ -4457,8 +5483,8 @@ ${dynamicBookSchemas}
                         <div style="display: flex; gap: 10px; align-items: flex-start;">
                             <span style="width: 20px; height: 20px; background: rgba(255,107,53,0.1); color: var(--primary); font-size: 11px; font-weight: 900; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">2</span>
                             <div>
-                                <strong>Bilingual Evaluation Options:</strong>
-                                <p style="margin: 2px 0 0 0; font-size: 11.5px; color: var(--grey-text);">Toggle assessment languages anytime using the <strong>TRANSLATE</strong> option provided in header bar during interactive play.</p>
+                                <strong>Detailed Solutions & Analysis:</strong>
+                                <p style="margin: 2px 0 0 0; font-size: 11.5px; color: var(--grey-text);">Review full explanations, language options, and question analytics directly on your Mock Test Scorecard after submission.</p>
                             </div>
                         </div>
 
@@ -4646,90 +5672,104 @@ ${dynamicBookSchemas}
                     </p>
                 </div>
 
-                <div class="pay-step2-grid">
-                    <div class="pay-step2-left">
-                        <!-- Form Inputs -->
-                        <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px;">
-                            <div>
-                                <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                                    <span>Aspirant Full Name *</span>
-                                </label>
-                                <div style="position: relative;">
-                                    <i class="ph ph-user" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px;"></i>
-                                    <input type="text" id="payFormName" class="form-input" style="margin-bottom:0; width: 100%; padding-left: 42px; border-radius: 12px; height: 46px; box-sizing: border-box;" placeholder="Enter your full name">
+                <form id="paymentWeb3Form" action="https://api.web3forms.com/submit" method="POST" onsubmit="handleSendPaymentDetailsEmail(event)">
+                    <input type="hidden" name="access_key" value="5d794766-9266-49a2-b97b-cc7313dd14d6">
+                    <input type="hidden" name="from_name" value="Taiyariya Student Portal">
+                    <input type="hidden" name="subject" id="payWeb3Subject" value="Payment Verification Request">
+                    <div class="pay-step2-grid">
+                        <div class="pay-step2-left">
+                            <!-- Form Inputs -->
+                            <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px;">
+                                <div>
+                                    <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                        <span>Aspirant Full Name *</span>
+                                    </label>
+                                    <div style="position: relative;">
+                                        <i class="ph ph-user" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px;"></i>
+                                        <input type="text" name="name" id="payFormName" class="form-input" style="margin-bottom:0; width: 100%; padding-left: 42px; border-radius: 12px; height: 46px; box-sizing: border-box;" placeholder="Enter your full name" required>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 6px;">
+                                        <span>Email ID (Credentials Recipient) *</span>
+                                    </label>
+                                    <div style="position: relative;">
+                                        <i class="ph ph-envelope-simple" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px;"></i>
+                                        <input type="email" name="email" id="payFormEmail" class="form-input" style="margin-bottom:0; width: 100%; padding-left: 42px; border-radius: 12px; height: 46px; box-sizing: border-box;" placeholder="student@example.com" required>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 6px;">Phone / WhatsApp Number *</label>
+                                    <div style="position: relative;">
+                                        <i class="ph ph-phone" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px;"></i>
+                                        <input type="tel" name="phone" id="payFormPhone" class="form-input" style="margin-bottom:0; width: 100%; padding-left: 42px; border-radius: 12px; height: 46px; box-sizing: border-box;" placeholder="Enter 10-digit mobile number" required>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                        <span>UPI UTR / Transaction ID (Optional)</span>
+                                        <span style="font-size: 9.5px; color: #64748b; background: #f1f5f9; padding: 1px 6px; border-radius: 6px; font-weight: 700; text-transform: none;">Optional</span>
+                                    </label>
+                                    <div style="position: relative;">
+                                        <i class="ph ph-receipt" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px;"></i>
+                                        <input type="text" name="utr" id="payFormUTR" class="form-input" style="margin-bottom:0; width: 100%; padding-left: 42px; border-radius: 12px; height: 46px; box-sizing: border-box;" placeholder="e.g. 423871902341 (Optional)">
+                                    </div>
+                                    <p style="margin: 4px 0 0 0; font-size: 11px; color: #64748b; font-weight: 600;">
+                                        💡 Optional: Enter 12-digit UPI Ref / UTR from Google Pay, PhonePe, Paytm or Bank app.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                        <span>Message / Payment Note</span>
+                                        <span style="font-size: 9.5px; color: #64748b; background: #f1f5f9; padding: 1px 6px; border-radius: 6px; font-weight: 700; text-transform: none;">Optional</span>
+                                    </label>
+                                    <div style="position: relative;">
+                                        <textarea name="message" id="payFormMessage" class="form-input" style="margin-bottom:0; width: 100%; padding: 10px 14px; border-radius: 12px; min-height: 64px; box-sizing: border-box; resize: vertical; font-family: inherit; font-size: 12.5px; line-height: 1.4;" placeholder="e.g. Paid via UPI, please verify and activate my access (Optional)"></textarea>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div>
-                                <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 6px;">
-                                    <span>Email ID (Credentials Recipient) *</span>
-                                </label>
-                                <div style="position: relative;">
-                                    <i class="ph ph-envelope-simple" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px;"></i>
-                                    <input type="email" id="payFormEmail" class="form-input" style="margin-bottom:0; width: 100%; padding-left: 42px; border-radius: 12px; height: 46px; box-sizing: border-box;" placeholder="student@example.com">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 6px;">Phone / WhatsApp Number *</label>
-                                <div style="position: relative;">
-                                    <i class="ph ph-phone" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px;"></i>
-                                    <input type="tel" id="payFormPhone" class="form-input" style="margin-bottom:0; width: 100%; padding-left: 42px; border-radius: 12px; height: 46px; box-sizing: border-box;" placeholder="Enter 10-digit mobile number">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label style="font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                                    <span>UPI UTR / Transaction ID (Optional)</span>
-                                    <span style="font-size: 9.5px; color: #64748b; background: #f1f5f9; padding: 1px 6px; border-radius: 6px; font-weight: 700; text-transform: none;">Optional</span>
-                                </label>
-                                <div style="position: relative;">
-                                    <i class="ph ph-receipt" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px;"></i>
-                                    <input type="text" id="payFormUTR" class="form-input" style="margin-bottom:0; width: 100%; padding-left: 42px; border-radius: 12px; height: 46px; box-sizing: border-box;" placeholder="e.g. 423871902341 (Optional)">
-                                </div>
-                                <p style="margin: 4px 0 0 0; font-size: 11px; color: #64748b; font-weight: 600;">
-                                    💡 Optional: Enter 12-digit UPI Ref / UTR from Google Pay, PhonePe, Paytm or Bank app.
+                        <div class="pay-step2-right">
+                            <!-- Crucial Email Note Banner -->
+                            <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: flex-start; gap: 10px;">
+                                <i class="ph-fill ph-envelope-open" style="color: #2563eb; font-size: 22px; flex-shrink: 0; margin-top: 1px;"></i>
+                                <p style="margin: 0; font-size: 12px; color: #1e40af; font-weight: 700; line-height: 1.45;">
+                                    <strong>Important Notice:</strong> Please double-check your Email ID. Your official <strong>Login ID &amp; Password</strong> will be dispatched to this email immediately upon verification.
                                 </p>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="pay-step2-right">
-                        <!-- Crucial Email Note Banner -->
-                        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: flex-start; gap: 10px;">
-                            <i class="ph-fill ph-envelope-open" style="color: #2563eb; font-size: 22px; flex-shrink: 0; margin-top: 1px;"></i>
-                            <p style="margin: 0; font-size: 12px; color: #1e40af; font-weight: 700; line-height: 1.45;">
-                                <strong>Important Notice:</strong> Please double-check your Email ID. Your official <strong>Login ID &amp; Password</strong> will be dispatched to this email immediately upon verification.
-                            </p>
-                        </div>
+                            <!-- Refund Policy -->
+                            <div style="background: #fef2f2; border: 1px solid #fca5a5; border-radius: 14px; padding: 12px; margin-bottom: 18px;">
+                                <p style="margin:0; font-size: 11px; color: #b91c1c; font-weight: 800; line-height: 1.45; display: flex; align-items: flex-start; gap: 6px;">
+                                    <span>⚠️</span>
+                                    <span>Refund Policy: Once payment is completed, no refund will be provided. Please try the free tests first and then purchase Premium Membership.</span>
+                                </p>
+                            </div>
 
-                        <!-- Refund Policy -->
-                        <div style="background: #fef2f2; border: 1px solid #fca5a5; border-radius: 14px; padding: 12px; margin-bottom: 18px;">
-                            <p style="margin:0; font-size: 11px; color: #b91c1c; font-weight: 800; line-height: 1.45; display: flex; align-items: flex-start; gap: 6px;">
-                                <span>⚠️</span>
-                                <span>Refund Policy: Once payment is completed, no refund will be provided. Please try the free tests first and then purchase Premium Membership.</span>
-                            </p>
-                        </div>
-
-                        <!-- Step 2 Submission Actions -->
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <button id="btnSendPaymentEmail" type="button" class="btn-fill-prime" onclick="handleSendPaymentDetailsEmail()" style="background: linear-gradient(135deg, #FF9F1C 0%, #FF5A1F 100%); color: #ffffff; margin: 0; width: 100%; border-radius: 12px; font-size: 13px; font-weight: 800; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(255, 90, 31, 0.3); white-space: nowrap;">
-                                <i class="ph-bold ph-paper-plane-tilt" style="font-size: 16px;"></i>
-                                <span>Submit Details &amp; Verify</span>
-                                <i class="ph-bold ph-arrow-right" style="font-size: 15px;"></i>
-                            </button>
-
-                            <div style="display: flex; gap: 10px;">
-                                <button type="button" onclick="goToPayStep(1)" class="btn-fill-prime" style="background: #f1f5f9; color: #475569; margin: 0; flex: 1; border-radius: 12px; font-size: 13px; font-weight: 800; height: 40px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
-                                    <span>Back</span>
+                            <!-- Step 2 Submission Actions -->
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <button id="btnSendPaymentEmail" type="submit" class="btn-fill-prime" style="background: linear-gradient(135deg, #FF9F1C 0%, #FF5A1F 100%); color: #ffffff; margin: 0; width: 100%; border-radius: 12px; font-size: 13px; font-weight: 800; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(255, 90, 31, 0.3); white-space: nowrap;">
+                                    <i class="ph-bold ph-paper-plane-tilt" style="font-size: 16px;"></i>
+                                    <span>Submit</span>
                                 </button>
-                                <button type="button" onclick="handleContactHelpdeskClick()" class="btn-fill-prime" style="background: #25d366; color: white; margin: 0; flex: 1; border-radius: 12px; font-size: 12px; font-weight: 800; height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);">
-                                    <i class="ph-bold ph-chats" style="font-size: 15px;"></i> Helpdesk
-                                </button>
+
+                                <div style="display: flex; gap: 10px;">
+                                    <button type="button" onclick="goToPayStep(1)" class="btn-fill-prime" style="background: #f1f5f9; color: #475569; margin: 0; flex: 1; border-radius: 12px; font-size: 13px; font-weight: 800; height: 40px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer;">
+                                        <span>Back</span>
+                                    </button>
+                                    <button type="button" onclick="handleContactHelpdeskClick()" class="btn-fill-prime" style="background: #25d366; color: white; margin: 0; flex: 1; border-radius: 12px; font-size: 12px; font-weight: 800; height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);">
+                                        <i class="ph-bold ph-chats" style="font-size: 15px;"></i> Helpdesk
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
 
             <!-- ================= STEP 3: VERIFICATION NOTICE & CREDENTIALS INFO ================= -->
@@ -4741,12 +5781,12 @@ ${dynamicBookSchemas}
                     </div>
                     
                     <div style="margin-bottom: 8px;">
-                        <span style="background: rgba(255, 184, 0, 0.15); color: #d97706; border: 1px solid rgba(217, 119, 6, 0.3); padding: 4px 12px; border-radius: 99px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 5px;">
-                            <i class="ph-fill ph-clock-countdown"></i> Verification In Progress
+                        <span style="background: rgba(34, 197, 94, 0.15); color: #16a34a; border: 1px solid rgba(34, 197, 94, 0.3); padding: 4px 12px; border-radius: 99px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 5px;">
+                            <i class="ph-fill ph-check-circle"></i> Verification In Progress
                         </span>
                     </div>
 
-                    <h2 style="font-weight: 900; margin: 4px 0; font-size: 22px; letter-spacing: -0.5px; color: #1e293b;">Step 3: Verification Notice</h2>
+                    <h2 style="font-weight: 900; margin: 4px 0; font-size: 22px; letter-spacing: -0.5px; color: #1e293b;">Submit Successfully</h2>
                 </div>
 
                 <div class="pay-step3-grid">
@@ -4805,6 +5845,10 @@ ${dynamicBookSchemas}
                                     <span style="color: #64748b; font-weight: 600;">Transaction UTR:</span>
                                     <span id="summaryUTR" style="font-weight: 800; color: #1e293b; font-family: monospace;">-</span>
                                 </div>
+                                <div id="summaryMessageRow" style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed var(--border-color); padding-bottom: 6px;">
+                                    <span style="color: #64748b; font-weight: 600;">Message/Note:</span>
+                                    <span id="summaryMessageText" style="font-weight: 700; color: #1e293b; max-width: 60%; word-break: break-word; text-align: right; font-size: 11.5px;">-</span>
+                                </div>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span style="color: #64748b; font-weight: 600;">Submission Time:</span>
                                     <span id="summarySubmittedTime" style="font-weight: 700; color: #64748b; font-size: 11.5px;">-</span>
@@ -4817,11 +5861,6 @@ ${dynamicBookSchemas}
                             <button type="button" onclick="handleTabNavigation('home')" class="btn-fill-prime" style="background: var(--dark, #111827); color: white; width: 100%; border-radius: 14px; font-size: 13px; font-weight: 800; height: 46px; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer; margin: 0;">
                                 <i class="ph-bold ph-house" style="font-size: 17px;"></i>
                                 <span>Explore Free Tests / Back to Home</span>
-                            </button>
-
-                            <button type="button" onclick="goToPayStep(2)" class="btn-fill-prime" style="background: transparent; color: #64748b; width: 100%; border-radius: 12px; font-size: 12px; font-weight: 700; height: 38px; display: flex; align-items: center; justify-content: center; gap: 6px; border: 1px dashed #cbd5e1; cursor: pointer; margin: 0;">
-                                <i class="ph-bold ph-pencil-simple" style="font-size: 14px;"></i>
-                                <span>Edit / Re-submit Details</span>
                             </button>
                         </div>
                     </div>
@@ -5144,106 +6183,183 @@ ${dynamicBookSchemas}
     </div>
 
 
-    <!-- Interactive Results and Analyses Dashboard (Redesigned) -->
+    <!-- Interactive Results and Analyses Dashboard (Redesigned Responsive Layout) -->
     <div id="scr-results" class="screen">
-        <div class="scorecard-block" style="background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%); color: white; border-radius: 24px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-bottom: 25px; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,107,53,0.1); border-radius: 50%; pointer-events: none;"></div>
-            
-            <h2 style="margin: 0 0 5px 0; font-size: 20px; font-weight: 900; letter-spacing: 0.5px; text-align: center;">MOCK TEST SCORECARD</h2>
-            <p id="resultsTopicHeader" style="margin: 0 0 20px 0; font-size: 11px; text-transform: uppercase; color: var(--primary); font-weight: bold; text-align: center; letter-spacing: 1px;">GENERAL TEST</p>
-            
-            <!-- Main Score Big Banner -->
-            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px;">
-                <span style="font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; font-weight: 800; letter-spacing: 1.5px;">Obtained Score / Marks</span>
-                <div style="display: flex; align-items: baseline; justify-content: center; gap: 8px; margin-top: 5px;">
-                    <h1 id="statTotalScoreCalcText" style="margin: 0; color: #22c55e; font-size: 40px; font-weight: 950; line-height: 1;">0.00</h1>
-                    <span id="statTotalPossibleMarks" style="font-size: 16px; color: rgba(255,255,255,0.4); font-weight: bold;">/ 100.00</span>
+        <div class="scorecard-block">
+            <!-- Decorative Subtle Ambient Glows -->
+            <div class="sc-ambient-glow sc-glow-1"></div>
+            <div class="sc-ambient-glow sc-glow-2"></div>
+
+            <!-- Top Header Strip -->
+            <div class="sc-header-bar">
+                <div class="sc-header-left">
+                    <span class="sc-badge-pill">
+                        <i class="ph-bold ph-trophy"></i>
+                        <span>TEST REPORT</span>
+                    </span>
+                    <h2 class="sc-main-title">MOCK TEST SCORECARD</h2>
+                </div>
+                <div class="sc-header-right">
+                    <p id="resultsTopicHeader" class="sc-topic-header">GENERAL TEST</p>
+                    <span class="sc-status-pill">
+                        <i class="ph-bold ph-check"></i> Completed
+                    </span>
                 </div>
             </div>
 
-            <!-- Dashboard Stats Grid -->
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
-                    <i class="ph ph-list-numbers" style="font-size: 18px; color: var(--primary);"></i>
-                    <div>
-                        <p style="margin: 0; font-size: 9px; color: rgba(255,255,255,0.5); font-weight: bold; text-transform: uppercase;">Total Items</p>
-                        <h4 id="statTotalItemsText" style="margin: 2px 0 0; font-size: 14px; font-weight: bold;">0</h4>
+            <!-- Main Score & Stats Bento Layout -->
+            <div class="sc-bento-grid">
+                <!-- Left: Big Score & Performance Showcase -->
+                <div class="sc-score-showcase">
+                    <div class="sc-score-header">
+                        <span class="sc-score-label">Obtained Score</span>
+                        <span id="statPerformanceBadge" class="sc-perf-badge">Score Summary</span>
                     </div>
-                </div>
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
-                    <i class="ph ph-check-circle" style="font-size: 18px; color: #22c55e;"></i>
-                    <div>
-                        <p style="margin: 0; font-size: 9px; color: rgba(255,255,255,0.5); font-weight: bold; text-transform: uppercase;">Correct Choice</p>
-                        <h4 id="statCorrectCountText" style="margin: 2px 0 0; font-size: 14px; font-weight: bold; color: #22c55e;">0</h4>
+
+                    <div class="sc-score-display">
+                        <h1 id="statTotalScoreCalcText" class="sc-score-number">0.00</h1>
+                        <span id="statTotalPossibleMarks" class="sc-score-max">/ 100.00</span>
                     </div>
-                </div>
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
-                    <i class="ph ph-x-circle" style="font-size: 18px; color: #ef4444;"></i>
-                    <div>
-                        <p style="margin: 0; font-size: 9px; color: rgba(255,255,255,0.5); font-weight: bold; text-transform: uppercase;">Incorrect Choice</p>
-                        <h4 id="statIncorrectCountText" style="margin: 2px 0 0; font-size: 14px; font-weight: bold; color: #ef4444;">0</h4>
-                    </div>
-                </div>
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
-                    <i class="ph ph-minus-circle" style="font-size: 18px; color: #3b82f6;"></i>
-                    <div>
-                        <p style="margin: 0; font-size: 9px; color: rgba(255,255,255,0.5); font-weight: bold; text-transform: uppercase;">Unanswered</p>
-                        <h4 id="statUnansweredCountText" style="margin: 2px 0 0; font-size: 14px; font-weight: bold; color: #3b82f6;">0</h4>
-                    </div>
-                </div>
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
-                    <i class="ph ph-percent" style="font-size: 18px; color: #eab308;"></i>
-                    <div>
-                        <p style="margin: 0; font-size: 9px; color: rgba(255,255,255,0.5); font-weight: bold; text-transform: uppercase;">Accuracy Ratio</p>
-                        <h4 id="statAccuracyPercent" style="margin: 2px 0 0; font-size: 14px; font-weight: bold; color: #eab308;">0%</h4>
-                    </div>
-                </div>
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
-                    <i class="ph ph-clock" style="font-size: 18px; color: #a855f7;"></i>
-                    <div>
-                        <p style="margin: 0; font-size: 9px; color: rgba(255,255,255,0.5); font-weight: bold; text-transform: uppercase;">Duration Taken</p>
-                        <h4 id="statDurationSpent" style="margin: 2px 0 0; font-size: 14px; font-weight: bold; color: #a855f7;">--</h4>
-                    </div>
-                </div>
-                <div onclick="handleShowRevealedAnswersModal()" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; grid-column: span 2; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(16, 185, 129, 0.15)'" onmouseout="this.style.background='rgba(16, 185, 129, 0.08)'">
-                    <i class="ph-fill ph-eye" style="font-size: 20px; color: #10b981;"></i>
-                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <div>
-                            <p style="margin: 0; font-size: 9px; color: #10b981; font-weight: bold; text-transform: uppercase;">Revealed (Eye Assist)</p>
-                            <h4 id="statRevealedAnswersCount" style="margin: 2px 0 0; font-size: 14px; font-weight: bold; color: #10b981;">0</h4>
+
+                    <!-- Mini metrics row under score -->
+                    <div class="sc-mini-metrics-row">
+                        <div class="sc-mini-metric">
+                            <div class="sc-mini-icon" style="color: #eab308; background: rgba(234, 179, 8, 0.12);">
+                                <i class="ph-bold ph-percent"></i>
+                            </div>
+                            <div>
+                                <span class="sc-mini-label">Accuracy</span>
+                                <h4 id="statAccuracyPercent" class="sc-mini-val">0%</h4>
+                            </div>
                         </div>
-                        <span style="font-size: 10px; background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: bold; padding: 3px 8px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">
-                            View Slides <i class="ph-bold ph-caret-right" style="font-size: 10px;"></i>
-                        </span>
+
+                        <div class="sc-mini-metric">
+                            <div class="sc-mini-icon" style="color: #a855f7; background: rgba(168, 85, 247, 0.12);">
+                                <i class="ph-bold ph-clock"></i>
+                            </div>
+                            <div>
+                                <span class="sc-mini-label">Time Spent</span>
+                                <h4 id="statDurationSpent" class="sc-mini-val">--</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Right: 4 Interactive Filter Cards Grid -->
+                <div class="sc-filters-grid">
+                    <!-- Total Items Card -->
+                    <div id="statCardTotal" onclick="handleFilterAnalysisQuestions('all', false)" class="sc-stat-card sc-card-total" title="Tap to view all questions">
+                        <div class="sc-stat-top">
+                            <span class="sc-stat-icon-wrap" style="color: var(--primary); background: rgba(255, 107, 53, 0.12);">
+                                <i class="ph-bold ph-list-numbers"></i>
+                            </span>
+                            <span class="sc-filter-action-tag">View All</span>
+                        </div>
+                        <div class="sc-stat-content">
+                            <h4 id="statTotalItemsText" class="sc-stat-num">0</h4>
+                            <p class="sc-stat-name">Total Items</p>
+                        </div>
+                    </div>
+
+                    <!-- Correct Card -->
+                    <div id="statCardCorrect" onclick="handleFilterAnalysisQuestions('correct', false)" class="sc-stat-card sc-card-correct" title="Tap to view correct questions">
+                        <div class="sc-stat-top">
+                            <span class="sc-stat-icon-wrap" style="color: #22c55e; background: rgba(34, 197, 94, 0.12);">
+                                <i class="ph-bold ph-check-circle"></i>
+                            </span>
+                            <span class="sc-filter-action-tag">Correct</span>
+                        </div>
+                        <div class="sc-stat-content">
+                            <h4 id="statCorrectCountText" class="sc-stat-num">0</h4>
+                            <p class="sc-stat-name">Correct</p>
+                        </div>
+                    </div>
+
+                    <!-- Incorrect Card -->
+                    <div id="statCardIncorrect" onclick="handleFilterAnalysisQuestions('incorrect', false)" class="sc-stat-card sc-card-incorrect" title="Tap to view incorrect questions">
+                        <div class="sc-stat-top">
+                            <span class="sc-stat-icon-wrap" style="color: #ef4444; background: rgba(239, 68, 68, 0.12);">
+                                <i class="ph-bold ph-x-circle"></i>
+                            </span>
+                            <span class="sc-filter-action-tag">Incorrect</span>
+                        </div>
+                        <div class="sc-stat-content">
+                            <h4 id="statIncorrectCountText" class="sc-stat-num">0</h4>
+                            <p class="sc-stat-name">Incorrect</p>
+                        </div>
+                    </div>
+
+                    <!-- Unanswered Card -->
+                    <div id="statCardUnanswered" onclick="handleFilterAnalysisQuestions('unanswered', false)" class="sc-stat-card sc-card-unanswered" title="Tap to view unanswered questions">
+                        <div class="sc-stat-top">
+                            <span class="sc-stat-icon-wrap" style="color: #3b82f6; background: rgba(59, 130, 246, 0.12);">
+                                <i class="ph-bold ph-minus-circle"></i>
+                            </span>
+                            <span class="sc-filter-action-tag">Unanswered</span>
+                        </div>
+                        <div class="sc-stat-content">
+                            <h4 id="statUnansweredCountText" class="sc-stat-num">0</h4>
+                            <p class="sc-stat-name">Unanswered</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Eye Assist Banner (Revealed Answers) -->
+            <div onclick="handleShowRevealedAnswersModal()" class="sc-revealed-banner" title="View questions revealed using eye assistant">
+                <div class="sc-revealed-left">
+                    <span class="sc-revealed-icon">
+                        <i class="ph-fill ph-eye"></i>
+                    </span>
+                    <div>
+                        <div class="sc-revealed-title-row">
+                            <span class="sc-revealed-label">Revealed (Eye Assist)</span>
+                            <span id="statRevealedAnswersCount" class="sc-revealed-count">0</span>
+                        </div>
+                        <p class="sc-revealed-sub">Answers viewed during test via instant eye helper</p>
+                    </div>
+                </div>
+                <button class="sc-revealed-btn" type="button">
+                    <span>View Slides</span>
+                    <i class="ph-bold ph-caret-right"></i>
+                </button>
             </div>
         </div>
 
-        <!-- Live Test Leaderboard Board is removed -->
+        <!-- Hidden Leaderboard anchor -->
         <div id="resultsLeaderboardBlock" style="display: none !important;"></div>
 
-        <h3 class="section-header-title" style="margin-top: 25px; margin-bottom: 8px;">
-            <i class="ph ph-chart-bar"></i> Interactive Paper Analysis
-        </h3>
-        <p style="font-size: 12px; color: var(--grey-text); margin-top: 0; margin-bottom: 15px;">
-            Tap on any question block below to instantly inspect correct answer choice, comprehensive evaluations, explanations, and direct references.
-        </p>
+        <!-- Analysis Section -->
+        <div class="sc-analysis-section">
+            <div class="sc-analysis-header">
+                <div class="sc-analysis-header-left">
+                    <h3 class="sc-analysis-title">Analysis</h3>
+                    <span id="analysisActiveFilterBadge" class="sc-analysis-badge">All Questions</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button id="scorecardGlobalLangBtn" onclick="handleToggleScorecardGlobalLanguage()" style="display: none; background: #ffffff; border: 1.5px solid #e2e8f0; color: var(--primary); font-size: 11px; font-weight: 800; border-radius: 9999px; padding: 4px 12px; cursor: pointer; align-items: center; gap: 5px; font-family: 'Outfit', sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.04); transition: all 0.2s ease;">
+                        <i class="ph-bold ph-translate" style="font-size: 13px;"></i> <span id="scorecardGlobalLangLabel">HINDI</span>
+                    </button>
+                    <div class="sc-analysis-hint">Tap any question number or use navigation buttons</div>
+                </div>
+            </div>
 
-        <!-- Horizontal Scrollable Selector Row -->
-        <div id="analysisQuestionSelectorRow" style="display: flex; gap: 8px; overflow-x: auto; padding: 12px 6px; margin-bottom: 20px; background: var(--light-grey); border: 1px solid var(--border-color); border-radius: 16px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
-            <!-- Rendered horizontally -->
-        </div>
+            <!-- Horizontal Scrollable Selector Row -->
+            <div id="analysisQuestionSelectorRow" class="sc-palette-scroll">
+                <!-- Rendered horizontally -->
+            </div>
 
-        <!-- Inline Detailed Analysis Card Container -->
-        <div id="analysisDetailViewerCard" style="background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; margin-bottom: 16px; min-height: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.01);">
-            <!-- Active Selected Question render here -->
-        </div>
+            <!-- Inline Detailed Analysis Card Container -->
+            <div id="analysisDetailViewerCard" class="sc-detail-viewer-card">
+                <!-- Active Selected Question render here -->
+            </div>
 
-        <div style="display: flex; justify-content: center; width: 100%; margin: 16px 0 10px 0;">
-            <button class="btn-fill-prime" onclick="handleTriggerRefreshReboot()" style="background: var(--dark); border-radius: 20px; padding: 12px 28px; font-size: 14px; font-weight: 850; width: auto; min-width: 240px; max-width: 320px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; box-shadow: 0 4px 14px rgba(0,0,0,0.12); cursor: pointer;">
-                <i class="ph ph-squares-four" style="font-size: 18px;"></i> Back To Dashboard
-            </button>
+            <div class="sc-bottom-actions">
+                <button class="btn-fill-prime sc-btn-dashboard" onclick="handleTriggerRefreshReboot()">
+                    <i class="ph ph-squares-four" style="font-size: 18px;"></i>
+                    <span>Back To Dashboard</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -6430,7 +7546,9 @@ ${dynamicBookSchemas}
             
             var iconContainer = document.getElementById("customDialogIconContainer");
             var cleanTitle = (title || "").toLowerCase();
-            if (cleanTitle.includes("success") || cleanTitle.includes("done") || cleanTitle.includes("complete") || cleanTitle.includes("saved")) {
+            if (cleanTitle.includes("coming soon") || cleanTitle.includes("soon")) {
+                iconContainer.innerHTML = '<div style="background: rgba(245,158,11,0.1); width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2.5px solid rgba(245,158,11,0.2); box-shadow: 0 4px 10px rgba(245,158,11,0.08); margin-bottom: 8px;"><i class="ph-fill ph-clock-countdown" style="font-size: 34px; color: #f59e0b;"></i></div>';
+            } else if (cleanTitle.includes("success") || cleanTitle.includes("done") || cleanTitle.includes("complete") || cleanTitle.includes("saved")) {
                 iconContainer.innerHTML = '<div style="background: rgba(34,197,94,0.1); width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2.5px solid rgba(34,197,94,0.15); box-shadow: 0 4px 10px rgba(34,197,94,0.08); margin-bottom: 8px;"><i class="ph-fill ph-check-circle" style="font-size: 34px; color: #22c55e;"></i></div>';
             } else if (cleanTitle.includes("error") || cleanTitle.includes("fail") || cleanTitle.includes("wrong")) {
                 iconContainer.innerHTML = '<div style="background: rgba(239,68,68,0.1); width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2.5px solid rgba(239,68,68,0.15); box-shadow: 0 4px 10px rgba(239,68,68,0.08); margin-bottom: 8px;"><i class="ph-fill ph-x-circle" style="font-size: 34px; color: #ef4444;"></i></div>';
@@ -7223,14 +8341,7 @@ ${dynamicBookSchemas}
             if (_activeQuestions.some(function(q) { return q.hi; })) _availableLanguages.push('hi');
             if (_availableLanguages.length === 0) _availableLanguages.push('en');
             _currentLanguage = _availableLanguages[0];
-            var translateBtn = document.getElementById("translateBtn");
-            var label = document.getElementById("translateLabel");
-            if (_availableLanguages.length > 1) {
-                translateBtn.style.display = "flex";
-                label.innerText = _currentLanguage.toUpperCase();
-            } else {
-                translateBtn.style.display = "none";
-            }
+            updateEngineLanguageUI();
             _activeQIndex = 0;
             _answersMap = {};
             _markedReviewMap = {};
@@ -8684,6 +9795,22 @@ ${dynamicBookSchemas}
             return 0;
         }
 
+        function isTestUploaded(testMeta) {
+            if (!testMeta) return false;
+            if (testMeta.hasSplitQuestions) return true;
+            var qCount = getQuestionsCountFromTest(testMeta);
+            if (qCount > 0) return true;
+            if (testMeta.questions && testMeta.questions.length > 0) return true;
+            return false;
+        }
+
+        function isPdfUploaded(pdfMeta) {
+            if (!pdfMeta) return false;
+            if (pdfMeta.url && typeof pdfMeta.url === 'string' && pdfMeta.url.trim().length > 0) return true;
+            if (pdfMeta.file && typeof pdfMeta.file === 'string' && pdfMeta.file.trim().length > 0) return true;
+            return false;
+        }
+
         function calculateNodeStats(node, type) {
             var totalTests = 0;
             var totalQuestions = 0;
@@ -8696,22 +9823,26 @@ ${dynamicBookSchemas}
                 if (!n) return;
                 if (type === "test") {
                     if (n.test && isItemVisibleToStudent(n.test)) {
-                        totalTests++;
                         var qCount = getQuestionsCountFromTest(n.test);
-                        totalQuestions += qCount;
-                        var dur = n.test.duration || 0;
-                        totalDurationMins += dur;
-                        var attempts = parseInt(localStorage.getItem("attempts_test_" + n.test.id) || "0", 10);
-                        if (attempts > 0) {
-                            attemptedTests++;
+                        if (isTestUploaded(n.test)) {
+                            totalTests++;
+                            totalQuestions += qCount;
+                            var dur = n.test.duration || 0;
+                            totalDurationMins += dur;
+                            var attempts = parseInt(localStorage.getItem("attempts_test_" + n.test.id) || "0", 10);
+                            if (attempts > 0) {
+                                attemptedTests++;
+                            }
                         }
                     }
                 } else {
                     if (n.pdf && isItemVisibleToStudent(n.pdf)) {
-                        totalFiles++;
-                        var pdfKey = (n.pdf && n.pdf.id) ? n.pdf.id : n.id;
-                        if (localStorage.getItem("pdf_read_" + pdfKey) === "true" || localStorage.getItem("pdf_read_" + n.id) === "true") {
-                            readFiles++;
+                        if (isPdfUploaded(n.pdf)) {
+                            totalFiles++;
+                            var pdfKey = (n.pdf && n.pdf.id) ? n.pdf.id : n.id;
+                            if (localStorage.getItem("pdf_read_" + pdfKey) === "true" || localStorage.getItem("pdf_read_" + n.id) === "true") {
+                                readFiles++;
+                            }
                         }
                     }
                 }
@@ -8800,7 +9931,7 @@ ${dynamicBookSchemas}
             });
 
             if (visibleCategories.length === 0) {
-                container.innerHTML = '<div class="coming-soon-box">No resource catalogs configured.</div>';
+                container.innerHTML = '<div class="coming-soon-box"><i class="ph-fill ph-clock-countdown" style="font-size: 26px; color: #ef4444; margin-bottom: 6px; display: block;"></i>Coming Soon</div>';
                 return;
             }
 
@@ -8934,19 +10065,29 @@ ${dynamicBookSchemas}
                                           '        </span>';
                     }
 
-                    var testBadgeLabel = stats.totalQuestions > 0 ? (totalQFormatted + ' MCQ') : (stats.totalTests + ' ' + (stats.totalTests === 1 ? 'Test' : 'Tests'));
-                    var testBadgeIcon = stats.totalQuestions > 0 ? 'ph-question' : 'ph-clipboard-text';
-                    detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ' + testBadgeIcon + '" style="color: #009CFC; font-size: 11px;"></i> ' + testBadgeLabel +
-                                  '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + totalHrsFormatted +
-                                  '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  statusBadgeHtml +
-                                  '    </div>';
+                    if (stats.totalTests === 0 && stats.totalQuestions === 0) {
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                      statusBadgeHtml +
+                                      '    </div>';
+                    } else {
+                        var testBadgeLabel = stats.totalQuestions > 0 ? (totalQFormatted + ' MCQ') : (stats.totalTests + ' ' + (stats.totalTests === 1 ? 'Test' : 'Tests'));
+                        var testBadgeIcon = stats.totalQuestions > 0 ? 'ph-question' : 'ph-clipboard-text';
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                      '            <i class="ph-bold ' + testBadgeIcon + '" style="color: #009CFC; font-size: 11px;"></i> ' + testBadgeLabel +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + totalHrsFormatted +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                      statusBadgeHtml +
+                                      '    </div>';
+                    }
                 } else {
                     var pdfStats = calculateNodeStats(cat, 'pdf');
                     var totalFiles = pdfStats.totalFiles;
@@ -9042,13 +10183,23 @@ ${dynamicBookSchemas}
                                              ytBadgeHtml;
                     }
 
-                    detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9.5px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> ' + totalFiles + ' PDFs' +
-                                  '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.2); flex-shrink: 0;"></span>' +
-                                  pdfStatusBadgeHtml +
-                                  '    </div>';
+                    if (totalFiles === 0) {
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.2); flex-shrink: 0;"></span>' +
+                                      pdfStatusBadgeHtml +
+                                      '    </div>';
+                    } else {
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9.5px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> ' + totalFiles + ' PDFs' +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.2); flex-shrink: 0;"></span>' +
+                                      pdfStatusBadgeHtml +
+                                      '    </div>';
+                    }
                 }
 
                 catHtml += '<div class="outline-item-details">';
@@ -9247,6 +10398,8 @@ ${dynamicBookSchemas}
                 document.getElementById("payFormPhone").value = "";
             }
             document.getElementById("payFormUTR").value = "";
+            var msgElCategory = document.getElementById("payFormMessage");
+            if (msgElCategory) msgElCategory.value = "";
             
             try { ensurePaymentQrCached(); } catch(e){}
             if (typeof goToPayStep === "function") {
@@ -9347,6 +10500,8 @@ ${dynamicBookSchemas}
                 document.getElementById("payFormPhone").value = "";
             }
             document.getElementById("payFormUTR").value = "";
+            var msgElGen = document.getElementById("payFormMessage");
+            if (msgElGen) msgElGen.value = "";
 
             try { ensurePaymentQrCached(); } catch(e){}
             if (typeof goToPayStep === "function") {
@@ -9657,7 +10812,13 @@ ${dynamicBookSchemas}
                     }
                 }
 
+                var isUploaded = (type === 'test') ? isTestUploaded(cat.test) : isPdfUploaded(cat.pdf);
+
                 directCard.onclick = () => {
+                    if (!isUploaded) {
+                        showCustomAlert("Coming Soon", "Yeh content abhi upload nahi hai. Coming Soon!");
+                        return;
+                    }
                     if (isDemoMode && !isFreeTest) {
                         showCategoryPaymentScreen(cat);
                         return;
@@ -9675,7 +10836,12 @@ ${dynamicBookSchemas}
                 
                 var rightIconHtml = '<i class="ph ph-play" style="color: var(--primary);"></i>';
                 var badgeLabelHtml = '<h4 class="outline-item-title" style="color: var(--primary); font-weight:800;">' + label + '</h4>';
-                if (isDemoMode) {
+                if (!isUploaded) {
+                    badgeLabelHtml = '<h4 class="outline-item-title" style="color: var(--primary); font-weight:800; display: flex; align-items: center; gap: 6px;">' +
+                                     '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #ef4444; font-size: 9.5px; font-weight: 850; background: rgba(239, 68, 68, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2); font-family: Outfit, sans-serif;"><i class="ph-bold ph-hourglass-simple" style="font-size: 10px;"></i> Coming Soon</span>' +
+                                     '    ' + label +
+                                     '</h4>';
+                } else if (isDemoMode) {
                     if (isFreeTest) {
                         badgeLabelHtml = '<h4 class="outline-item-title" style="color: var(--primary); font-weight:800; display: flex; align-items: center; gap: 6px;">' +
                                          '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9.5px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); font-family: Outfit, sans-serif;"><i class="ph-bold ph-gift" style="font-size: 10px;"></i> Free Demo</span>' +
@@ -9700,7 +10866,7 @@ ${dynamicBookSchemas}
 
             if (!cat.subCategories || cat.subCategories.length === 0) {
                 if (!hasResource) {
-                    container.innerHTML = '<div class="coming-soon-box">No topics configured in this library.</div>';
+                    container.innerHTML = '<div class="coming-soon-box"><i class="ph-fill ph-clock-countdown" style="font-size: 26px; color: #ef4444; margin-bottom: 6px; display: block;"></i>Coming Soon</div>';
                 }
                 return;
             }
@@ -9708,7 +10874,7 @@ ${dynamicBookSchemas}
             const visibleSubs = cat.subCategories.filter(isItemVisibleToStudent);
             if (visibleSubs.length === 0) {
                 if (!hasResource) {
-                    container.innerHTML = '<div class="coming-soon-box">No topics currently available/scheduled in this library.</div>';
+                    container.innerHTML = '<div class="coming-soon-box"><i class="ph-fill ph-clock-countdown" style="font-size: 26px; color: #ef4444; margin-bottom: 6px; display: block;"></i>Coming Soon</div>';
                 }
                 return;
             }
@@ -9747,34 +10913,50 @@ ${dynamicBookSchemas}
                     var progressColor = (stats.attemptedTests === totalTests && totalTests > 0) ? "#2ecc71" : (stats.attemptedTests > 0 ? "#3498db" : "var(--grey-text)");
                     var progressIcon = (stats.attemptedTests === totalTests && totalTests > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
-                    detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-clipboard-text" style="color: #009CFC; font-size: 11px;"></i> ' + totalTests + ' ' + (totalTests === 1 ? 'Test' : 'Tests') +
-                                  '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + totalHrsFormatted +
-                                  '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
-                                  '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
-                                  '        </span>' +
-                                  '    </div>';
+                    if (totalTests === 0) {
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                                      '        </span>' +
+                                      '    </div>';
+                    } else {
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-clipboard-text" style="color: #009CFC; font-size: 11px;"></i> ' + totalTests + ' ' + (totalTests === 1 ? 'Test' : 'Tests') +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + totalHrsFormatted +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
+                                      '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
+                                      '        </span>' +
+                                      '    </div>';
+                    }
                 } else {
                     var totalFiles = stats.totalFiles;
                     var progressText = stats.readFiles + "/" + totalFiles + " Read";
                     var progressColor = (stats.readFiles === totalFiles && totalFiles > 0) ? "#2ecc71" : (stats.readFiles > 0 ? "#3498db" : "var(--grey-text)");
                     var progressIcon = (stats.readFiles === totalFiles && totalFiles > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
-                    detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> ' + totalFiles + ' ' + (totalFiles === 1 ? 'PDF' : 'PDFs') +
-                                  '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
-                                  '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
-                                  '        </span>' +
-                                  '    </div>';
+                    if (totalFiles === 0) {
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                                      '        </span>' +
+                                      '    </div>';
+                    } else {
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> ' + totalFiles + ' ' + (totalFiles === 1 ? 'PDF' : 'PDFs') +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
+                                      '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
+                                      '        </span>' +
+                                      '    </div>';
+                    }
                 }
 
                 var labelHtml = '<h4 class="outline-item-title">' + sub.name + '</h4>';
@@ -9930,7 +11112,13 @@ ${dynamicBookSchemas}
                     }
                 }
 
+                var isUploaded = (type === 'test') ? isTestUploaded(_activeSubcategoryNodeForUrl.test) : isPdfUploaded(_activeSubcategoryNodeForUrl.pdf);
+
                 directCard.onclick = () => {
+                    if (!isUploaded) {
+                        showCustomAlert("Coming Soon", "Yeh content abhi upload nahi hai. Coming Soon!");
+                        return;
+                    }
                     if (isDemoMode && !isFreeTest) {
                         showCategoryPaymentScreen(rootCat);
                         return;
@@ -9947,7 +11135,12 @@ ${dynamicBookSchemas}
                 };
 
                 var badgeLabelHtml = '<h4 class="outline-item-title">' + _activeSubcategoryNodeForUrl.name + '</h4>';
-                if (isDemoMode && isFreeTest) {
+                if (!isUploaded) {
+                    badgeLabelHtml = '<h4 class="outline-item-title" style="display: flex; align-items: center; gap: 6px;">' +
+                                     '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #ef4444; font-size: 9.5px; font-weight: 850; background: rgba(239, 68, 68, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2); font-family: Outfit, sans-serif;"><i class="ph-bold ph-hourglass-simple" style="font-size: 10px;"></i> Coming Soon</span>' +
+                                     '    ' + _activeSubcategoryNodeForUrl.name +
+                                     '</h4>';
+                } else if (isDemoMode && isFreeTest) {
                     badgeLabelHtml = '<h4 class="outline-item-title" style="display: flex; align-items: center; gap: 6px;">' +
                                      '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9.5px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); font-family: Outfit, sans-serif;"><i class="ph-bold ph-gift" style="font-size: 10px;"></i> Free Demo</span>' +
                                      '    ' + _activeSubcategoryNodeForUrl.name +
@@ -10013,7 +11206,7 @@ ${dynamicBookSchemas}
                 if (!hasResource || _activeTopicStack.length > 0) {
                     const emptyBox = document.createElement("div");
                     emptyBox.className = "coming-soon-box";
-                    emptyBox.innerText = "No active items located here currently.";
+                    emptyBox.innerHTML = '<i class="ph-fill ph-clock-countdown" style="font-size: 26px; color: #ef4444; margin-bottom: 6px; display: block;"></i>Coming Soon';
                     container.appendChild(emptyBox);
                 }
                 return;
@@ -10062,88 +11255,132 @@ ${dynamicBookSchemas}
                         var progressColor = (stats.attemptedTests === totalTests && totalTests > 0) ? "#2ecc71" : (stats.attemptedTests > 0 ? "#3498db" : "var(--grey-text)");
                         var progressIcon = (stats.attemptedTests === totalTests && totalTests > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-clipboard-text" style="color: #009CFC; font-size: 11px;"></i> ' + totalTests + ' ' + (totalTests === 1 ? 'Test' : 'Tests') +
-                                      '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + totalHrsFormatted +
-                                      '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
-                                      '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
-                                      '        </span>' +
-                                      '    </div>';
+                        if (totalTests === 0) {
+                            detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
+                                          '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
+                                          '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                                          '        </span>' +
+                                          '    </div>';
+                        } else {
+                            detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
+                                          '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                          '            <i class="ph-bold ph-clipboard-text" style="color: #009CFC; font-size: 11px;"></i> ' + totalTests + ' ' + (totalTests === 1 ? 'Test' : 'Tests') +
+                                          '        </span>' +
+                                          '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                          '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                          '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + totalHrsFormatted +
+                                          '        </span>' +
+                                          '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                          '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
+                                          '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
+                                          '        </span>' +
+                                          '    </div>';
+                        }
                     } else {
                         var totalFiles = stats.totalFiles;
                         var progressText = stats.readFiles + "/" + totalFiles + " Read";
                         var progressColor = (stats.readFiles === totalFiles && totalFiles > 0) ? "#2ecc71" : (stats.readFiles > 0 ? "#3498db" : "var(--grey-text)");
                         var progressIcon = (stats.readFiles === totalFiles && totalFiles > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
+                        if (totalFiles === 0) {
+                            detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
+                                          '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
+                                          '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                                          '        </span>' +
+                                          '    </div>';
+                        } else {
+                            detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
+                                          '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                          '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> ' + totalFiles + ' ' + (totalFiles === 1 ? 'PDF' : 'PDFs') +
+                                          '        </span>' +
+                                          '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                          '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
+                                          '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
+                                          '        </span>' +
+                                          '    </div>';
+                        }
+                    }
+                } else if (type === 'test') {
+                    var isUploaded = isTestUploaded(topic.test);
+                    if (!isUploaded) {
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                                      '        </span>' +
+                                      '    </div>';
+                    } else {
+                        var totalQ = topic.test ? getQuestionsCountFromTest(topic.test) : 0;
+                        var durationMins = topic.test ? (topic.test.duration || 0) : 0;
+                        var attempts = topic.test ? parseInt(localStorage.getItem("attempts_test_" + topic.test.id) || "0", 10) : 0;
+
+                        var durationText = (function() {
+                            if (durationMins >= 60) {
+                                var rawHours = durationMins / 60;
+                                var totalHrsStr = rawHours.toFixed(1);
+                                return (totalHrsStr.endsWith(".0") ? rawHours.toFixed(0) : totalHrsStr) + ' Hrs';
+                            } else if (durationMins > 0) {
+                                return durationMins + ' Mins';
+                            }
+                            return '0 Mins';
+                        })();
+
+                        var attemptsText = attempts + (attempts === 1 ? " Attempt" : " Attempts");
+                        var attemptsColor = (attempts > 0) ? "#2ecc71" : "var(--grey-text)";
+                        var attemptsIcon = (attempts > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
+
                         detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
                                       '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> ' + totalFiles + ' ' + (totalFiles === 1 ? 'PDF' : 'PDFs') +
+                                      '            <i class="ph-bold ph-question" style="color: #009CFC; font-size: 11px;"></i> ' + totalQ + ' MCQ' +
                                       '        </span>' +
                                       '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
-                                      '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + durationText +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + attemptsColor + '; white-space: nowrap;">' +
+                                      '            <i class="' + attemptsIcon + '" style="font-size: 11px;"></i> ' + attemptsText +
                                       '        </span>' +
                                       '    </div>';
                     }
-                } else if (type === 'test') {
-                    var totalQ = topic.test ? getQuestionsCountFromTest(topic.test) : 0;
-                    var durationMins = topic.test ? (topic.test.duration || 0) : 0;
-                    var attempts = topic.test ? parseInt(localStorage.getItem("attempts_test_" + topic.test.id) || "0", 10) : 0;
-
-                    var durationText = (function() {
-                        if (durationMins >= 60) {
-                            var rawHours = durationMins / 60;
-                            var totalHrsStr = rawHours.toFixed(1);
-                            return (totalHrsStr.endsWith(".0") ? rawHours.toFixed(0) : totalHrsStr) + ' Hrs';
-                        } else if (durationMins > 0) {
-                            return durationMins + ' Mins';
-                        }
-                        return '0 Mins';
-                    })();
-
-                    var attemptsText = attempts + (attempts === 1 ? " Attempt" : " Attempts");
-                    var attemptsColor = (attempts > 0) ? "#2ecc71" : "var(--grey-text)";
-                    var attemptsIcon = (attempts > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
-
-                    detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-question" style="color: #009CFC; font-size: 11px;"></i> ' + totalQ + ' MCQ' +
-                                  '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + durationText +
-                                  '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + attemptsColor + '; white-space: nowrap;">' +
-                                  '            <i class="' + attemptsIcon + '" style="font-size: 11px;"></i> ' + attemptsText +
-                                  '        </span>' +
-                                  '    </div>';
                 } else {
-                    var pdfIdKey = (topic.pdf && topic.pdf.id) ? topic.pdf.id : topic.id;
-                    var hasRead = pdfIdKey && (localStorage.getItem("pdf_read_" + pdfIdKey) === "true" || localStorage.getItem("pdf_read_" + topic.id) === "true");
-                    var readText = hasRead ? "Read" : "Unread";
-                    var readColor = hasRead ? "#2ecc71" : "var(--grey-text)";
-                    var readIcon = hasRead ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
+                    var isUploaded = isPdfUploaded(topic.pdf);
+                    if (!isUploaded) {
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                                      '        </span>' +
+                                      '    </div>';
+                    } else {
+                        var pdfIdKey = (topic.pdf && topic.pdf.id) ? topic.pdf.id : topic.id;
+                        var hasRead = pdfIdKey && (localStorage.getItem("pdf_read_" + pdfIdKey) === "true" || localStorage.getItem("pdf_read_" + topic.id) === "true");
+                        var readText = hasRead ? "Read" : "Unread";
+                        var readColor = hasRead ? "#2ecc71" : "var(--grey-text)";
+                        var readIcon = hasRead ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
-                    detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> PDF Document' +
-                                  '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + readColor + '; white-space: nowrap;">' +
-                                  '            <i class="' + readIcon + '" style="font-size: 11px;"></i> ' + readText +
-                                  '        </span>' +
-                                  '    </div>';
+                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                                      '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> PDF Document' +
+                                      '        </span>' +
+                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
+                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + readColor + '; white-space: nowrap;">' +
+                                      '            <i class="' + readIcon + '" style="font-size: 11px;"></i> ' + readText +
+                                      '        </span>' +
+                                      '    </div>';
+                    }
+                }
+
+                var isUploaded = true;
+                if (!topic.topics || topic.topics.length === 0) {
+                    isUploaded = (type === 'test') ? isTestUploaded(topic.test) : isPdfUploaded(topic.pdf);
                 }
 
                 topicHtml += '<div class="outline-item-details">';
-                if (isDemoMode && isFreeTest) {
+                if (!isUploaded) {
+                    topicHtml += '    <h4 class="outline-item-title" style="display: flex; align-items: center; gap: 6px;">' +
+                                 '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #ef4444; font-size: 9.5px; font-weight: 850; background: rgba(239, 68, 68, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2); font-family: Outfit, sans-serif;"><i class="ph-bold ph-hourglass-simple" style="font-size: 10px;"></i> Coming Soon</span>' +
+                                 '        ' + topic.name +
+                                 '    </h4>';
+                } else if (isDemoMode && isFreeTest) {
                     topicHtml += '    <h4 class="outline-item-title" style="display: flex; align-items: center; gap: 6px;">' +
                                  '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9.5px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); font-family: Outfit, sans-serif;"><i class="ph-bold ph-gift" style="font-size: 10px;"></i> Free Demo</span>' +
                                  '        ' + topic.name +
@@ -10227,8 +11464,8 @@ ${dynamicBookSchemas}
             }
             if (type === 'pdf') {
                 const pdfData = node.pdf;
-                if (!pdfData || !pdfData.url) {
-                    showCustomAlert("Unavailable", "No PDF resources linked here yet.");
+                if (!pdfData || !isPdfUploaded(pdfData)) {
+                    showCustomAlert("Coming Soon", "Yeh PDF abhi upload nahi hai. Coming Soon!");
                     return;
                 }
                 
@@ -10247,10 +11484,8 @@ ${dynamicBookSchemas}
                 });
             } else {
                 const testData = node.test;
-                const othersCount = Object.values((testData && testData.questionsOther) || {}).reduce((sum, arr) => sum + (arr ? arr.length : 0), 0);
-                const isConfigured = testData && (testData.hasSplitQuestions || (testData.questionsEn && testData.questionsEn.length > 0) || (testData.questionsHi && testData.questionsHi.length > 0) || othersCount > 0 || (testData.questionsCount && testData.questionsCount > 0) || testData.id);
-                if (!testData || !isConfigured) {
-                    alert("No questions configured inside this Mock Test yet.");
+                if (!testData || !isTestUploaded(testData)) {
+                    showCustomAlert("Coming Soon", "Yeh Test abhi upload nahi hai. Coming Soon!");
                     return;
                 }
 
@@ -10765,16 +12000,8 @@ ${dynamicBookSchemas}
                 _activeQuestions.push(questionBag);
             }
 
-            // Render translation toggle action dynamically
-            const translateBtn = document.getElementById("translateBtn");
-            const label = document.getElementById("translateLabel");
-
-            if (_availableLanguages.length > 1) {
-                translateBtn.style.display = "flex";
-                label.innerText = _currentLanguage.toUpperCase();
-            } else {
-                translateBtn.style.display = "none";
-            }
+            // Update Test Engine Language Toggle Button
+            updateEngineLanguageUI();
 
             // Increment local registered attempts counter
             localStorage.setItem(attemptCountKey, (currentAttempts + 1).toString());
@@ -10825,14 +12052,60 @@ ${dynamicBookSchemas}
             }, 1000);
         }
 
-        // Test Language Translation Toggle
+        // Update Test Engine Language Toggle Button below topic name
+        function updateEngineLanguageUI() {
+            var btn = document.getElementById("engineLangToggleBtn");
+            var label = document.getElementById("engineLangLabel");
+            if (!btn) return;
+
+            var hasMultipleLangs = false;
+            if (Array.isArray(_availableLanguages) && _availableLanguages.length > 1) {
+                hasMultipleLangs = true;
+            } else if (Array.isArray(_activeQuestions)) {
+                for (var i = 0; i < _activeQuestions.length; i++) {
+                    if (getQuestionAvailableLanguages(_activeQuestions[i]).length > 1) {
+                        hasMultipleLangs = true;
+                        break;
+                    }
+                }
+            }
+
+            if (hasMultipleLangs) {
+                btn.style.display = "inline-flex";
+                var nextLangName = _currentLanguage === 'hi' ? 'ENGLISH' : 'HINDI';
+                if (label) {
+                    label.innerText = nextLangName;
+                }
+                btn.title = "Switch Language to " + nextLangName;
+            } else {
+                // If test has only 1 language, do not show switch button at all
+                btn.style.display = "none";
+            }
+        }
+
+        // Test Language Translation Toggle - instant change on tap
         function handleToggleLanguage() {
-            const idx = _availableLanguages.indexOf(_currentLanguage);
-            const nextIdx = (idx + 1) % _availableLanguages.length;
-            _currentLanguage = _availableLanguages[nextIdx];
+            var available = [];
+            if (Array.isArray(_availableLanguages) && _availableLanguages.length > 1) {
+                available = _availableLanguages;
+            } else if (Array.isArray(_activeQuestions)) {
+                var langSet = {};
+                _activeQuestions.forEach(function(q) {
+                    getQuestionAvailableLanguages(q).forEach(function(l) { langSet[l] = true; });
+                });
+                available = Object.keys(langSet);
+            }
+
+            if (available.length <= 1) {
+                // Dusra language nahi hai toh switch na ho
+                return;
+            }
+
+            var curIdx = available.indexOf(_currentLanguage);
+            var nextIdx = curIdx === -1 ? 0 : (curIdx + 1) % available.length;
+            _currentLanguage = available[nextIdx];
             
-            const label = document.getElementById("translateLabel");
-            label.innerText = _currentLanguage.toUpperCase();
+            updateEngineLanguageUI();
             renderEngineQuestionItem();
         }
 
@@ -11180,22 +12453,33 @@ ${dynamicBookSchemas}
                                 else if (isSelected) boxClasses += " oa-box-wrong";
                                 else boxClasses += " oa-box-" + String.fromCharCode(97 + optIdx);
 
-                                let boxLabel = "Option Analysis";
-                                if (isCorrect) boxLabel = "Correct Option Analysis";
-                                else if (isSelected) boxLabel = "Selected Option Analysis";
+                                const boxLabel = "Option " + String.fromCharCode(65 + optIdx) + " Analysis";
 
                                 oaHtml = '<div class="' + boxClasses + '" style="margin-top:4px; margin-bottom:8px; ' + oaFontStyle + '">' +
-                                    '<div class="oa-box-label">' + boxLabel + '</div>' +
-                                    '<div class="oa-box-content" style="' + oaFontStyle + '">' + formatMarkdownBold(optAnalysisText) + '</div>' +
+                                    '<div class="oa-box-label" style="font-family: Outfit, sans-serif !important;"><i class="ph-bold ph-info" style="font-size: 12px;"></i> ' + boxLabel + '</div>' +
+                                    '<div class="oa-box-content" style="font-weight: 400 !important; ' + oaFontStyle + '">' + formatMarkdownBold(optAnalysisText) + '</div>' +
                                     '</div>';
                             }
 
                             const optionLetter = String.fromCharCode(65 + optIdx);
+                            let optBadgeBg = "rgba(0,0,0,0.05)";
+                            let optBadgeColor = "var(--dark)";
+                            let optBadgeBorder = "1px solid var(--border-color)";
+                            if (isCorrect) {
+                                optBadgeBg = "#22c55e";
+                                optBadgeColor = "#ffffff";
+                                optBadgeBorder = "1px solid #22c55e";
+                            } else if (isSelected) {
+                                optBadgeBg = "#ef4444";
+                                optBadgeColor = "#ffffff";
+                                optBadgeBorder = "1px solid #ef4444";
+                            }
+
                             optionsHtml += 
                                 '<div style="margin-bottom: 8px;">' +
-                                '  <div class="' + optClasses + '" style="font-weight: 500; display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 10px; ' + oFontStyle + '">' +
-                                '      <div style="flex-grow: 1; display: flex; align-items: center; gap: 6px; ' + oFontStyle + '">' +
-                                '          <span style="font-family: Outfit, sans-serif !important; font-weight: bold;">' + optionLetter + ')</span> <span style="' + oFontStyle + '">' + optContent + '</span>' +
+                                '  <div class="' + optClasses + '" style="font-weight: 400 !important; display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 10px; ' + oFontStyle + '">' +
+                                '      <div style="flex-grow: 1; display: flex; align-items: center; gap: 8px; ' + oFontStyle + '">' +
+                                '          <span style="font-family: Outfit, sans-serif !important; font-weight: 700; width: 24px; height: 24px; border-radius: 6px; background: ' + optBadgeBg + '; color: ' + optBadgeColor + '; border: ' + optBadgeBorder + '; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">' + optionLetter + '</span> <span style="font-weight: 400 !important; ' + oFontStyle + '">' + optContent + '</span>' +
                                 '      </div>' +
                                 '  </div>' +
                                 oaHtml +
@@ -11209,24 +12493,24 @@ ${dynamicBookSchemas}
                         slideCard.innerHTML = 
                             '<div class="lang-' + (isHi ? 'hi' : 'en') + '" style="' + fontStyle + '">' +
                             '    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">' +
-                            '        <span style="font-weight: 900; font-size: 12px; color: var(--grey-text); text-transform: uppercase; font-family: Outfit, sans-serif !important;">Question ' + (qIdx + 1) + '</span>' +
-                            '        <span style="background: rgba(16, 185, 129, 0.12); color: #10b981; font-weight: 800; font-size: 10px; padding: 2px 8px; border-radius: 6px; font-family: Outfit, sans-serif !important;">Correct Option: ' + correctLetter + '</span>' +
+                            '        <span style="font-weight: 800; font-size: 11px; color: var(--primary); text-transform: uppercase; font-family: Outfit, sans-serif !important; letter-spacing: 0.5px;">Question ' + (qIdx + 1) + '</span>' +
+                            '        <span style="background: rgba(16, 185, 129, 0.12); color: #10b981; font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: 6px; font-family: Outfit, sans-serif !important;">Correct: Option ' + correctLetter + '</span>' +
                             '    </div>' +
                             '    ' +
-                            '    <div class="analysis-question-box" style="font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--dark); margin-bottom: 15px; margin-top: 5px; ' + qFontStyle + '">' +
-                            '        <strong style="font-family: Outfit, sans-serif !important;">Q:</strong> <span style="' + qFontStyle + '">' + sanitizeQuestionText(qNode.q) + '</span>' +
+                            '    <div class="analysis-question-box" style="margin-bottom: 15px; margin-top: 5px; ' + qFontStyle + '">' +
+                            '        <div class="analysis-question-text" style="' + qFontStyle + '">' + sanitizeQuestionText(qNode.q) + '</div>' +
                             '    </div>' +
                             '    ' +
                             (qNode.image ? '<div style="text-align: center; margin-bottom: 15px;"><img src="' + qNode.image + '" style="max-width: 100%; max-height: 180px; border-radius: 10px; border: 1px solid var(--border-color); object-fit: contain; background: white;" referrerPolicy="no-referrer"></div>' : '') +
                             '    ' +
                             '    <div style="margin-bottom: 15px;">' + optionsHtml + '</div>' +
                             '    ' +
-                            '    <div class="analysis-explanation-box" style="padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; margin-top: 15px; ' + expFontStyle + '">' +
-                            '        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-weight: 900; color: inherit; font-family: Outfit, sans-serif !important;">' +
-                            '            <i class="ph-fill ph-check-circle" style="font-size: 16px; color: inherit;"></i>' +
+                            '    <div class="analysis-explanation-box" style="padding: 14px; border-radius: 12px; font-size: 13.5px; line-height: 1.6; margin-top: 15px; ' + expFontStyle + '">' +
+                            '        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-weight: 800; color: var(--primary); font-size: 11.5px; text-transform: uppercase; font-family: Outfit, sans-serif !important;">' +
+                            '            <i class="ph-bold ph-lightbulb" style="font-size: 15px; color: inherit;"></i>' +
                             '            <span>EXPLANATION / SOLUTION</span>' +
                             '        </div>' +
-                            '        <div style="font-weight: 500; ' + expFontStyle + '">' + formatMarkdownBold(qNode.s || 'No explanation provided for this question.') + '</div>' +
+                            '        <div class="analysis-explanation-content" style="' + expFontStyle + '">' + formatMarkdownBold(qNode.s || 'No explanation provided for this question.') + '</div>' +
                             '    </div>' +
                             '</div>';
                         viewport.appendChild(slideCard);
@@ -11479,6 +12763,24 @@ ${dynamicBookSchemas}
             const accuracyVal = _activeQuestions.length > 0 ? Math.round((correctCount / _activeQuestions.length) * 100) : 0;
             document.getElementById("statAccuracyPercent").innerText = accuracyVal + "%";
 
+            const perfBadgeEl = document.getElementById("statPerformanceBadge");
+            if (perfBadgeEl) {
+                perfBadgeEl.removeAttribute("style");
+                if (accuracyVal >= 80) {
+                    perfBadgeEl.innerText = "Outstanding";
+                    perfBadgeEl.className = "sc-perf-badge badge-outstanding";
+                } else if (accuracyVal >= 60) {
+                    perfBadgeEl.innerText = "Good Score";
+                    perfBadgeEl.className = "sc-perf-badge badge-good";
+                } else if (accuracyVal >= 40) {
+                    perfBadgeEl.innerText = "Average";
+                    perfBadgeEl.className = "sc-perf-badge badge-average";
+                } else {
+                    perfBadgeEl.innerText = "Needs Practice";
+                    perfBadgeEl.className = "sc-perf-badge badge-practice";
+                }
+            }
+
             const totalSecsTaken = (_activeTest.duration * 60) - _timeRemainingSecs;
             const durationMinutesText = Math.floor(totalSecsTaken / 60) + "m " + (totalSecsTaken % 60) + "s";
             document.getElementById("statDurationSpent").innerText = durationMinutesText;
@@ -11488,50 +12790,8 @@ ${dynamicBookSchemas}
                 resultsTopicHeaderEl.innerText = _activeTest.title || "MOCK ASSESSMENT";
             }
 
-            // Populate Results Question inline horizontal scrollable palette
-            const resGrid = document.getElementById("analysisQuestionSelectorRow");
-            if (resGrid) {
-                resGrid.innerHTML = "";
-
-                _activeQuestions.forEach((qBlock, idx) => {
-                    const selectAns = _answersMap[idx];
-                    const btn = document.createElement("button");
-                    
-                    let btnColorLabel = "#808080"; // Grey unvisited standard
-                    let btnTextColor = "#ffffff";
-
-                    if (selectAns === undefined || selectAns === null) {
-                        btnColorLabel = "#a4b0be";
-                    } else if (selectAns === qBlock.originalCorrect) {
-                        btnColorLabel = "var(--green)";
-                    } else {
-                        btnColorLabel = "var(--primary)";
-                    }
-
-                    btn.className = "palette-cell";
-                    btn.style.backgroundColor = btnColorLabel;
-                    btn.style.color = btnTextColor;
-                    btn.style.borderColor = btnColorLabel;
-                    btn.style.width = "40px";
-                    btn.style.height = "40px";
-                    btn.style.borderRadius = "10px";
-                    btn.style.flexShrink = "0";
-                    btn.style.fontFamily = "'Outfit', sans-serif";
-                    btn.innerText = (idx + 1).toString();
-                    btn.onclick = () => handleOpenDetailedAnalysisItem(idx);
-
-                    resGrid.appendChild(btn);
-                });
-
-                // Auto view first question analysis
-                if (_activeQuestions.length > 0) {
-                    try {
-                        handleOpenDetailedAnalysisItem(0);
-                    } catch(e) {
-                        console.error("Analysis preview render notice:", e);
-                    }
-                }
-            }
+            // Populate Results Question inline horizontal scrollable palette with interactive filtering
+            handleFilterAnalysisQuestions('all', false);
 
             // Live Leaderboards & Analytics submissions (Features 21 & 26)
             let candidateName = "";
@@ -11762,7 +13022,7 @@ ${dynamicBookSchemas}
                         classes += " wrong";
                     }
 
-                    let style = "font-weight:bold; " + oFontStyle;
+                    let style = "font-weight: 400 !important; " + oFontStyle;
 
                     const hasOptionAnalysis = qNode.oa && qNode.oa[idx] && qNode.oa[idx].trim().length > 0;
                     let arrowHtml = "";
@@ -11791,13 +13051,11 @@ ${dynamicBookSchemas}
                             else boxClasses += " oa-box-e";
                         }
 
-                        let boxLabel = "Option Analysis";
-                        if (isCorrect) boxLabel = "Correct Option Analysis";
-                        else if (isSelected) boxLabel = "Selected Option Analysis";
+                        const boxLabel = "Option " + String.fromCharCode(65 + idx) + " Analysis";
 
                         analysisBoxHtml = '<div id="oa-box-' + index + '-' + idx + '" class="' + boxClasses + '" style="display:none; ' + oaFontStyle + '">' +
                             '<div class="oa-box-label">' + boxLabel + '</div>' +
-                            '<div class="oa-box-content" style="' + oaFontStyle + '">' + formatMarkdownBold(optAnalysisText) + '</div>' +
+                            '<div class="oa-box-content" style="font-weight: 400 !important; ' + oaFontStyle + '">' + formatMarkdownBold(optAnalysisText) + '</div>' +
                             '</div>';
 
                         extraProps = 'onclick="toggleOptionAnalysis(' + index + ', ' + idx + ')" style="' + style + ' display:flex; align-items:center; justify-content:space-between; width:100%; cursor:pointer;"';
@@ -11805,7 +13063,7 @@ ${dynamicBookSchemas}
 
                     return '<div style="margin-bottom:8px;">' +
                         '<div class="' + classes + '" ' + extraProps + '>' + 
-                        '<div style="flex-grow:1; display:flex; align-items:center; gap:4px; ' + oFontStyle + '"><span style="font-family: Outfit, sans-serif !important; font-weight:bold;">' + String.fromCharCode(65 + idx) + ')</span> <span style="' + oFontStyle + '">' + oVal + '</span></div>' +
+                        '<div style="flex-grow:1; display:flex; align-items:center; gap:6px; ' + oFontStyle + '"><span style="font-family: Outfit, sans-serif !important; font-weight:700;">' + String.fromCharCode(65 + idx) + ')</span> <span style="font-weight: 400 !important; ' + oFontStyle + '">' + oVal + '</span></div>' +
                         arrowHtml +
                         '</div>' +
                         analysisBoxHtml +
@@ -11820,10 +13078,10 @@ ${dynamicBookSchemas}
                 blockEl.innerHTML += \`
                     <div class="lang-\${langKey}" style="border-bottom:1px dashed var(--border-color); padding-bottom:15px; margin-bottom:15px; font-family: \${fontName} !important;">
                         <span style="font-size:10px; font-weight:bold; color:var(--primary); font-family: Outfit, sans-serif !important;">\${langTitle}</span>
-                        <div class="analysis-question-box" style="\${qFontStyle}"><strong style="font-family: Outfit, sans-serif !important;">Q:</strong> <span style="\${qFontStyle}">\${qNode.q}</span></div>
+                        <div class="analysis-question-box" style="\${qFontStyle}"><div class="analysis-question-text" style="\${qFontStyle}">\${qNode.q}</div></div>
                         \${qNode.image ? '<div style="text-align:center; padding:10px 0;"><img src="' + qNode.image + '" style="max-width:100%; max-height:240px; border-radius:10px; border:1px solid var(--border-color); background:white;" referrerPolicy="no-referrer"></div>' : ''}
                         \${optSelectionsHtml}
-                        \${qNode.s ? '<div class="analysis-explanation-box" style="font-family: ' + finalExpFont + ' !important;"><strong style="font-family: Outfit, sans-serif !important;">Explanation / Solution (Ex):</strong> <div style="margin-top:6px; font-family: ' + finalExpFont + ' !important;">' + formatMarkdownBold(qNode.s) + '</div></div>' : ''}
+                        \${qNode.s ? '<div class="analysis-explanation-box" style="font-family: ' + finalExpFont + ' !important;"><strong style="font-family: Outfit, sans-serif !important;">Explanation / Solution:</strong> <div class="analysis-explanation-content" style="margin-top:6px; font-family: ' + finalExpFont + ' !important;">' + formatMarkdownBold(qNode.s) + '</div></div>' : ''}
                     </div>
                 \`;
             });
@@ -12434,18 +13692,18 @@ ${dynamicBookSchemas}
                 btn.disabled = false;
                 btn.style.cursor = "pointer";
                 btn.style.opacity = "1";
-                btn.style.background = "var(--primary)";
-                btn.style.color = "";
+                btn.style.background = buttonId === "btnSendPaymentEmail" ? "linear-gradient(135deg, #FF9F1C 0%, #FF5A1F 100%)" : "var(--primary)";
+                btn.style.color = "#ffffff";
                 btn.style.boxShadow = buttonId === "btnSendPaymentEmail" ? "0 4px 15px rgba(255, 107, 53, 0.2)" : "none";
                 btn.style.whiteSpace = "";
-                btn.style.fontSize = "12px";
+                btn.style.fontSize = buttonId === "btnSendPaymentEmail" ? "13px" : "12px";
                 btn.style.padding = buttonId === "btnSendPaymentEmail" ? "" : "12px 20px";
                 btn.style.fontFamily = "inherit";
                 btn.style.fontWeight = buttonId === "btnSendPaymentEmail" ? "800" : "inherit";
                 btn.style.letterSpacing = "";
 
                 if (buttonId === "btnSendPaymentEmail") {
-                    btn.innerHTML = '<i class="ph-bold ph-envelope" style="font-size: 17px;"></i> SEND EMAIL';
+                    btn.innerHTML = '<i class="ph-bold ph-paper-plane-tilt" style="font-size: 16px;"></i> Submit';
                 } else if (buttonId === "btnSendReportEmail") {
                     btn.innerHTML = '<i class="ph ph-paper-plane"></i> Send Report Email';
                 }
@@ -12616,11 +13874,13 @@ ${dynamicBookSchemas}
         }
         window.handleTapPayDirect = handleTapPayDirect;
 
-        function handleSendPaymentDetailsEmail() {
+        async function handleSendPaymentDetailsEmail(e) {
+            if (e && e.preventDefault) e.preventDefault();
+
             const currentKey = getPaymentCooldownStorageKey();
             const expiry = parseInt(localStorage.getItem(currentKey) || "0", 10);
             if (expiry && expiry > Date.now()) {
-                showCustomAlert("Cooldown Active", "Please wait for the cooling period to end before sending another activation request.");
+                showCustomAlert("Cooldown Active", "Please wait for the 24-hour verification period to complete before submitting another request.");
                 return;
             }
 
@@ -12628,6 +13888,8 @@ ${dynamicBookSchemas}
             const email = (document.getElementById("payFormEmail").value || "").trim();
             const phone = (document.getElementById("payFormPhone").value || "").trim();
             const utr = (document.getElementById("payFormUTR").value || "").trim();
+            const messageEl = document.getElementById("payFormMessage");
+            let message = (messageEl ? messageEl.value : "").trim();
             const displayUTR = utr || "Not Provided";
 
             if (!name) {
@@ -12651,6 +13913,11 @@ ${dynamicBookSchemas}
                 categoryDetails = "General Premium Plan (" + amt + ")";
             }
 
+            const rawUserMessage = (messageEl ? messageEl.value : "").trim();
+            if (!message) {
+                message = "Payment verification for: " + categoryDetails + "\\nName: " + name + "\\nEmail: " + email + "\\nPhone: " + phone + "\\nUPI UTR: " + displayUTR;
+            }
+
             // Populate Step 3 Summary Elements
             var sumPlan = document.getElementById("summaryPlanName");
             var sumName = document.getElementById("summaryStudentName");
@@ -12658,6 +13925,7 @@ ${dynamicBookSchemas}
             var sumPhone = document.getElementById("summaryStudentPhone");
             var sumUTR = document.getElementById("summaryUTR");
             var sumTime = document.getElementById("summarySubmittedTime");
+            var sumMsg = document.getElementById("summaryMessageText");
 
             if (sumPlan) sumPlan.innerText = categoryDetails;
             if (sumName) sumName.innerText = name;
@@ -12665,34 +13933,49 @@ ${dynamicBookSchemas}
             if (sumPhone) sumPhone.innerText = phone;
             if (sumUTR) sumUTR.innerText = displayUTR;
             if (sumTime) sumTime.innerText = new Date().toLocaleString();
+            if (sumMsg) sumMsg.innerText = rawUserMessage || "Not Provided";
 
-            const subject = "Premium Access Activation Request - " + name;
-            const body = 
-                "Hi Admin, 👋\\n\\n" +
-                "I've successfully completed my premium payment. Please verify it and activate my access.\\n\\n" +
-                "Registration Details:\\n" +
-                "👤 Name: **" + name + "**\\n" +
-                "📧 Email: **" + email + "**\\n" +
-                "📱 Phone: **" + phone + "**\\n" +
-                "📚 Category / Plan: **" + categoryDetails + "**\\n" +
-                "💳 UTR / UPI Ref ID: **" + displayUTR + "**\\n\\n" +
-                "Looking forward to your confirmation. 🚀\\n\\n" +
-                "Note: I understand that payment verification will be completed by the team and login credentials will be shared on my registered email.\\n\\n" +
-                "Thanks! ❤️\\n" +
-                name;
-
-            // Transition to Step 3 immediately to show verification notice
-            goToPayStep(3);
-
-            // Trigger mailto client
-            try {
-                window.location.href = "mailto:hi@taiyariya.in?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-            } catch(e) {
-                console.log("Mailto error:", e);
+            const submitBtn = document.getElementById("btnSendPaymentEmail");
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="ph-bold ph-spinner ph-spin" style="font-size: 16px;"></i> Submitting...';
             }
 
-            startCooldown("btnSendPaymentEmail", currentKey, 7200000);
+            // Web3Forms API submission
+            const payload = {
+                access_key: "5d794766-9266-49a2-b97b-cc7313dd14d6",
+                subject: "Premium Payment Verification - " + name + " (" + categoryDetails + ")",
+                from_name: name,
+                name: name,
+                email: email,
+                phone: phone,
+                utr: displayUTR,
+                plan: categoryDetails,
+                message: message
+            };
+
+            try {
+                const response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const resData = await response.json();
+                console.log("Web3Forms submission status:", resData);
+            } catch (err) {
+                console.warn("Web3Forms submission error (proceeding to verification screen):", err);
+            }
+
+            // Transition to Step 3 verification notice
+            goToPayStep(3);
+
+            // Start 24 hours (86,400,000 ms) cooldown
+            startCooldown("btnSendPaymentEmail", currentKey, 86400000);
         }
+        window.handleSendPaymentDetailsEmail = handleSendPaymentDetailsEmail;
 
         function handleSendReportEmail() {
             const expiry = parseInt(localStorage.getItem("report_email_cooldown_expiry") || "0", 10);
@@ -12749,25 +14032,334 @@ ${dynamicBookSchemas}
             handleTabNavigation('home');
         }
 
-        // Open detailed inline explanation analysis
-        function handleOpenDetailedAnalysisItem(index) {
+        // Interactive Mock Score Card Question Filtering & Navigation
+        var _activeResultFilter = 'all'; // 'all' | 'incorrect' | 'unanswered' | 'correct'
+        var _filteredQuestionIndices = [];
+        var _currentFilteredPos = 0;
+
+        function handleFilterAnalysisQuestions(filterType, shouldScroll) {
+            _activeResultFilter = filterType || 'all';
+            _filteredQuestionIndices = [];
+
+            if (!_activeQuestions || _activeQuestions.length === 0) {
+                renderEmptyFilteredAnalysisState();
+                return;
+            }
+
+            _activeQuestions.forEach((qBlock, idx) => {
+                const selectAns = _answersMap[idx];
+                const isCorrect = (selectAns !== undefined && selectAns !== null && selectAns === qBlock.originalCorrect);
+                const isUnanswered = (selectAns === undefined || selectAns === null);
+                const isIncorrect = (!isUnanswered && !isCorrect);
+
+                if (_activeResultFilter === 'all') {
+                    _filteredQuestionIndices.push(idx);
+                } else if (_activeResultFilter === 'incorrect') {
+                    if (isIncorrect) _filteredQuestionIndices.push(idx);
+                } else if (_activeResultFilter === 'unanswered') {
+                    if (isUnanswered) _filteredQuestionIndices.push(idx);
+                } else if (_activeResultFilter === 'correct') {
+                    if (isCorrect) _filteredQuestionIndices.push(idx);
+                }
+            });
+
+            _currentFilteredPos = 0;
+            updateAnalysisFilterUI();
+            renderAnalysisQuestionPalette();
+
+            if (_filteredQuestionIndices.length > 0) {
+                handleOpenDetailedAnalysisItemByFilteredPos(0);
+            } else {
+                renderEmptyFilteredAnalysisState();
+            }
+        }
+
+        function updateAnalysisFilterUI() {
+            // Keep stat cards styling clean and responsive in both Day Mode and Night Mode
+            const isDark = document.body.classList.contains("dark-mode");
+            const inactiveBg = isDark ? "#0B131E" : "#ffffff";
+            const inactiveBorder = isDark ? "#1E344B" : "#e2e8f0";
+
+            const statCardTotal = document.getElementById("statCardTotal");
+            const statCardCorrect = document.getElementById("statCardCorrect");
+            const statCardIncorrect = document.getElementById("statCardIncorrect");
+            const statCardUnanswered = document.getElementById("statCardUnanswered");
+
+            if (statCardTotal) {
+                statCardTotal.style.background = _activeResultFilter === 'all' ? (isDark ? "rgba(255, 107, 53, 0.18)" : "rgba(255, 107, 53, 0.08)") : inactiveBg;
+                statCardTotal.style.borderColor = _activeResultFilter === 'all' ? "var(--primary)" : inactiveBorder;
+                statCardTotal.style.boxShadow = _activeResultFilter === 'all' ? "0 0 0 2px rgba(255, 107, 53, 0.25)" : (isDark ? "none" : "0 2px 8px rgba(0, 0, 0, 0.02)");
+                statCardTotal.style.transform = "none";
+            }
+
+            if (statCardCorrect) {
+                statCardCorrect.style.background = _activeResultFilter === 'correct' ? (isDark ? "rgba(34, 197, 94, 0.18)" : "rgba(34, 197, 94, 0.08)") : inactiveBg;
+                statCardCorrect.style.borderColor = _activeResultFilter === 'correct' ? "#22c55e" : inactiveBorder;
+                statCardCorrect.style.boxShadow = _activeResultFilter === 'correct' ? "0 0 0 2px rgba(34, 197, 94, 0.25)" : (isDark ? "none" : "0 2px 8px rgba(0, 0, 0, 0.02)");
+                statCardCorrect.style.transform = "none";
+            }
+
+            if (statCardIncorrect) {
+                statCardIncorrect.style.background = _activeResultFilter === 'incorrect' ? (isDark ? "rgba(239, 68, 68, 0.18)" : "rgba(239, 68, 68, 0.08)") : inactiveBg;
+                statCardIncorrect.style.borderColor = _activeResultFilter === 'incorrect' ? "#ef4444" : inactiveBorder;
+                statCardIncorrect.style.boxShadow = _activeResultFilter === 'incorrect' ? "0 0 0 2px rgba(239, 68, 68, 0.25)" : (isDark ? "none" : "0 2px 8px rgba(0, 0, 0, 0.02)");
+                statCardIncorrect.style.transform = "none";
+            }
+
+            if (statCardUnanswered) {
+                statCardUnanswered.style.background = _activeResultFilter === 'unanswered' ? (isDark ? "rgba(59, 130, 246, 0.18)" : "rgba(59, 130, 246, 0.08)") : inactiveBg;
+                statCardUnanswered.style.borderColor = _activeResultFilter === 'unanswered' ? "#3b82f6" : inactiveBorder;
+                statCardUnanswered.style.boxShadow = _activeResultFilter === 'unanswered' ? "0 0 0 2px rgba(59, 130, 246, 0.25)" : (isDark ? "none" : "0 2px 8px rgba(0, 0, 0, 0.02)");
+                statCardUnanswered.style.transform = "none";
+            }
+
+            const activeFilterBadge = document.getElementById("analysisActiveFilterBadge");
+            if (activeFilterBadge) {
+                const count = (_filteredQuestionIndices && _filteredQuestionIndices.length) || 0;
+                if (_activeResultFilter === 'correct') {
+                    activeFilterBadge.innerText = "Correct (" + count + ")";
+                    activeFilterBadge.style.color = "#22c55e";
+                    activeFilterBadge.style.background = "rgba(34, 197, 94, 0.12)";
+                    activeFilterBadge.style.borderColor = "rgba(34, 197, 94, 0.25)";
+                } else if (_activeResultFilter === 'incorrect') {
+                    activeFilterBadge.innerText = "Incorrect (" + count + ")";
+                    activeFilterBadge.style.color = "#ef4444";
+                    activeFilterBadge.style.background = "rgba(239, 68, 68, 0.12)";
+                    activeFilterBadge.style.borderColor = "rgba(239, 68, 68, 0.25)";
+                } else if (_activeResultFilter === 'unanswered') {
+                    activeFilterBadge.innerText = "Unanswered (" + count + ")";
+                    activeFilterBadge.style.color = "#3b82f6";
+                    activeFilterBadge.style.background = "rgba(59, 130, 246, 0.12)";
+                    activeFilterBadge.style.borderColor = "rgba(59, 130, 246, 0.25)";
+                } else {
+                    activeFilterBadge.innerText = "All Questions (" + (_activeQuestions ? _activeQuestions.length : 0) + ")";
+                    activeFilterBadge.style.color = "var(--primary)";
+                    activeFilterBadge.style.background = "rgba(255, 107, 53, 0.12)";
+                    activeFilterBadge.style.borderColor = "rgba(255, 107, 53, 0.25)";
+                }
+            }
+
+            updateScorecardGlobalLanguageBtn();
+        }
+
+        function renderAnalysisQuestionPalette() {
+            const resGrid = document.getElementById("analysisQuestionSelectorRow");
+            if (!resGrid) return;
+            resGrid.innerHTML = "";
+
+            if (!_filteredQuestionIndices || _filteredQuestionIndices.length === 0) {
+                resGrid.innerHTML = '<div style="padding: 12px 18px; font-size: 12.5px; color: var(--grey-text); font-family: Outfit, sans-serif; font-weight: 700;">No questions match this filter criteria.</div>';
+                return;
+            }
+
+            _filteredQuestionIndices.forEach((origIdx, pos) => {
+                const btn = document.createElement("button");
+
+                btn.className = "palette-cell analysis-filter-cell";
+                btn.setAttribute("data-filtered-pos", pos.toString());
+                btn.setAttribute("data-orig-idx", origIdx.toString());
+                btn.style.backgroundColor = "#ffffff";
+                btn.style.color = "var(--dark)";
+                btn.style.border = "1.5px solid var(--border-color)";
+                btn.style.width = "40px";
+                btn.style.height = "40px";
+                btn.style.borderRadius = "10px";
+                btn.style.flexShrink = "0";
+                btn.style.fontFamily = "'Outfit', sans-serif";
+                btn.style.fontWeight = "800";
+                btn.style.fontSize = "13px";
+                btn.style.cursor = "pointer";
+                btn.style.transition = "all 0.18s ease";
+                btn.innerText = (origIdx + 1).toString();
+                btn.title = "Question " + (origIdx + 1);
+
+                btn.onclick = () => {
+                    handleOpenDetailedAnalysisItemByFilteredPos(pos);
+                };
+
+                resGrid.appendChild(btn);
+            });
+        }
+
+        function renderEmptyFilteredAnalysisState() {
             const detailCard = document.getElementById("analysisDetailViewerCard");
             if (!detailCard) return;
 
-            // Highlight horizontal selector button
+            let iconHtml = '<i class="ph-fill ph-check-circle" style="font-size: 32px; color: #22c55e;"></i>';
+            let titleText = "No Questions Found";
+            let descText = "No questions match this filter criteria.";
+
+            if (_activeResultFilter === 'incorrect') {
+                iconHtml = '<i class="ph-fill ph-confetti" style="font-size: 32px; color: #22c55e;"></i>';
+                titleText = "No Incorrect Questions!";
+                descText = "Shaandar! Aapka koi bhi attempted question galat nahi hua.";
+            } else if (_activeResultFilter === 'unanswered') {
+                iconHtml = '<i class="ph-fill ph-sparkle" style="font-size: 32px; color: #3b82f6;"></i>';
+                titleText = "No Unanswered Questions!";
+                descText = "Aapne sabhi questions attempt kiye hain, koi question chhoota nahi.";
+            } else if (_activeResultFilter === 'correct') {
+                iconHtml = '<i class="ph-fill ph-info" style="font-size: 32px; color: #ef4444;"></i>';
+                titleText = "No Correct Questions";
+                descText = "Aapne is test mein koi sahi answer record nahi kiya.";
+            }
+
+            detailCard.innerHTML = 
+                '<div style="text-align: center; padding: 40px 20px; font-family: Outfit, sans-serif;">' +
+                '  <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(120, 120, 120, 0.08); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px;">' +
+                '    ' + iconHtml +
+                '  </div>' +
+                '  <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 900; color: var(--dark);">' + titleText + '</h3>' +
+                '  <p style="margin: 0 0 20px 0; font-size: 13.5px; color: var(--grey-text); max-width: 360px; margin-left: auto; margin-right: auto; line-height: 1.5;">' + descText + '</p>' +
+                '  <button id="btnViewAllFromAnalysisEmpty" style="background: var(--dark); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-size: 13px; font-weight: 850; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.12);">' +
+                '    <i class="ph-bold ph-squares-four"></i> View All Questions' +
+                '  </button>' +
+                '</div>';
+
+            var viewAllBtn = document.getElementById("btnViewAllFromAnalysisEmpty");
+            if (viewAllBtn) {
+                viewAllBtn.onclick = function() {
+                    handleFilterAnalysisQuestions('all', false);
+                };
+            }
+        }
+
+        function handleOpenDetailedAnalysisItemByFilteredPos(pos) {
+            if (!_filteredQuestionIndices || _filteredQuestionIndices.length === 0) return;
+            if (pos < 0 || pos >= _filteredQuestionIndices.length) return;
+            _currentFilteredPos = pos;
+            const origIdx = _filteredQuestionIndices[pos];
+            handleOpenDetailedAnalysisItem(origIdx, pos);
+        }
+
+        function handleNavigateFilteredAnalysis(delta) {
+            if (!_filteredQuestionIndices || _filteredQuestionIndices.length === 0) return;
+            const newPos = _currentFilteredPos + delta;
+            if (newPos >= 0 && newPos < _filteredQuestionIndices.length) {
+                _currentFilteredPos = newPos;
+                handleOpenDetailedAnalysisItemByFilteredPos(newPos);
+            }
+        }
+
+        function getQuestionAvailableLanguages(qBlock) {
+            if (!qBlock) return [];
+            var langs = [];
+            if (qBlock.en && (qBlock.en.q || (qBlock.en.o && qBlock.en.o.length > 0))) {
+                langs.push('en');
+            }
+            if (qBlock.hi && (qBlock.hi.q || (qBlock.hi.o && qBlock.hi.o.length > 0))) {
+                langs.push('hi');
+            }
+            if (Array.isArray(_availableLanguages)) {
+                _availableLanguages.forEach(function(l) {
+                    if (langs.indexOf(l) === -1 && qBlock[l] && (qBlock[l].q || (qBlock[l].o && qBlock[l].o.length > 0))) {
+                        langs.push(l);
+                    }
+                });
+            }
+            return langs;
+        }
+
+        // Toggle language in Analysis view (Only switches if question has multiple languages)
+        function handleToggleAnalysisLanguage(index) {
+            var qBlock = _activeQuestions && _activeQuestions[index];
+            if (!qBlock) return;
+
+            var langs = getQuestionAvailableLanguages(qBlock);
+            if (langs.length <= 1) {
+                // If there is no second language available, do not switch
+                return;
+            }
+
+            var curIdx = langs.indexOf(_currentLanguage);
+            var nextIdx = curIdx === -1 ? 0 : (curIdx + 1) % langs.length;
+            _currentLanguage = langs[nextIdx];
+
+            updateScorecardGlobalLanguageBtn();
+            handleOpenDetailedAnalysisItem(index, _currentFilteredPos);
+        }
+
+        // Update Scorecard Global Language button visibility and label (only shown if multi-language questions exist)
+        function updateScorecardGlobalLanguageBtn() {
+            var btn = document.getElementById("scorecardGlobalLangBtn");
+            var label = document.getElementById("scorecardGlobalLangLabel");
+            if (!btn || !label) return;
+
+            var hasMultipleLangs = false;
+            if (Array.isArray(_availableLanguages) && _availableLanguages.length > 1) {
+                hasMultipleLangs = true;
+            } else if (Array.isArray(_activeQuestions)) {
+                for (var i = 0; i < _activeQuestions.length; i++) {
+                    if (getQuestionAvailableLanguages(_activeQuestions[i]).length > 1) {
+                        hasMultipleLangs = true;
+                        break;
+                    }
+                }
+            }
+
+            if (hasMultipleLangs) {
+                btn.style.display = "inline-flex";
+                var nextLangName = _currentLanguage === 'hi' ? 'ENGLISH' : 'HINDI';
+                label.innerText = nextLangName;
+            } else {
+                // If test has only 1 language, do not show switch button at all
+                btn.style.display = "none";
+            }
+        }
+
+        // Global language switcher on Mock Scorecard
+        function handleToggleScorecardGlobalLanguage() {
+            var available = [];
+            if (Array.isArray(_availableLanguages) && _availableLanguages.length > 1) {
+                available = _availableLanguages;
+            } else if (Array.isArray(_activeQuestions)) {
+                var langSet = {};
+                _activeQuestions.forEach(function(q) {
+                    getQuestionAvailableLanguages(q).forEach(function(l) { langSet[l] = true; });
+                });
+                available = Object.keys(langSet);
+            }
+
+            if (available.length <= 1) {
+                // If no other language, do not switch
+                return;
+            }
+
+            var curIdx = available.indexOf(_currentLanguage);
+            var nextIdx = curIdx === -1 ? 0 : (curIdx + 1) % available.length;
+            _currentLanguage = available[nextIdx];
+
+            updateScorecardGlobalLanguageBtn();
+            if (typeof _currentFilteredPos === 'number' && _filteredQuestionIndices && _filteredQuestionIndices.length > 0) {
+                handleOpenDetailedAnalysisItemByFilteredPos(_currentFilteredPos);
+            }
+        }
+
+        // Open detailed inline explanation analysis
+        function handleOpenDetailedAnalysisItem(index, filteredPos) {
+            const detailCard = document.getElementById("analysisDetailViewerCard");
+            if (!detailCard) return;
+
+            // Ensure filtered index alignment
+            if (typeof filteredPos !== 'number' || filteredPos < 0) {
+                filteredPos = _filteredQuestionIndices.indexOf(index);
+                if (filteredPos === -1) {
+                    _activeResultFilter = 'all';
+                    _filteredQuestionIndices = _activeQuestions.map((_, i) => i);
+                    filteredPos = index;
+                    updateAnalysisFilterUI();
+                    renderAnalysisQuestionPalette();
+                }
+            }
+            _currentFilteredPos = filteredPos;
+
+            // Do not highlight active button or auto-scroll
             const rowSelector = document.getElementById("analysisQuestionSelectorRow");
             if (rowSelector) {
-                const buttons = rowSelector.querySelectorAll("button");
-                buttons.forEach((btn, idx) => {
-                    if (idx === index) {
-                        btn.style.outline = "3px solid var(--primary)";
-                        btn.style.outlineOffset = "1.5px";
-                        try {
-                            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                        } catch (e) {}
-                    } else {
-                        btn.style.outline = "none";
-                    }
+                const buttons = rowSelector.querySelectorAll("button.palette-cell");
+                buttons.forEach((btn) => {
+                    btn.style.outline = "none";
+                    btn.style.transform = "none";
+                    btn.style.boxShadow = "none";
                 });
             }
 
@@ -12812,19 +14404,36 @@ ${dynamicBookSchemas}
                      classes += " wrong";
                 }
 
-                let style = "font-weight:bold; " + oFontStyle;
+                let style = "font-weight: 400 !important; " + oFontStyle;
 
                 const hasOptionAnalysis = qNode.oa && qNode.oa[idx] && qNode.oa[idx].trim().length > 0;
                 let arrowHtml = "";
                 let analysisBoxHtml = "";
-                let extraProps = 'style="' + style + ' display:flex; align-items:center; justify-content:space-between; width:100%;"';
+
+                // Option letter badge style
+                const optLetter = String.fromCharCode(65 + idx);
+                let badgeBg = "rgba(0,0,0,0.05)";
+                let badgeColor = "var(--dark)";
+                let badgeBorder = "1px solid var(--border-color)";
+                if (isCorrect) {
+                    badgeBg = "#22c55e";
+                    badgeColor = "#ffffff";
+                    badgeBorder = "1px solid #22c55e";
+                } else if (isSelected) {
+                    badgeBg = "#ef4444";
+                    badgeColor = "#ffffff";
+                    badgeBorder = "1px solid #ef4444";
+                }
+
+                const badgeHtml = '<div style="width: 26px; height: 26px; min-width: 26px; border-radius: 8px; background: ' + badgeBg + '; color: ' + badgeColor + '; border: ' + badgeBorder + '; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; font-family: Outfit, sans-serif !important; flex-shrink: 0;">' + optLetter + '</div>';
 
                 if (hasOptionAnalysis) {
                     const optAnalysisText = qNode.oa[idx].trim();
                     const oaFontName = getFontForText(optAnalysisText, fontName);
                     const oaFontStyle = "font-family: " + oaFontName + " !important;";
-                    arrowHtml = '<div style="color:inherit; padding:4px 8px; display:inline-flex; align-items:center; justify-content:center; margin-left:auto;">' +
-                        '<i id="oa-arrow-' + index + '-' + idx + '" class="ph-bold ph-caret-down" style="transition: transform 0.25s ease; font-size:16px;"></i>' +
+                    arrowHtml = '<div style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; background: rgba(0,0,0,0.04); border: 1px solid var(--border-color); font-size: 10.5px; font-weight: 700; color: inherit; margin-left: 6px; flex-shrink: 0; font-family: Outfit, sans-serif;">' +
+                        '<span>Analysis</span>' +
+                        '<i id="oa-arrow-' + index + '-' + idx + '" class="ph-bold ph-caret-down" style="transition: transform 0.25s ease; font-size: 12px;"></i>' +
                         '</div>';
 
                     let boxClasses = "option-analysis-expandable-box";
@@ -12840,22 +14449,25 @@ ${dynamicBookSchemas}
                         else boxClasses += " oa-box-e";
                     }
 
-                    let boxLabel = "Option Analysis";
-                    if (isCorrect) boxLabel = "Correct Option Analysis";
-                    else if (isSelected) boxLabel = "Selected Option Analysis";
+                    const boxLabel = "Option " + optLetter + " Analysis";
 
                     analysisBoxHtml = '<div id="oa-box-' + index + '-' + idx + '" class="' + boxClasses + '" style="display:none; ' + oaFontStyle + '">' +
-                        '<div class="oa-box-label" style="font-family: Outfit, sans-serif !important;">' + boxLabel + '</div>' +
-                        '<div class="oa-box-content" style="' + oaFontStyle + '">' + formatMarkdownBold(optAnalysisText) + '</div>' +
+                        '<div class="oa-box-label" style="font-family: Outfit, sans-serif !important;"><i class="ph-bold ph-info" style="font-size: 12px;"></i> ' + boxLabel + '</div>' +
+                        '<div class="oa-box-content" style="font-weight: 400 !important; font-size: 13.5px; line-height: 1.6; color: inherit; ' + oaFontStyle + '">' + formatMarkdownBold(optAnalysisText) + '</div>' +
                         '</div>';
-
-                    extraProps = 'onclick="toggleOptionAnalysis(' + index + ', ' + idx + ')" style="' + style + ' display:flex; align-items:center; justify-content:space-between; width:100%; cursor:pointer;"';
                 }
+
+                let extraProps = 'onclick="' + (hasOptionAnalysis ? 'toggleOptionAnalysis(' + index + ', ' + idx + ')' : '') + '" style="' + style + ' display:flex; align-items:center; justify-content:space-between; width:100%; ' + (hasOptionAnalysis ? 'cursor:pointer;' : '') + '"';
 
                 return '<div style="margin-bottom:8px;">' +
                     '<div class="' + classes + '" ' + extraProps + '>' + 
-                    '<div style="flex-grow:1; display:flex; align-items:center; gap:4px; ' + oFontStyle + '"><span style="font-family: Outfit, sans-serif !important; font-weight:bold;">' + String.fromCharCode(65 + idx) + ')</span> <span style="' + oFontStyle + '">' + oVal + '</span></div>' +
-                    arrowHtml +
+                    '  <div style="flex-grow:1; display:flex; align-items:center; gap:10px; min-width:0; ' + oFontStyle + '">' +
+                    '    ' + badgeHtml +
+                    '    <div style="font-weight: 400 !important; font-size: 14.5px; line-height: 1.5; color: inherit; flex-grow: 1; min-width: 0; word-break: break-word; ' + oFontStyle + '">' + oVal + '</div>' +
+                    '  </div>' +
+                    '  <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: 8px;">' +
+                    '    ' + arrowHtml +
+                    '  </div>' +
                     '</div>' +
                     analysisBoxHtml +
                     '</div>';
@@ -12872,8 +14484,8 @@ ${dynamicBookSchemas}
             const srcFontStyle = "font-family: " + srcFontName + " !important;";
             
             if (sourceText && !_hideSourceOnStudent) {
-                sourceHtml = '<div style="margin-top: 15px; padding: 10px 12px; background: #fffbeb; border-left: 4px solid #d97706; border-radius: 6px; font-size: 11px; font-weight: bold; color: #b45309; ' + srcFontStyle + '">' +
-                    '&#128214; <strong>:</strong> ' + sourceText.replace(/^:\s*/, '') +
+                sourceHtml = '<div class="analysis-source-box" style="' + srcFontStyle + '">' +
+                    '<span style="font-weight: 700; font-family: Outfit, sans-serif !important; margin-right: 4px;">Source:</span> ' + sourceText.replace(/^:\s*/, '') +
                     '</div>';
             }
 
@@ -12889,18 +14501,36 @@ ${dynamicBookSchemas}
                 '<i class="ph-bold ph-warning-circle" style="font-size: 14px;"></i> Report' +
                 '</button>';
 
-            const prevDisabled = index === 0;
-            const nextDisabled = index === _activeQuestions.length - 1;
+            var qLangs = getQuestionAvailableLanguages(qBlock);
+            var canSwitchLanguage = qLangs.length > 1;
+
+            var currentLangName = _currentLanguage === 'hi' ? 'Hindi' : 'English';
+            var nextLangName = _currentLanguage === 'hi' ? 'English' : 'Hindi';
+            var analysisLangBtnHtml = '';
+            if (canSwitchLanguage) {
+                analysisLangBtnHtml = '<button onclick="handleToggleAnalysisLanguage(' + index + ')" id="analysisLangToggleBtn" style="background: rgba(255, 107, 53, 0.08); border: 1.5px solid rgba(255, 107, 53, 0.22); border-radius: 9999px; padding: 3px 10px; color: var(--primary); font-size: 11px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-family: Outfit, sans-serif;" title="Change Language">' +
+                    '<i class="ph-bold ph-translate" style="font-size: 13px;"></i> ' + nextLangName +
+                    '</button>';
+            }
+
+            // Strict bounds-checked Previous / Next navigation across filtered items
+            const prevDisabled = _currentFilteredPos <= 0;
+            const nextDisabled = _currentFilteredPos >= _filteredQuestionIndices.length - 1;
+
+            let navCenterText = '<span style="font-weight: 800; color: var(--dark);">Q. ' + (index + 1) + ' (' + (_currentFilteredPos + 1) + ' of ' + _filteredQuestionIndices.length + ')</span>';
+            if (_filteredQuestionIndices.length === _activeQuestions.length) {
+                navCenterText = '<span style="font-weight: 800; color: var(--dark);">Q. ' + (index + 1) + ' / ' + _activeQuestions.length + '</span>';
+            }
 
             const navigationHtml = 
-                '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1.5px solid var(--border-color); gap: 12px;">' +
-                '  <button class="analysis-nav-btn" ' + (prevDisabled ? 'disabled' : 'onclick="handleOpenDetailedAnalysisItem(' + (index - 1) + ')"') + ' style="flex: 1; max-width: 150px;">' +
-                '    <i class="ph-bold ph-caret-left" style="font-size: 14px;"></i> Previous' +
+                '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1.5px solid var(--border-color); gap: 12px;">' +
+                '  <button class="analysis-nav-btn" ' + (prevDisabled ? 'disabled' : 'onclick="handleNavigateFilteredAnalysis(-1)"') + ' style="flex: 1; max-width: 150px;">' +
+                '    <i class="ph-bold ph-caret-left" style="font-size: 14px;"></i> Back' +
                 '  </button>' +
-                '  <div style="font-size: 12.5px; font-weight: 600; color: var(--grey-text); font-family: Outfit, sans-serif; letter-spacing: 0.5px; opacity: 0.9;">' +
-                '    Q. ' + (index + 1) + ' / ' + _activeQuestions.length +
+                '  <div style="font-size: 12.5px; font-family: Outfit, sans-serif; letter-spacing: 0.3px; text-align: center;">' +
+                '    ' + navCenterText +
                 '  </div>' +
-                '  <button class="analysis-nav-btn" ' + (nextDisabled ? 'disabled' : 'onclick="handleOpenDetailedAnalysisItem(' + (index + 1) + ')"') + ' style="flex: 1; max-width: 150px;">' +
+                '  <button class="analysis-nav-btn" ' + (nextDisabled ? 'disabled' : 'onclick="handleNavigateFilteredAnalysis(1)"') + ' style="flex: 1; max-width: 150px;">' +
                 '    Next <i class="ph-bold ph-caret-right" style="font-size: 14px;"></i>' +
                 '  </button>' +
                 '</div>';
@@ -12912,20 +14542,70 @@ ${dynamicBookSchemas}
                 '  <span>Answer Revealed during test (Eye icon clicked)</span>' +
                 '</div>' : '';
 
+            let questionStatusBadge = "";
+            const userSelectedOpt = _answersMap[index];
+            if (userSelectedOpt !== undefined && userSelectedOpt !== null) {
+                if (userSelectedOpt === qNode.c) {
+                    questionStatusBadge = '<span style="background: rgba(34, 197, 94, 0.12); color: #16a34a; border: 1px solid rgba(34, 197, 94, 0.28); font-size: 11px; font-weight: 700; padding: 2.5px 9px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 4px; font-family: Outfit, sans-serif;"><i class="ph-bold ph-check-circle" style="font-size: 13px;"></i> Correct</span>';
+                } else {
+                    questionStatusBadge = '<span style="background: rgba(239, 68, 68, 0.12); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.28); font-size: 11px; font-weight: 700; padding: 2.5px 9px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 4px; font-family: Outfit, sans-serif;"><i class="ph-bold ph-x-circle" style="font-size: 13px;"></i> Incorrect</span>';
+                }
+            } else {
+                questionStatusBadge = '<span style="background: rgba(100, 116, 139, 0.12); color: #64748b; border: 1px solid rgba(100, 116, 139, 0.28); font-size: 11px; font-weight: 700; padding: 2.5px 9px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 4px; font-family: Outfit, sans-serif;"><i class="ph-bold ph-minus-circle" style="font-size: 13px;"></i> Unattempted</span>';
+            }
+
+            const questionBoxHtml = 
+                '<div class="analysis-question-box">' +
+                '  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">' +
+                '    <div style="display: flex; align-items: center; gap: 6px;">' +
+                '      <span style="background: rgba(255, 107, 53, 0.09); color: var(--primary); font-size: 11px; font-weight: 800; padding: 2.5px 8px; border-radius: 6px; text-transform: uppercase; font-family: Outfit, sans-serif; letter-spacing: 0.5px;">Question ' + (index + 1) + '</span>' +
+                '    </div>' +
+                '    ' + questionStatusBadge +
+                '  </div>' +
+                '  <div class="analysis-question-text" style="' + qFontStyle + '">' + sanitizeQuestionText(qNode.q) + '</div>' +
+                '</div>';
+
+            let explanationHtml = "";
+            if (qNode.s) {
+                explanationHtml = 
+                    '<div class="analysis-explanation-box" style="' + expFontStyle + '">' +
+                    '  <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1.5px solid var(--border-color); padding-bottom: 8px; margin-bottom: 10px;">' +
+                    '    <div style="display: flex; align-items: center; gap: 7px; color: var(--primary); font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; font-family: Outfit, sans-serif;">' +
+                    '      <i class="ph-bold ph-lightbulb" style="font-size: 15px;"></i>' +
+                    '      <span>Explanation & Solution</span>' +
+                    '    </div>' +
+                    '    <span style="font-size: 11px; font-weight: 700; color: #15803d; background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.3); padding: 2px 8px; border-radius: 6px; font-family: Outfit, sans-serif;">Correct: Option ' + String.fromCharCode(64 + qNode.c) + '</span>' +
+                    '  </div>' +
+                    '  <div class="analysis-explanation-content" style="' + expFontStyle + '">' + formatMarkdownBold(qNode.s) + '</div>' +
+                    '</div>';
+            } else {
+                explanationHtml = 
+                    '<div class="analysis-explanation-box" style="opacity: 0.85; font-family: Outfit, sans-serif !important;">' +
+                    '  <div style="display: flex; align-items: center; gap: 6px; color: var(--grey-text); font-size: 11.5px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">' +
+                    '    <i class="ph-bold ph-info" style="font-size: 15px;"></i>' +
+                    '    <span>Explanation</span>' +
+                    '  </div>' +
+                    '  <div style="font-size: 13.5px; font-weight: 400 !important; color: var(--grey-text);">No detailed explanation provided for this question.</div>' +
+                    '</div>';
+            }
+
             detailCard.innerHTML = 
                 '<div class="lang-' + _currentLanguage + '" style="' + fontStyle + '">' +
-                '  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom:8px;">' +
-                '    <div style="font-size:11px; font-weight:bold; color:var(--primary); font-family: Outfit, sans-serif !important;">QUESTION ' + (index + 1) + ' ANALYSIS (' + _currentLanguage.toUpperCase() + ')</div>' +
-                '    <div style="display: flex; align-items: center; gap: 15px;">' +
+                '  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">' +
+                '    <div style="display: flex; align-items: center; gap: 8px;">' +
+                '      <div style="font-size:11px; font-weight:bold; color:var(--primary); font-family: Outfit, sans-serif !important; text-transform: uppercase;">QUESTION ' + (index + 1) + ' ANALYSIS (' + _currentLanguage.toUpperCase() + ')</div>' +
+                '    </div>' +
+                '    <div style="display: flex; align-items: center; gap: 12px;">' +
+                (analysisLangBtnHtml ? '       ' + analysisLangBtnHtml : '') +
                 '       ' + analysisSaveBtnHtml +
                 '       ' + analysisReportBtnHtml +
                 '    </div>' +
                 '  </div>' +
                 '  ' + revealedBannerHtml +
-                '  <div class="analysis-question-box" style="background:var(--light-grey); padding:16px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:20px; font-size:15px; line-height:1.5; font-weight:500; ' + qFontStyle + '"><strong style="font-family: Outfit, sans-serif !important;">Q:</strong> <span style="' + qFontStyle + '">' + sanitizeQuestionText(qNode.q) + '</span></div>' +
+                '  ' + questionBoxHtml +
                 (qNode.image ? '<div class="analysis-question-image-box" style="margin: -10px 0 15px; text-align: center;"><img src="' + qNode.image + '" style="max-width: 100%; max-height: 250px; border-radius: 12px; border: 1.5px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); object-fit: contain; background: white;" referrerPolicy="no-referrer"></div>' : '') +
                 '  <div style="margin-top:10px;">' + optSelectionsHtml + '</div>' +
-                '  ' + (qNode.s ? '<div class="analysis-explanation-box" style="background:#e1f5fe; border:1px solid #b3e5fc; padding:16px; border-radius:12px; font-size:14px; line-height:1.5; color:#0277bd; margin-top:15px; ' + expFontStyle + '"><strong style="font-family: Outfit, sans-serif !important;">Explanation / Solution (Ex):</strong> <div style="margin-top:6px; ' + expFontStyle + '">' + formatMarkdownBold(qNode.s) + '</div></div>' : '<div class="analysis-explanation-box" style="background:#f1f2f6; border:1px solid var(--border-color); padding:16px; border-radius:12px; font-size:13px; color:#57606f; margin-top:15px; font-family: Outfit, sans-serif !important;"><strong style="font-family: Outfit, sans-serif !important;">Explanation:</strong> No explanation provided.</div>') +
+                '  ' + explanationHtml +
                 '  ' + sourceHtml +
                 '  ' + navigationHtml +
                 '</div>';
