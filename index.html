@@ -35,10 +35,15 @@
     <!-- Google AdSense Site Verification -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4084240304484658" crossorigin="anonymous"></script>
 
+    <!-- PWA Web App Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#ffffff" id="rootThemeColorMeta" />
+
     <!-- Favicon and App Logo Metadata for Search Engines & Browsers -->
-    <link rel="icon" type="image/png" href="https://i.ibb.co/GNHYwQv/file-00000000be548211a9ed25bf8420e390.png" />
-    <link rel="shortcut icon" href="https://i.ibb.co/GNHYwQv/file-00000000be548211a9ed25bf8420e390.png" type="image/png" />
-    <link rel="apple-touch-icon" href="https://i.ibb.co/GNHYwQv/file-00000000be548211a9ed25bf8420e390.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="shortcut icon" href="/logo.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
 
     <!-- Google-friendly SiteNavigationElement Structured Data for Automatic Sitelinks -->
     <script type="application/ld+json">
@@ -103,6 +108,20 @@
     </nav>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').then(function(reg) {
+            console.log('[PWA] ServiceWorker registered with scope:', reg.scope);
+          }).catch(function(err) {
+            navigator.serviceWorker.register('sw.js').catch(function(e) {
+              console.warn('[PWA] ServiceWorker note:', e);
+            });
+          });
+        });
+      }
+    </script>
   </body>
 </html>
 

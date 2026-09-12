@@ -1,6 +1,6 @@
 {
-  "name": "Taiyariya : Admin Panel",
-  "description": "Taiyariya Studio & Admin Panel featuring password protection, multi-language support, test series management, PDF study materials, student user accounts, dynamic banners, and instant standalone app export.",
+  "name": "Taiyariya",
+  "description": "Taiyariya Studio & Online Mock Test Portal featuring bilingual tests, CBT exam practice, PDF notes, student performance tracking, and instant standalone app export.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -1,7 +1,7 @@
 {
   "config": {
     "appName": "Taiyariya",
-    "logoUrl": "https://i.ibb.co/GNHYwQv/file-00000000be548211a9ed25bf8420e390.png",
+    "logoUrl": "/logo.svg",
     "studentGreeting": "Hi, Aspirant!",
     "studentSubGreeting": "Taiyariya Se Selection  Tak❤️‍🔥",
     "sliders": [
@@ -26535,6 +26535,20 @@
   "leaderboards": {},
   "logs": [
     {
+      "id": "log_1789211214180_643",
+      "action": "Successful Admin Panel password unlock",
+      "date": "2026-09-12",
+      "time": "11:06",
+      "adminName": "Admin User"
+    },
+    {
+      "id": "log_1789211210868_870",
+      "action": "Failed Admin password attempt: 'Gud***'",
+      "date": "2026-09-12",
+      "time": "11:06",
+      "adminName": "Unknown User"
+    },
+    {
       "id": "log_1787850107996_270",
       "action": "Synchronized student database",
       "date": "2026-08-27",
@@ -27068,6 +27082,7 @@
     }
   ],
   "activeAdminTokens": [
-    "p1_token_66203c3lbb_1787845218558"
+    "p1_token_66203c3lbb_1787845218558",
+    "p1_token_le1f30vein_1789211214142"
   ]
 }

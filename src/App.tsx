@@ -62,8 +62,90 @@ import { TestFormatGuideModal } from "./components/TestFormatGuideModal";
 import { SeoGooglePreviewModal } from "./components/SeoGooglePreviewModal";
 import { FormattedText } from "./components/FormattedText";
 import { TRANSLATIONS, LANGUAGES, LanguageCode } from "./translations";
+import { PWA_ICON_192_BASE64, PWA_ICON_512_BASE64, HOSTINGER_LOGO_BASE64, HOSTINGER_LOGO_SVG } from "./utils/pwaIcons";
 
-const DEFAULT_LOGO_URL = "https://i.ibb.co/GNHYwQv/file-00000000be548211a9ed25bf8420e390.png";
+const DEFAULT_LOGO_URL = "/logo.svg";
+
+const DEFAULT_LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Day Mode Vibrant Blue Background Gradient -->
+    <linearGradient id="dayBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00A8FF" />
+      <stop offset="45%" stop-color="#0077F7" />
+      <stop offset="100%" stop-color="#0052D4" />
+    </linearGradient>
+
+    <!-- Subtle Top Radial Glow for Depth -->
+    <radialGradient id="topGlow" cx="30%" cy="20%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Golden Spark Gradient (Excellence & Preparation) -->
+    <linearGradient id="goldSpark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF385" />
+      <stop offset="40%" stop-color="#FFC700" />
+      <stop offset="100%" stop-color="#FF9500" />
+    </linearGradient>
+
+    <!-- Mint Emerald Verification Swoosh (Correctness & Practice) -->
+    <linearGradient id="emeraldSwoosh" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Soft Drop Shadow for Icon Core -->
+    <filter id="iconDepth" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#002766" flood-opacity="0.38" />
+    </filter>
+
+    <filter id="sparkGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#FF9500" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Base for App Icon -->
+  <rect width="512" height="512" rx="118" fill="url(#dayBgGrad)" />
+
+  <!-- Subtle Specular Lighting Reflection -->
+  <rect width="512" height="512" rx="118" fill="url(#topGlow)" />
+
+  <!-- Delicate Inner Border for crisp edges -->
+  <rect x="14" y="14" width="484" height="484" rx="104" fill="none" stroke="#ffffff" stroke-width="4" stroke-opacity="0.28" />
+
+  <!-- Main "Taiyariya" T-Symbol & Knowledge Wings Core -->
+  <g filter="url(#iconDepth)">
+    <!-- Dynamic Open Knowledge Wing (T-Bar Left Wing) -->
+    <path d="M 120 162 C 160 156, 210 168, 256 182 C 230 162, 180 148, 126 148 C 114 148, 108 152, 120 162 Z" fill="#ffffff" fill-opacity="0.4" />
+
+    <!-- Stylized "T" Crossbar with soaring book/wing curves -->
+    <path d="M 104 176 C 168 150, 224 162, 256 180 C 288 162, 344 150, 408 176 C 418 180, 424 192, 416 202 C 408 212, 396 216, 384 212 C 336 195, 292 202, 276 216 L 276 358 C 276 376, 260 392, 242 392 C 224 392, 208 376, 208 358 L 208 216 C 192 202, 148 195, 100 212 C 88 216, 76 212, 68 202 C 60 192, 66 180, 104 176 Z"
+          fill="#ffffff" />
+
+    <!-- Center Spine Highlight on T-bar -->
+    <path d="M 236 186 C 242 184, 250 184, 256 185 C 262 184, 270 184, 276 186 L 276 260 C 270 256, 262 254, 256 254 C 250 254, 242 256, 236 260 Z"
+          fill="#E2E8F0" fill-opacity="0.35" />
+  </g>
+
+  <!-- Green Victory / Accuracy Checkmark Swoosh intertwining with T -->
+  <g filter="url(#iconDepth)">
+    <path d="M 218 290 L 260 334 C 266 340, 276 340, 282 334 L 372 238 C 380 230, 394 230, 402 238 C 410 246, 410 260, 402 268 L 292 384 C 278 398, 256 398, 242 384 L 188 328 C 180 320, 180 306, 188 298 C 196 290, 210 290, 218 290 Z"
+          fill="url(#emeraldSwoosh)" />
+  </g>
+
+  <!-- Golden Radiance Spark / Star of Preparation (Top-Right of T) -->
+  <g filter="url(#sparkGlow)" transform="translate(376, 116)">
+    <!-- 4-Point Brilliant Star -->
+    <path d="M 0 -36 C 2 -10, 10 -2, 36 0 C 10 2, 2 10, 0 36 C -2 10, -10 2, -36 0 C -10 -2, -2 -10, 0 -36 Z" fill="url(#goldSpark)" />
+    <!-- Center white core for sparkle -->
+    <circle cx="0" cy="0" r="7" fill="#ffffff" />
+  </g>
+
+  <!-- Mini Sparkle at Bottom Left -->
+  <g filter="url(#sparkGlow)" transform="translate(132, 270)">
+    <path d="M 0 -16 C 1 -4, 4 -1, 16 0 C 4 1, 1 4, 0 16 C -1 4, -4 1, -16 0 C -4 -1, -1 -4, 0 -16 Z" fill="url(#goldSpark)" opacity="0.85" />
+  </g>
+</svg>`;
 
 const enhanceImageUrlQuality = (url: string): string => {
   if (!url) return url;
@@ -3447,6 +3529,108 @@ export default function App() {
       const zip = new JSZip();
       zip.file("index.html", htmlContent);
 
+      // Generate Web App Manifest (manifest.json) & PWA Service Worker (sw.js)
+      const manifestData = {
+        name: "Taiyariya",
+        short_name: "Taiyariya",
+        description: safeConfig.seo?.metaDescription || "Taiyariya - Online Mock Tests & Study Portal",
+        start_url: "/",
+        scope: "/",
+        id: "/",
+        display: "standalone",
+        background_color: "#ffffff",
+        theme_color: "#ffffff",
+        orientation: "portrait-primary",
+        icons: [
+          {
+            src: "/icon-192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "any"
+          },
+          {
+            src: "/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any"
+          },
+          {
+            src: "/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable"
+          },
+          {
+            src: "/logo.svg",
+            sizes: "any",
+            type: "image/svg+xml",
+            purpose: "any"
+          }
+        ]
+      };
+      zip.file("manifest.json", JSON.stringify(manifestData, null, 2));
+      zip.file("logo.svg", HOSTINGER_LOGO_SVG || HOSTINGER_LOGO_BASE64);
+      zip.file("icon-192.png", PWA_ICON_192_BASE64, { base64: true });
+      zip.file("icon-512.png", PWA_ICON_512_BASE64, { base64: true });
+
+      const swContent = `// Taiyariya Service Worker for PWA Offline Shell & App Installability
+const CACHE_NAME = 'taiyariya-cache-v2';
+const PRECACHE_ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/logo.svg',
+  '/icon-192.png',
+  '/icon-512.png'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(PRECACHE_ASSETS).catch((err) => {
+        console.warn('[SW] Precache asset failure (graceful):', err);
+      });
+    }).then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+  if (!event.request.url.startsWith('http')) return;
+
+  event.respondWith(
+    fetch(event.request)
+      .catch(() => caches.match(event.request))
+      .then((response) => {
+        if (response) return response;
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html') || caches.match('/');
+        }
+        return new Response('Offline content unavailable', {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: new Headers({ 'Content-Type': 'text/plain' })
+        });
+      })
+  );
+});
+`;
+      zip.file("sw.js", swContent);
+
       // Generate and obfuscate students_db.txt and student_db.txt files
       const studentsJsonString = JSON.stringify(clonedConfig.students || []);
       const scrambledStudents = encodeObfuscatedDatabase(studentsJsonString);
@@ -3592,17 +3776,36 @@ export default function App() {
     Header always set Access-Control-Allow-Origin "*"
     Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
     Header always set Access-Control-Allow-Headers "*"
+
+    # PWA Manifest & Service Worker Header Configuration
+    <FilesMatch "manifest\\.json$">
+        Header always set Content-Type "application/manifest+json; charset=utf-8"
+        Header always set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+    <FilesMatch "sw\\.js$">
+        Header always set Content-Type "application/javascript; charset=utf-8"
+        Header always set Service-Worker-Allowed "/"
+        Header always set Access-Control-Allow-Origin "*"
+    </FilesMatch>
 </IfModule>
 
-# 5. Disable ETags globally across Apache/Hostinger
+# 5. Correct MIME Types for PWA Manifest, SVG, and Service Worker
+<IfModule mod_mime.c>
+    AddType application/manifest+json .json
+    AddType application/manifest+json .webmanifest
+    AddType application/javascript .js
+    AddType image/svg+xml .svg
+</IfModule>
+
+# 6. Disable ETags globally across Apache/Hostinger
 FileETag None
 
-# 6. Gzip & Deflate Compression for 0.01s Instant Loading
+# 7. Gzip & Deflate Compression for 0.01s Instant Loading
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json application/xml
 </IfModule>
 
-# 7. Prevent Directory Listing
+# 8. Prevent Directory Listing
 Options -Indexes
 `;
       zip.file(".htaccess", htaccessContent);
@@ -3693,14 +3896,16 @@ Options -Indexes
 
 FILES LIST IN THIS BUNDLE:
 1. index.html                   - Main student testing portal (configured to dynamically fetch DB chunks + students database from R2 Storage).
-2. 404.html                     - SPA clean-path router fallback redirect (with taiyariya.in/Blackbook/A-Word-Test support!).
-3. sitemap.xml                  - Automatically compiled XML Sitemap listing all deep URLs for high SEO rank!
-4. robots.txt                   - Robots file explicitly linking the Sitemap location to Google crawler bots.
-5. ads.txt                      - Google AdSense Authorized Digital Sellers file for instant AdSense approval!
-6. students_db.txt              - SEPARATE student authentication database. You can edit/upload this independently anytime!
-7. config_part_1.txt, _2.txt... - Database fragment plain text files (to be uploaded to Cloudflare R2).
-8. test_questions_*.txt         - Individual exam questions split files (to be uploaded to Cloudflare R2).
-9. README.txt                   - This instruction file.
+2. sw.js                        - PWA Service Worker enabling direct Chrome app installation.
+3. manifest.json                - Web App Manifest configuring app name, icons, and standalone mode.
+4. 404.html                     - SPA clean-path router fallback redirect (with taiyariya.in/Blackbook/A-Word-Test support!).
+5. sitemap.xml                  - Automatically compiled XML Sitemap listing all deep URLs for high SEO rank!
+6. robots.txt                   - Robots file explicitly linking the Sitemap location to Google crawler bots.
+7. ads.txt                      - Google AdSense Authorized Digital Sellers file for instant AdSense approval!
+8. students_db.txt              - SEPARATE student authentication database. You can edit/upload this independently anytime!
+9. config_part_1.txt, _2.txt... - Database fragment plain text files (to be uploaded to Cloudflare R2).
+10. test_questions_*.txt        - Individual exam questions split files (to be uploaded to Cloudflare R2).
+11. README.txt                  - This instruction file.
 
 Note: All database fragments (config_part_*.txt files), student accounts (students_db.txt), and questions (test_questions_*.txt files) must be uploaded to Cloudflare R2 Storage so they are accessible at:
 https://pub-dc360536e4fb46baa3e3e8719d01793e.r2.dev/students_db.txt
@@ -3869,6 +4074,108 @@ The application dynamically fetches and reassembles all segments into memory upo
       const zip = new JSZip();
       zip.file("index.html", htmlContent);
 
+      // Generate Web App Manifest (manifest.json) & PWA Service Worker (sw.js)
+      const manifestData = {
+        name: "Taiyariya",
+        short_name: "Taiyariya",
+        description: safeConfig.seo?.metaDescription || "Taiyariya - Online Mock Tests & Study Portal",
+        start_url: "/",
+        scope: "/",
+        id: "/",
+        display: "standalone",
+        background_color: "#ffffff",
+        theme_color: "#ffffff",
+        orientation: "portrait-primary",
+        icons: [
+          {
+            src: "/icon-192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "any"
+          },
+          {
+            src: "/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any"
+          },
+          {
+            src: "/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable"
+          },
+          {
+            src: "/logo.svg",
+            sizes: "any",
+            type: "image/svg+xml",
+            purpose: "any"
+          }
+        ]
+      };
+      zip.file("manifest.json", JSON.stringify(manifestData, null, 2));
+      zip.file("logo.svg", HOSTINGER_LOGO_SVG || HOSTINGER_LOGO_BASE64);
+      zip.file("icon-192.png", PWA_ICON_192_BASE64, { base64: true });
+      zip.file("icon-512.png", PWA_ICON_512_BASE64, { base64: true });
+
+      const swContent = `// Taiyariya Service Worker for PWA Offline Shell & App Installability
+const CACHE_NAME = 'taiyariya-cache-v2';
+const PRECACHE_ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/logo.svg',
+  '/icon-192.png',
+  '/icon-512.png'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(PRECACHE_ASSETS).catch((err) => {
+        console.warn('[SW] Precache asset failure (graceful):', err);
+      });
+    }).then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+  if (!event.request.url.startsWith('http')) return;
+
+  event.respondWith(
+    fetch(event.request)
+      .catch(() => caches.match(event.request))
+      .then((response) => {
+        if (response) return response;
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html') || caches.match('/');
+        }
+        return new Response('Offline content unavailable', {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: new Headers({ 'Content-Type': 'text/plain' })
+        });
+      })
+  );
+});
+`;
+      zip.file("sw.js", swContent);
+
       // Generate and obfuscate students_db.txt and student_db.txt files
       const studentsJsonString = JSON.stringify(clonedConfig.students || []);
       const scrambledStudents = encodeObfuscatedDatabase(studentsJsonString);
@@ -4014,17 +4321,36 @@ The application dynamically fetches and reassembles all segments into memory upo
     Header always set Access-Control-Allow-Origin "*"
     Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
     Header always set Access-Control-Allow-Headers "*"
+
+    # PWA Manifest & Service Worker Header Configuration
+    <FilesMatch "manifest\\.json$">
+        Header always set Content-Type "application/manifest+json; charset=utf-8"
+        Header always set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+    <FilesMatch "sw\\.js$">
+        Header always set Content-Type "application/javascript; charset=utf-8"
+        Header always set Service-Worker-Allowed "/"
+        Header always set Access-Control-Allow-Origin "*"
+    </FilesMatch>
 </IfModule>
 
-# 5. Disable ETags globally across Apache/Hostinger
+# 5. Correct MIME Types for PWA Manifest, SVG, and Service Worker
+<IfModule mod_mime.c>
+    AddType application/manifest+json .json
+    AddType application/manifest+json .webmanifest
+    AddType application/javascript .js
+    AddType image/svg+xml .svg
+</IfModule>
+
+# 6. Disable ETags globally across Apache/Hostinger
 FileETag None
 
-# 6. Gzip & Deflate Compression for 0.01s Instant Loading
+# 7. Gzip & Deflate Compression for 0.01s Instant Loading
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json application/xml
 </IfModule>
 
-# 7. Prevent Directory Listing
+# 8. Prevent Directory Listing
 Options -Indexes
 `;
       zip.file(".htaccess", htaccessContent);
@@ -4115,21 +4441,23 @@ Options -Indexes
 
 FILES LIST IN THIS BUNDLE:
 1. index.html                   - Main student testing portal (configured to dynamically fetch DB chunks + students database locally from the same folder).
-2. .htaccess                    - High-performance Apache server config for zero-cache instant updates and SPA deep-link routing (fixes 404 on page refresh).
-3. 404.html                     - SPA clean-path router fallback redirect (with support for Hostinger subdirectory page refreshing!).
-4. sitemap.xml                  - Automatically compiled XML Sitemap listing all deep URLs for high SEO rank!
-5. robots.txt                   - Robots file explicitly linking the Sitemap location to Google crawler bots.
-6. ads.txt                      - Google AdSense Authorized Digital Sellers file for instant AdSense approval!
-7. students_db.txt              - SEPARATE student authentication database. You can edit/upload this independently anytime!
-8. config_part_1.txt, _2.txt... - Database fragment plain text files (to be uploaded to Hostinger in the same folder as index.html).
-9. test_questions_*.txt         - Individual exam questions split files (to be uploaded to Hostinger in the same folder as index.html).
-10. CategoryPayment.txt         - Subscription price and helpdesk metadata file.
-11. README.txt                  - This instruction file.
+2. sw.js                        - PWA Service Worker enabling direct Chrome app installation.
+3. manifest.json                - Web App Manifest configuring app name, icons, and standalone mode.
+4. .htaccess                    - High-performance Apache server config for zero-cache instant updates and SPA deep-link routing (fixes 404 on page refresh).
+5. 404.html                     - SPA clean-path router fallback redirect (with support for Hostinger subdirectory page refreshing!).
+6. sitemap.xml                  - Automatically compiled XML Sitemap listing all deep URLs for high SEO rank!
+7. robots.txt                   - Robots file explicitly linking the Sitemap location to Google crawler bots.
+8. ads.txt                      - Google AdSense Authorized Digital Sellers file for instant AdSense approval!
+9. students_db.txt              - SEPARATE student authentication database. You can edit/upload this independently anytime!
+10. config_part_1.txt, _2.txt... - Database fragment plain text files (to be uploaded to Hostinger in the same folder as index.html).
+11. test_questions_*.txt         - Individual exam questions split files (to be uploaded to Hostinger in the same folder as index.html).
+12. CategoryPayment.txt         - Subscription price and helpdesk metadata file.
+13. README.txt                  - This instruction file.
 
 HOW TO DEPLOY ON HOSTINGER (public_html):
 1. Extract/Unzip all files in this ZIP archive on your local computer.
 2. Log into your Hostinger hPanel, go to File Manager, and navigate to 'public_html' (or your desired subdomain folder like 'public_html/student').
-3. Upload ALL extracted files (index.html, .htaccess, 404.html, sitemap.xml, robots.txt, ads.txt, students_db.txt, student_db.txt, CategoryPayment.txt, all config_part_*.txt and test_questions_*.txt files) directly into that folder. (Make sure hidden files starting with '.' like .htaccess are visible and uploaded!).
+3. Upload ALL extracted files (index.html, sw.js, manifest.json, .htaccess, 404.html, sitemap.xml, robots.txt, ads.txt, students_db.txt, student_db.txt, CategoryPayment.txt, all config_part_*.txt and test_questions_*.txt files) directly into that folder. (Make sure hidden files starting with '.' like .htaccess are visible and uploaded!).
 4. That's it! Everything works immediately! Open 'https://yourdomain.com/' (or your subdirectory/subdomain URL) to access your exam portal.
 
 HOW TO USE CLEAN DYNAMIC TEST URLs:

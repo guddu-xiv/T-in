@@ -19,7 +19,7 @@ export function generateStudentHTML(config: AppConfig, base64Config: string, ser
   const metaDescription = seo.metaDescription || `Welcome to ${config.appName || "Taiyariya"}. India's leading digital education center for bilingual MCQ practice, simulated online CBT exam portals, offline Blackbooks, study material PDFs, and deep learning analytics.`;
   const metaKeywords = seo.metaKeywords || "Taiyariya, taiyariya, taiyariya.in, taiyariya.in student, Taiyariya App, Blackbook, ssc mock series, cgl cbt mockup, previous worksheets pdf, online exam testing, learn, test series";
   const canonicalUrl = seo.canonicalUrl || "https://taiyariya.in/";
-  const ogImage = seo.ogImage || config.logoUrl || "https://i.ibb.co/GNHYwQv/file-00000000be548211a9ed25bf8420e390.png";
+  const ogImage = seo.ogImage || config.logoUrl || "https://taiyariya.in/logo.svg";
   const author = seo.author || config.appName || "Taiyariya";
   const googleSiteVerification = seo.googleSiteVerification || social.googleVerificationId || "k7WEweulUiwAmqV3D5oVNzLu528Ib-B5VT4s4F2f4";
   const bingSiteVerification = seo.bingSiteVerification || "";
@@ -135,10 +135,20 @@ export function generateStudentHTML(config: AppConfig, base64Config: string, ser
     ${bingSiteVerification ? `<meta name="msvalidate.01" content="${bingSiteVerification}">` : ""}
     <link rel="canonical" href="${canonicalUrl}">
 
+    <!-- PWA Web App Manifest & Mobile App Capabilities -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" id="appThemeColorMeta" content="#ffffff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="${config.appName || 'Taiyariya'}">
+
     <!-- Favicon and App Logo Metadata for Search Engines & Browsers -->
-    <link rel="icon" type="image/svg+xml" href="${config.logoUrl || '/logo.svg'}" />
-    <link rel="shortcut icon" href="${config.logoUrl || '/logo.svg'}" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="${config.logoUrl || '/logo.svg'}" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="shortcut icon" href="/logo.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
 
     <!-- Open Graph (Facebook / WhatsApp / Telegram) -->
     <meta property="og:type" content="website">
@@ -418,11 +428,31 @@ ${dynamicBookSchemas}
         .dark-mode div[style*="background: #EAF7FF"],
         .dark-mode div[style*="background:#EAF7FF"],
         .dark-mode div[style*="background: #F5FBFF"],
-        .dark-mode div[style*="background:#F5FBFF"] {
-            background-color: #162638 !important;
-            background: #162638 !important;
-            color: #F0F6FC !important;
-            border-color: rgba(255, 255, 255, 0.09) !important;
+        .dark-mode div[style*="background:#F5FBFF"],
+        .dark-mode span[style*="background: #EAF7FF"],
+        .dark-mode span[style*="background:#EAF7FF"],
+        .dark-mode span[style*="background: #F5FBFF"],
+        .dark-mode span[style*="background:#F5FBFF"],
+        .dark-mode div[style*="background: rgba(0, 156, 252"],
+        .dark-mode div[style*="background:rgba(0, 156, 252"],
+        .dark-mode div[style*="background: rgba(0,156,252"],
+        .dark-mode div[style*="background:rgba(0,156,252"],
+        .dark-mode span[style*="background: rgba(0, 156, 252"],
+        .dark-mode span[style*="background:rgba(0, 156, 252"],
+        .dark-mode span[style*="background: rgba(0,156,252"],
+        .dark-mode span[style*="background:rgba(0,156,252"] {
+            background-color: #132337 !important;
+            background: #132337 !important;
+            color: #7dd3fc !important;
+            border-color: rgba(0, 156, 252, 0.35) !important;
+        }
+
+        .dark-mode div[style*="border: 2px dashed #009CFC"],
+        .dark-mode div[style*="border:2px dashed #009CFC"] {
+            background-color: #112338 !important;
+            background: #112338 !important;
+            border-color: #0284c7 !important;
+            color: #f0f6fc !important;
         }
 
         .dark-mode div[style*="background: #fffbeb"],
@@ -487,8 +517,20 @@ ${dynamicBookSchemas}
         }
 
         /* Comprehensive Day/Night Visibility Guardians */
-        .dark-mode body,
-        .dark-mode .screen,
+        html.dark-mode,
+        body.dark-mode,
+        .dark-mode body {
+            background-color: #0B131E !important;
+            background: #0B131E !important;
+            color: #F0F6FC !important;
+        }
+
+        .dark-mode .screen {
+            background-color: transparent !important;
+            background: transparent !important;
+            color: #F0F6FC !important;
+        }
+
         .dark-mode .drawer-sheet,
         .dark-mode .modal-box,
         .dark-mode .custom-dialog {
@@ -585,9 +627,9 @@ ${dynamicBookSchemas}
         }
         
         .dark-mode .header, .dark-mode .mainHeader {
-            background: rgba(18, 31, 47, 0.95) !important;
-            border: 1px solid #1E344B !important;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4) !important;
+            background: #000000 !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
         }
 
         .dark-mode .greet-title, .dark-mode .greet-sub {
@@ -595,9 +637,9 @@ ${dynamicBookSchemas}
         }
 
         .dark-mode .back-nav-bar {
-            background: rgba(18, 31, 47, 0.95) !important;
-            border: 1px solid #1E344B !important;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4) !important;
+            background: #000000 !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
         }
 
         .dark-mode .category-card, .dark-mode .accordion-item, .dark-mode .faq-item, .dark-mode .block-card, .dark-mode .notif-card {
@@ -1008,6 +1050,31 @@ ${dynamicBookSchemas}
             color: #86efac !important;
         }
 
+        .dark-mode #scr-pay div[style*="#F5FBFF"],
+        .dark-mode #scr-pay div[style*="#EAF7FF"],
+        .dark-mode #scr-pay div[style*="border: 2px dashed #009CFC"],
+        .dark-mode #scr-pay div[style*="border:2px dashed #009CFC"] {
+            background: #112338 !important;
+            border-color: #0284c7 !important;
+            color: #f0f6fc !important;
+        }
+
+        .dark-mode #scr-pay #pay-scan-qr-header {
+            color: #f0f6fc !important;
+        }
+
+        .dark-mode #scr-pay #pay-plan-badge {
+            background: rgba(0, 156, 252, 0.16) !important;
+            border-color: rgba(0, 156, 252, 0.35) !important;
+            color: #7dd3fc !important;
+        }
+
+        .dark-mode #scr-pay #pay-validity-text {
+            background: rgba(0, 156, 252, 0.2) !important;
+            border-color: rgba(0, 156, 252, 0.45) !important;
+            color: #7dd3fc !important;
+        }
+
         @keyframes payFadeIn {
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1073,6 +1140,15 @@ ${dynamicBookSchemas}
             font-family: inherit;
         }
 
+        html {
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        html.dark-mode {
+            background-color: #0B131E !important;
+            background: #0B131E !important;
+        }
         body {
             margin: 0;
             background-color: #ffffff;
@@ -1083,6 +1159,11 @@ ${dynamicBookSchemas}
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
             position: relative;
+        }
+        body.dark-mode {
+            background-color: #0B131E !important;
+            background: #0B131E !important;
+            color: #F0F6FC !important;
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -1157,7 +1238,7 @@ ${dynamicBookSchemas}
         .back-nav-bar {
             position: sticky;
             top: 12px;
-            background: rgba(255, 255, 255, 0.88);
+            background: #ffffff;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             z-index: 999;
@@ -1168,7 +1249,7 @@ ${dynamicBookSchemas}
             padding: 12px 18px !important;
             max-width: calc(100% - 24px);
             margin: 12px auto;
-            border: 1.5px solid rgba(0, 0, 0, 0.05);
+            border: 1.5px solid rgba(0, 0, 0, 0.08);
             border-radius: 20px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1189,7 +1270,7 @@ ${dynamicBookSchemas}
         .header {
             position: sticky;
             top: 12px;
-            background: rgba(255, 255, 255, 0.88);
+            background: #ffffff;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             z-index: 999;
@@ -1197,7 +1278,7 @@ ${dynamicBookSchemas}
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border: 1.5px solid rgba(0, 0, 0, 0.05);
+            border: 1.5px solid rgba(0, 0, 0, 0.08);
             border-radius: 20px;
             max-width: calc(100% - 24px);
             margin: 12px auto;
@@ -1279,6 +1360,98 @@ ${dynamicBookSchemas}
             }
             .header {
                 padding: 10px 12px;
+            }
+            .cat-details-pill {
+                gap: 2px !important;
+                padding: 1px 3px !important;
+            }
+            .cat-stat-item {
+                font-size: 7.2px !important;
+            }
+            .cat-stat-item i {
+                font-size: 8px !important;
+            }
+            .cat-stat-divider {
+                height: 7px !important;
+                margin: 0 !important;
+            }
+            .cat-btn-buy {
+                font-size: 7.2px !important;
+                padding: 1px 3.5px !important;
+                gap: 1.5px !important;
+            }
+            .cat-btn-buy i {
+                font-size: 8px !important;
+            }
+            .cat-btn-demo {
+                font-size: 7.2px !important;
+                padding: 1px 3.5px !important;
+                gap: 1.5px !important;
+            }
+            .cat-btn-demo i {
+                font-size: 8px !important;
+            }
+            .cat-btn-yt {
+                font-size: 7.2px !important;
+                padding: 1px 3.5px !important;
+                gap: 1.5px !important;
+            }
+            .cat-btn-yt i {
+                font-size: 8px !important;
+            }
+            .cat-btn-text {
+                max-width: 65px !important;
+            }
+            .cat-stat-badge {
+                font-size: 7.2px !important;
+                padding: 1px 3px !important;
+            }
+        }
+
+        @media (max-width: 340px) {
+            .cat-details-pill {
+                gap: 1.5px !important;
+                padding: 1px 2.5px !important;
+            }
+            .cat-stat-item {
+                font-size: 6.8px !important;
+            }
+            .cat-stat-item i {
+                font-size: 7.5px !important;
+            }
+            .cat-stat-divider {
+                height: 6px !important;
+            }
+            .cat-btn-buy {
+                font-size: 6.8px !important;
+                padding: 1px 3px !important;
+                gap: 1px !important;
+            }
+            .cat-btn-buy i {
+                font-size: 7.5px !important;
+            }
+            .cat-btn-demo {
+                font-size: 6.8px !important;
+                padding: 1px 3px !important;
+                gap: 1px !important;
+            }
+            .cat-btn-demo i {
+                font-size: 7.5px !important;
+            }
+            .cat-btn-yt {
+                font-size: 6.8px !important;
+                padding: 1px 3px !important;
+                gap: 1px !important;
+            }
+            .cat-btn-yt i {
+                font-size: 7.5px !important;
+            }
+            .cat-btn-text {
+                max-width: 55px !important;
+            }
+            .cat-stat-badge {
+                font-size: 6.8px !important;
+                padding: 1px 2.5px !important;
             }
         }
 
@@ -1693,6 +1866,244 @@ ${dynamicBookSchemas}
             color: var(--grey-text);
             word-break: break-word;
             overflow-wrap: break-word;
+        }
+
+        /* Responsive Category Meta Container, Stats Pill & Action Buttons */
+        .cat-meta-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: visible;
+        }
+
+        .cat-action-btns {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            overflow: visible;
+        }
+
+        .cat-details-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            background: rgba(120, 120, 120, 0.05);
+            border: 1px solid rgba(120, 120, 120, 0.08);
+            padding: 2px 6px;
+            border-radius: 6px;
+            box-sizing: border-box;
+            flex-wrap: nowrap !important;
+            white-space: nowrap !important;
+            max-width: 100% !important;
+            overflow: visible !important;
+            flex-shrink: 0;
+        }
+
+        .cat-details-pill.cat-details-pill-soon {
+            background: rgba(239, 68, 68, 0.08) !important;
+            border-color: rgba(239, 68, 68, 0.18) !important;
+            padding: 2px 7px !important;
+        }
+
+        .cat-stat-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 2.5px;
+            font-size: 9px;
+            font-weight: 850;
+            color: var(--dark);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .cat-stat-item i {
+            font-size: 11px;
+        }
+
+        .cat-stat-divider {
+            width: 1px;
+            height: 8.5px;
+            background: rgba(120, 120, 120, 0.18);
+            flex-shrink: 0;
+            margin: 0 1px;
+        }
+
+        .cat-btn-buy {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            background: #009CFC;
+            color: #ffffff !important;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: 850;
+            cursor: pointer;
+            font-size: 9px;
+            box-shadow: 0 1.5px 4px rgba(0, 156, 252, 0.25);
+            white-space: nowrap;
+            font-family: Outfit, sans-serif;
+            flex-shrink: 0;
+            line-height: 1.25;
+            transition: all 0.15s ease;
+        }
+        .cat-btn-buy:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 156, 252, 0.35);
+        }
+        .cat-btn-buy:active {
+            transform: scale(0.96);
+            filter: brightness(0.92);
+        }
+
+        .cat-btn-demo {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            background: #0077C8;
+            color: #ffffff !important;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: 850;
+            cursor: pointer;
+            font-size: 9px;
+            box-shadow: 0 1.5px 4px rgba(0, 119, 200, 0.25);
+            white-space: nowrap;
+            font-family: Outfit, sans-serif;
+            flex-shrink: 0;
+            line-height: 1.25;
+            transition: all 0.15s ease;
+        }
+        .cat-btn-demo:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 119, 200, 0.35);
+        }
+        .cat-btn-demo:active {
+            transform: scale(0.96);
+            filter: brightness(0.92);
+        }
+
+        .cat-btn-yt {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            background: #FF0000;
+            color: #ffffff !important;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: 850;
+            cursor: pointer;
+            font-size: 9px;
+            box-shadow: 0 1.5px 4px rgba(255, 0, 0, 0.25);
+            white-space: nowrap;
+            font-family: Outfit, sans-serif;
+            flex-shrink: 0;
+            line-height: 1.25;
+            transition: all 0.15s ease;
+        }
+        .cat-btn-yt:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(255, 0, 0, 0.35);
+        }
+        .cat-btn-yt:active {
+            transform: scale(0.96);
+            filter: brightness(0.92);
+        }
+
+        .cat-btn-text {
+            display: inline-block;
+            max-width: 140px;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .cat-stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 1.5px 6px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 850;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .cat-stat-badge-lifetime {
+            color: #9b59b6;
+            background: rgba(155, 89, 182, 0.08);
+            border: 1px solid rgba(155, 89, 182, 0.15);
+            animation: premiumBlink 1.5s infinite ease-in-out;
+        }
+        .cat-stat-badge-active {
+            color: #2ecc71;
+            background: rgba(46, 204, 113, 0.08);
+            border: 1px solid rgba(46, 204, 113, 0.15);
+        }
+        .cat-stat-badge-expired {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+        }
+        .cat-stat-badge-free {
+            color: #0077C8;
+            background: rgba(0, 156, 252, 0.08);
+            border: 1px solid rgba(0, 156, 252, 0.18);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .dark-mode .cat-details-pill {
+            background: rgba(255, 255, 255, 0.06) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        .dark-mode .cat-details-pill.cat-details-pill-soon {
+            background: rgba(239, 68, 68, 0.15) !important;
+            border-color: rgba(239, 68, 68, 0.25) !important;
+        }
+        .dark-mode .cat-stat-divider {
+            background: rgba(255, 255, 255, 0.15) !important;
+        }
+        .dark-mode .cat-stat-item {
+            color: #F0F6FC !important;
+        }
+        .dark-mode .cat-stat-badge-free {
+            color: #7dd3fc !important;
+            background: rgba(0, 156, 252, 0.16) !important;
+            border: 1px solid rgba(0, 156, 252, 0.35) !important;
+        }
+        .dark-mode .cat-stat-badge-active {
+            color: #4ade80 !important;
+            background: rgba(34, 197, 94, 0.16) !important;
+            border: 1px solid rgba(34, 197, 94, 0.35) !important;
+        }
+        .dark-mode .cat-stat-badge-lifetime {
+            color: #c084fc !important;
+            background: rgba(168, 85, 247, 0.16) !important;
+            border: 1px solid rgba(168, 85, 247, 0.35) !important;
+        }
+        .dark-mode .cat-stat-badge-expired {
+            color: #f87171 !important;
+            background: rgba(239, 68, 68, 0.16) !important;
+            border: 1px solid rgba(239, 68, 68, 0.35) !important;
+        }
+        .dark-mode .outline-item-img {
+            background: #162638 !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        .dark-mode .outline-item-title {
+            color: #ffffff !important;
+        }
+        .dark-mode .outline-item-subtitle {
+            color: #94A9BE !important;
+        }
+        .dark-mode .outline-item-card i.ph-caret-right {
+            color: #009CFC !important;
         }
 
         /* Screen Header block */
@@ -3947,6 +4358,64 @@ ${dynamicBookSchemas}
             .outline-item-subtitle {
                 font-size: 10.5px !important;
             }
+            .cat-meta-wrap {
+                gap: 4px !important;
+                flex-wrap: wrap !important;
+                margin-top: 4px !important;
+                overflow: visible !important;
+            }
+            .cat-action-btns {
+                gap: 3px !important;
+                flex-wrap: wrap !important;
+                overflow: visible !important;
+            }
+            .cat-details-pill {
+                gap: 3px !important;
+                padding: 1.5px 4.5px !important;
+            }
+            .cat-stat-item {
+                font-size: 8px !important;
+                gap: 1.5px !important;
+            }
+            .cat-stat-item i {
+                font-size: 9.5px !important;
+            }
+            .cat-stat-divider {
+                height: 7.5px !important;
+                margin: 0 !important;
+            }
+            .cat-btn-buy {
+                font-size: 8px !important;
+                padding: 1px 4.5px !important;
+                gap: 2px !important;
+            }
+            .cat-btn-buy i {
+                font-size: 8.5px !important;
+            }
+            .cat-btn-demo {
+                font-size: 8px !important;
+                padding: 1px 4.5px !important;
+                gap: 2px !important;
+            }
+            .cat-btn-demo i {
+                font-size: 8.5px !important;
+            }
+            .cat-btn-yt {
+                font-size: 8px !important;
+                padding: 1px 4.5px !important;
+                gap: 2px !important;
+            }
+            .cat-btn-yt i {
+                font-size: 8.5px !important;
+            }
+            .cat-btn-text {
+                max-width: 85px !important;
+            }
+            .cat-stat-badge {
+                font-size: 8px !important;
+                padding: 1px 4.5px !important;
+                gap: 2px !important;
+            }
             
             /* Dynamic sliding banners on narrow screens */
             .slider-container {
@@ -3992,6 +4461,37 @@ ${dynamicBookSchemas}
                 margin-bottom: 0 !important;
                 height: 100% !important;
                 box-sizing: border-box !important;
+            }
+            .cat-meta-wrap {
+                gap: 6px !important;
+                flex-wrap: nowrap !important;
+                white-space: nowrap !important;
+                margin-top: 5px !important;
+                overflow: visible !important;
+            }
+            .cat-action-btns {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-wrap: nowrap !important;
+                white-space: nowrap !important;
+                overflow: visible !important;
+                flex-shrink: 0 !important;
+            }
+            .cat-details-pill {
+                flex-shrink: 0 !important;
+                white-space: nowrap !important;
+            }
+            .cat-btn-buy, .cat-btn-demo, .cat-btn-yt {
+                font-size: 9.5px !important;
+                padding: 2.5px 7.5px !important;
+                border-radius: 6px !important;
+                flex-shrink: 0 !important;
+                white-space: nowrap !important;
+            }
+            .cat-btn-text {
+                max-width: none !important;
+                white-space: nowrap !important;
             }
         }
 
@@ -4048,7 +4548,7 @@ ${dynamicBookSchemas}
                 padding: 14px 36px !important;
                 border-radius: 22px !important;
                 margin: 16px auto 24px auto !important;
-                background: rgba(255, 255, 255, 0.88) !important;
+                background: #ffffff !important;
                 backdrop-filter: blur(20px) !important;
                 -webkit-backdrop-filter: blur(20px) !important;
                 border: 1.5px solid var(--border-color) !important;
@@ -4063,9 +4563,9 @@ ${dynamicBookSchemas}
                 transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
             }
             body.dark-mode .header {
-                background: rgba(15, 23, 42, 0.9) !important;
-                border-color: rgba(255, 255, 255, 0.08) !important;
-                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4) !important;
+                background: #000000 !important;
+                border-color: rgba(255, 255, 255, 0.12) !important;
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6) !important;
             }
 
             /* Remove back arrow navigation bar completely on computer view */
@@ -4388,7 +4888,7 @@ ${dynamicBookSchemas}
 
             #categoryGridArea, #subcategoryGridArea, #topicsGridArea {
                 display: grid !important;
-                grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)) !important;
+                grid-template-columns: repeat(auto-fill, minmax(390px, 1fr)) !important;
                 gap: 18px !important;
             }
 
@@ -4396,14 +4896,132 @@ ${dynamicBookSchemas}
                 margin-bottom: 0 !important;
                 height: 100% !important;
                 border-radius: 18px !important;
-                padding: 18px 20px !important;
+                padding: 16px 20px !important;
                 box-sizing: border-box !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 14px !important;
                 transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                overflow: visible !important;
             }
             .outline-item-card:hover {
                 transform: translateY(-3px) !important;
                 box-shadow: 0 14px 30px rgba(0, 0, 0, 0.06) !important;
                 border-color: var(--primary) !important;
+            }
+            .outline-item-details {
+                flex: 1 1 auto !important;
+                min-width: 0 !important;
+                overflow: visible !important;
+            }
+            .outline-item-title {
+                font-size: 15px !important;
+                font-weight: 800 !important;
+                line-height: 1.3 !important;
+                color: var(--dark) !important;
+                margin-bottom: 4px !important;
+            }
+            .cat-meta-wrap {
+                display: flex !important;
+                align-items: center !important;
+                gap: 7px !important;
+                flex-wrap: nowrap !important;
+                white-space: nowrap !important;
+                margin-top: 5px !important;
+                width: 100% !important;
+                overflow: visible !important;
+            }
+            .cat-details-pill {
+                padding: 2.5px 7.5px !important;
+                border-radius: 6px !important;
+                gap: 4px !important;
+                overflow: visible !important;
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+            }
+            .cat-stat-item {
+                font-size: 10.5px !important;
+                font-weight: 800 !important;
+                gap: 3px !important;
+            }
+            .cat-stat-item i {
+                font-size: 12px !important;
+            }
+            .cat-stat-divider {
+                height: 10px !important;
+                margin: 0 1px !important;
+            }
+            .cat-action-btns {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                flex-wrap: nowrap !important;
+                white-space: nowrap !important;
+                overflow: visible !important;
+                flex-shrink: 0 !important;
+            }
+            .cat-btn-buy {
+                font-size: 10.5px !important;
+                padding: 3px 9px !important;
+                border-radius: 6px !important;
+                gap: 3.5px !important;
+                font-weight: 850 !important;
+                box-shadow: 0 2px 6px rgba(0, 156, 252, 0.28) !important;
+                line-height: 1.3 !important;
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+            }
+            .cat-btn-buy i {
+                font-size: 12px !important;
+            }
+            .cat-btn-demo {
+                font-size: 10.5px !important;
+                padding: 3px 9px !important;
+                border-radius: 6px !important;
+                gap: 3.5px !important;
+                font-weight: 850 !important;
+                box-shadow: 0 2px 6px rgba(0, 119, 200, 0.28) !important;
+                line-height: 1.3 !important;
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+            }
+            .cat-btn-demo i {
+                font-size: 12px !important;
+            }
+            .cat-btn-yt {
+                font-size: 10.5px !important;
+                padding: 3px 9px !important;
+                border-radius: 6px !important;
+                gap: 3.5px !important;
+                font-weight: 850 !important;
+                box-shadow: 0 2px 6px rgba(255, 0, 0, 0.28) !important;
+                line-height: 1.3 !important;
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+            }
+            .cat-btn-yt i {
+                font-size: 12px !important;
+            }
+            .cat-btn-text {
+                max-width: none !important;
+                overflow: visible !important;
+                text-overflow: clip !important;
+                white-space: nowrap !important;
+            }
+            .cat-btn-buy:hover {
+                transform: translateY(-1.5px) !important;
+                filter: brightness(1.08) !important;
+                box-shadow: 0 4px 10px rgba(0, 156, 252, 0.38) !important;
+            }
+            .cat-btn-demo:hover {
+                transform: translateY(-1.5px) !important;
+                filter: brightness(1.1) !important;
+                box-shadow: 0 4px 10px rgba(0, 119, 200, 0.38) !important;
+            }
+            .cat-btn-yt:hover {
+                transform: translateY(-1.5px) !important;
+                filter: brightness(1.1) !important;
+                box-shadow: 0 4px 10px rgba(255, 0, 0, 0.38) !important;
             }
 
             /* Account Screen on Desktop & Laptop */
@@ -5118,6 +5736,24 @@ ${dynamicBookSchemas}
                 max-height: calc(100vh - 20px) !important;
             }
         }
+
+        /* PWA Install Modal Dark Mode Theme Sync */
+        .dark-mode #pwaInstallModal > div {
+            background: #111827 !important;
+            color: #f8fafc !important;
+            border-color: #374151 !important;
+        }
+        .dark-mode #pwaInstallModal h3 {
+            color: #f8fafc !important;
+        }
+        .dark-mode #pwaInstallModal p {
+            color: #94a3b8 !important;
+        }
+        .dark-mode #pwaCancelBtn {
+            background: rgba(255, 255, 255, 0.08) !important;
+            color: #cbd5e1 !important;
+            border-color: #374151 !important;
+        }
     </style>
     <!-- __CHUNK_SCRIPTS_PLACEHOLDER__ -->
 </head>
@@ -5133,10 +5769,18 @@ ${dynamicBookSchemas}
             } else {
                 isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
             }
+            var themeColorMeta = document.getElementById("appThemeColorMeta") || document.querySelector('meta[name="theme-color"]');
+            var appleStatusMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
             if (isDark) {
+                document.documentElement.classList.add("dark-mode");
                 document.body.classList.add("dark-mode");
+                if (themeColorMeta) themeColorMeta.setAttribute("content", "#000000");
+                if (appleStatusMeta) appleStatusMeta.setAttribute("content", "black");
             } else {
+                document.documentElement.classList.remove("dark-mode");
                 document.body.classList.remove("dark-mode");
+                if (themeColorMeta) themeColorMeta.setAttribute("content", "#ffffff");
+                if (appleStatusMeta) appleStatusMeta.setAttribute("content", "default");
             }
         } catch(e){}
     </script>
@@ -5191,7 +5835,7 @@ ${dynamicBookSchemas}
         <div class="engine-header" style="justify-content: space-between; gap: 8px; padding: 8px 14px; min-height: 65px; height: auto;">
             <div style="display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1; justify-content: flex-start;">
                 <div class="engine-title-group" onclick="triggerTestInterruptionPause()" style="cursor: pointer; display: flex; align-items: center; gap: 8px; min-width: 0;" title="Pause / Exit Test">
-                    <img id="testEngineLogo" class="app-logo" src="${config.logoUrl}" style="flex-shrink: 0; width: 34px; height: 34px; object-fit: contain;">
+                    <img id="testEngineLogo" class="app-logo" src="${config.logoUrl || 'logo.svg'}" onerror="if(this.src!=='logo.svg') this.src='logo.svg';" style="flex-shrink: 0; width: 34px; height: 34px; object-fit: contain;">
                     <div style="min-width: 0; display: flex; flex-direction: column; flex: 1;">
                         <span id="testEngineName" style="margin: 0; font-weight: 850; display: block; line-height: 1.35;">--</span>
                         <button class="engine-lang-badge" id="engineLangToggleBtn" onclick="event.stopPropagation(); handleToggleLanguage()" title="Change Language" style="display: none; align-items: center; gap: 3.5px; border: 1px solid var(--border-color); background: var(--light-grey); color: var(--primary); font-size: 8.5px; font-weight: 850; border-radius: 4px; padding: 1.5px 6px; margin-top: 2.5px; cursor: pointer; width: fit-content; font-family: Outfit, sans-serif; transition: all 0.15s ease; user-select: none;">
@@ -5219,7 +5863,7 @@ ${dynamicBookSchemas}
         </div>
 
         <div class="watermark-container">
-            <img class="watermark-img" src="${config.logoUrl}">
+            <img class="watermark-img" src="${config.logoUrl || 'logo.svg'}" onerror="if(this.src!=='logo.svg') this.src='logo.svg';">
             <div class="watermark-text" id="displayEngineWatermarkText">${(config.appName || "Taiyariya").toUpperCase()}</div>
         </div>
 
@@ -5244,7 +5888,7 @@ ${dynamicBookSchemas}
     <!-- APP CORE NAVIGATION VISUAL HEADERS -->
     <div class="header" id="mainHeader">
         <div class="app-branding" onclick="handleTabNavigation('home')">
-            <img class="app-logo" src="${config.logoUrl}">
+            <img class="app-logo" src="${config.logoUrl || 'logo.svg'}" onerror="if(this.src!=='logo.svg') this.src='logo.svg';">
             <div class="greetings-box">
                 <h4 class="greet-title" id="displayGreetText">${config.studentGreeting}</h4>
                 <p class="greet-sub" id="displayGreetSubtitle">${config.studentSubGreeting || 'TAIYARIYA PROFESSIONAL HUB'}</p>
@@ -10021,8 +10665,8 @@ ${dynamicBookSchemas}
                                 }
                             }
                             if (isCatLifetime) {
-                                statusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #9b59b6; font-size: 9.5px; font-weight: 850; background: rgba(155, 89, 182, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(155, 89, 182, 0.15); animation: premiumBlink 1.5s infinite ease-in-out; white-space: nowrap;">' +
-                                                  '            <i class="ph-fill ph-sparkle" style="font-size: 10.5px; color: #9b59b6;"></i> ' +
+                                statusBadgeHtml = '        <span class="cat-stat-badge cat-stat-badge-lifetime">' +
+                                                  '            <i class="ph-fill ph-sparkle"></i> ' +
                                                   '            <span>Lifetime Active</span>' +
                                                   '        </span>';
                             } else if (catExpiry) {
@@ -10030,64 +10674,79 @@ ${dynamicBookSchemas}
                                 var diffMs = exp.getTime() - Date.now();
                                 var diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
                                 if (diffDays > 0) {
-                                    statusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9.5px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 2px 6.5px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); white-space: nowrap;">' +
-                                                      '            <i class="ph-fill ph-check-circle" style="font-size: 11px; color: #2ecc71;"></i> ' +
-                                                      '            <span style="display: inline-block; position: relative; height: 13px; width: 70px; overflow: hidden; vertical-align: middle; line-height: 13px;">' +
+                                    statusBadgeHtml = '        <span class="cat-stat-badge cat-stat-badge-active">' +
+                                                      '            <i class="ph-fill ph-check-circle"></i> ' +
+                                                      '            <span style="display: inline-block; position: relative; height: 13px; width: 66px; overflow: hidden; vertical-align: middle; line-height: 13px;">' +
                                                       '                <span style="position: absolute; left: 0; top: 0; font-weight: 850; animation: badgeAltTextFade1 3s infinite; white-space: nowrap;">Active</span>' +
                                                       '                <span style="position: absolute; left: 0; top: 0; font-weight: 850; animation: badgeAltTextFade2 3s infinite; white-space: nowrap;">' + diffDays + ' Days</span>' +
                                                       '            </span>' +
                                                       '        </span>';
                                 } else {
-                                    statusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #ef4444; font-size: 9.5px; font-weight: 850; background: rgba(239, 68, 68, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.15); white-space: nowrap;">' +
-                                                      '            <i class="ph-fill ph-x-circle" style="font-size: 10.5px; color: #ef4444;"></i> ' +
+                                    statusBadgeHtml = '        <span class="cat-stat-badge cat-stat-badge-expired">' +
+                                                      '            <i class="ph-fill ph-x-circle"></i> ' +
                                                       '            <span>Expired</span>' +
                                                       '        </span>';
                                 }
                             } else {
-                                statusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #9b59b6; font-size: 9.5px; font-weight: 850; background: rgba(155, 89, 182, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(155, 89, 182, 0.15); animation: premiumBlink 1.5s infinite ease-in-out; white-space: nowrap;">' +
-                                                  '            <i class="ph-fill ph-sparkle" style="font-size: 10.5px; color: #9b59b6;"></i> ' +
+                                statusBadgeHtml = '        <span class="cat-stat-badge cat-stat-badge-lifetime">' +
+                                                  '            <i class="ph-fill ph-sparkle"></i> ' +
                                                   '            <span>Lifetime Active</span>' +
                                                   '        </span>';
                             }
                         } else {
                             var price = cat.paymentAmount || (DB && DB.social && DB.social.premiumPrice) || "₹49";
-                            statusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 3px; background: #009CFC; color: #ffffff; padding: 1.5px 6.5px; border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 9px; box-shadow: 0 1.5px 4px rgba(0,156,252,0.25); white-space: nowrap; font-family: Outfit, sans-serif;" onclick="event.stopPropagation(); handleBuyNowClick(\\\'' + cat.id + '\\\')">' +
-                                              '            <i class="ph-bold ph-shopping-cart-simple" style="font-size: 9.5px;"></i> ' + price + ' / Buy Now' +
+                            statusBadgeHtml = '        <span class="cat-btn-buy" onclick="event.stopPropagation(); handleBuyNowClick(\\\'' + cat.id + '\\\')">' +
+                                              '            <i class="ph-bold ph-shopping-cart-simple"></i> <span class="cat-btn-text">' + price + ' / Buy Now</span>' +
                                               '        </span>' +
-                                              '        <span style="display: inline-flex; align-items: center; gap: 3px; background: #0077C8; color: #ffffff; padding: 1.5px 5.5px; border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 9px; box-shadow: 0 1.5px 4px rgba(0,119,200,0.2); white-space: nowrap; margin-left: 4px; font-family: Outfit, sans-serif;" onclick="event.stopPropagation(); handleViewDemoClick(\\\'' + cat.id + '\\\', \\\'test\\\')">' +
-                                              '            <i class="ph-bold ph-eye" style="font-size: 9.5px;"></i> View Demo' +
+                                              '        <span class="cat-btn-demo" onclick="event.stopPropagation(); handleViewDemoClick(\\\'' + cat.id + '\\\', \\\'test\\\')">' +
+                                              '            <i class="ph-bold ph-eye"></i> <span class="cat-btn-text">View Demo</span>' +
                                               '        </span>';
                         }
                     } else {
-                        statusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #0077C8; font-size: 9px; font-weight: 900; background: rgba(0, 156, 252, 0.08); padding: 1.5px 6.5px; border-radius: 6px; border: 1px solid rgba(0, 156, 252, 0.18); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.3px;">' +
-                                          '            <i class="ph-bold ph-gift" style="font-size: 10px; color: #009CFC;"></i> ' +
+                        statusBadgeHtml = '        <span class="cat-stat-badge cat-stat-badge-free">' +
+                                          '            <i class="ph-bold ph-gift"></i> ' +
                                           '            <span>Free</span>' +
                                           '        </span>';
                     }
 
+                    var isLockedPaidTest = cat.isPaid && !isCategoryUnlocked(cat);
+                    var actionBtnsHtml = '';
+                    if (isLockedPaidTest) {
+                        var price = cat.paymentAmount || (DB && DB.social && DB.social.premiumPrice) || "₹49";
+                        actionBtnsHtml = '    <div class="cat-action-btns">' +
+                                         '        <span class="cat-btn-buy" onclick="event.stopPropagation(); handleBuyNowClick(\\\'' + cat.id + '\\\')">' +
+                                         '            <i class="ph-bold ph-shopping-cart-simple"></i> <span class="cat-btn-text">' + price + ' / Buy Now</span>' +
+                                         '        </span>' +
+                                         '        <span class="cat-btn-demo" onclick="event.stopPropagation(); handleViewDemoClick(\\\'' + cat.id + '\\\', \\\'test\\\')">' +
+                                         '            <i class="ph-bold ph-eye"></i> <span class="cat-btn-text">View Demo</span>' +
+                                         '        </span>' +
+                                         '    </div>';
+                    }
+
+                    var statsPillHtml = '';
                     if (stats.totalTests === 0 && stats.totalQuestions === 0) {
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                        statsPillHtml = '    <div class="cat-details-pill cat-details-pill-soon">' +
+                                      '        <span class="cat-stat-item" style="color: #ef4444;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444;"></i> Coming Soon' +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      statusBadgeHtml +
+                                      (!isLockedPaidTest ? ('        <span class="cat-stat-divider"></span>' + statusBadgeHtml) : '') +
                                       '    </div>';
                     } else {
                         var testBadgeLabel = stats.totalQuestions > 0 ? (totalQFormatted + ' MCQ') : (stats.totalTests + ' ' + (stats.totalTests === 1 ? 'Test' : 'Tests'));
                         var testBadgeIcon = stats.totalQuestions > 0 ? 'ph-question' : 'ph-clipboard-text';
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ' + testBadgeIcon + '" style="color: #009CFC; font-size: 11px;"></i> ' + testBadgeLabel +
+                        statsPillHtml = '    <div class="cat-details-pill">' +
+                                      '        <span class="cat-stat-item">' +
+                                      '            <i class="ph-bold ' + testBadgeIcon + '" style="color: #009CFC;"></i> ' + testBadgeLabel +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + totalHrsFormatted +
+                                      '        <span class="cat-stat-divider"></span>' +
+                                      '        <span class="cat-stat-item">' +
+                                      '            <i class="ph-bold ph-clock" style="color: #0077C8;"></i> ' + totalHrsFormatted +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      statusBadgeHtml +
+                                      (!isLockedPaidTest ? ('        <span class="cat-stat-divider"></span>' + statusBadgeHtml) : '') +
                                       '    </div>';
                     }
+
+                    detailsHtml = '<div class="cat-meta-wrap">' + statsPillHtml + (isLockedPaidTest ? actionBtnsHtml : '') + '</div>';
                 } else {
                     var pdfStats = calculateNodeStats(cat, 'pdf');
                     var totalFiles = pdfStats.totalFiles;
@@ -10118,8 +10777,8 @@ ${dynamicBookSchemas}
                                 }
                             }
                             if (isCatLifetime) {
-                                pdfStatusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #9b59b6; font-size: 9.5px; font-weight: 850; background: rgba(155, 89, 182, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(155, 89, 182, 0.15); animation: premiumBlink 1.5s infinite ease-in-out; white-space: nowrap;">' +
-                                                     '            <i class="ph-fill ph-sparkle" style="font-size: 10.5px; color: #9b59b6;"></i> ' +
+                                pdfStatusBadgeHtml = '        <span class="cat-stat-badge cat-stat-badge-lifetime">' +
+                                                     '            <i class="ph-fill ph-sparkle"></i> ' +
                                                      '            <span>Lifetime Active</span>' +
                                                      '        </span>';
                             } else if (catExpiry) {
@@ -10127,22 +10786,22 @@ ${dynamicBookSchemas}
                                 var diffMs = exp.getTime() - Date.now();
                                 var diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
                                 if (diffDays > 0) {
-                                    pdfStatusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9.5px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); white-space: nowrap;">' +
-                                                         '            <i class="ph-fill ph-check-circle" style="font-size: 10.5px; color: #2ecc71;"></i> ' +
-                                                         '            <span style="display: inline-block; position: relative; height: 13px; width: 70px; overflow: hidden; vertical-align: middle; line-height: 13px;">' +
+                                    pdfStatusBadgeHtml = '        <span class="cat-stat-badge cat-stat-badge-active">' +
+                                                         '            <i class="ph-fill ph-check-circle"></i> ' +
+                                                         '            <span style="display: inline-block; position: relative; height: 13px; width: 66px; overflow: hidden; vertical-align: middle; line-height: 13px;">' +
                                                          '                <span style="position: absolute; left: 0; top: 0; font-weight: 850; animation: badgeAltTextFade1 3s infinite; white-space: nowrap;">Active</span>' +
                                                          '                <span style="position: absolute; left: 0; top: 0; font-weight: 850; animation: badgeAltTextFade2 3s infinite; white-space: nowrap;">' + diffDays + ' Days</span>' +
                                                          '            </span>' +
                                                          '        </span>';
                                 } else {
-                                    pdfStatusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #ef4444; font-size: 9.5px; font-weight: 850; background: rgba(239, 68, 68, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.15); white-space: nowrap;">' +
-                                                         '            <i class="ph-fill ph-x-circle" style="font-size: 10.5px; color: #ef4444;"></i> ' +
+                                    pdfStatusBadgeHtml = '        <span class="cat-stat-badge cat-stat-badge-expired">' +
+                                                         '            <i class="ph-fill ph-x-circle"></i> ' +
                                                          '            <span>Expired</span>' +
                                                          '        </span>';
                                 }
                             } else {
-                                pdfStatusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #9b59b6; font-size: 9.5px; font-weight: 850; background: rgba(155, 89, 182, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(155, 89, 182, 0.15); animation: premiumBlink 1.5s infinite ease-in-out; white-space: nowrap;">' +
-                                                     '            <i class="ph-fill ph-sparkle" style="font-size: 10.5px; color: #9b59b6;"></i> ' +
+                                pdfStatusBadgeHtml = '        <span class="cat-stat-badge cat-stat-badge-lifetime">' +
+                                                     '            <i class="ph-fill ph-sparkle"></i> ' +
                                                      '            <span>Lifetime Active</span>' +
                                                      '        </span>';
                             }
@@ -10154,15 +10813,15 @@ ${dynamicBookSchemas}
                             var ytBadgeHtml = "";
                             if (ytUrl && ytUrl.trim() !== "") {
                                 var logoHtml = ytLogo ? '<img src="' + ytLogo + '" style="width: 10px; height: 10px; border-radius: 2px; object-fit: cover; vertical-align: middle;" onerror="this.style.display=\\\'none\\\'">' : '<i class="ph-fill ph-youtube-logo" style="font-size: 11px; color: #ffffff;"></i>';
-                                ytBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 3.5px; background: #FF0000; color: #ffffff; padding: 1.5px 6.5px; border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 9px; box-shadow: 0 1.5px 4px rgba(255,0,0,0.25); white-space: nowrap; margin-left: 4px; font-family: Outfit, sans-serif;" onclick="event.stopPropagation(); window.open(\\\'' + ytUrl.replace(/'/g, "\\'") + '\\\', \\\'_blank\\\')">' +
-                                              '            ' + logoHtml + ' ' + ytName +
+                                ytBadgeHtml = '        <span class="cat-btn-yt" onclick="event.stopPropagation(); window.open(\\\'' + ytUrl.replace(/'/g, "\\'") + '\\\', \\\'_blank\\\')">' +
+                                              '            ' + logoHtml + ' <span class="cat-btn-text">' + ytName + '</span>' +
                                               '        </span>';
                             }
-                            pdfStatusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 3px; background: #009CFC; color: #ffffff; padding: 1.5px 6.5px; border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 9px; box-shadow: 0 1.5px 4px rgba(0,156,252,0.25); white-space: nowrap; font-family: Outfit, sans-serif;" onclick="event.stopPropagation(); handleBuyNowClick(\\\'' + cat.id + '\\\')">' +
-                                                 '            <i class="ph-bold ph-shopping-cart-simple" style="font-size: 9.5px;"></i> ' + price + ' / Buy Now' +
+                            pdfStatusBadgeHtml = '        <span class="cat-btn-buy" onclick="event.stopPropagation(); handleBuyNowClick(\\\'' + cat.id + '\\\')">' +
+                                                 '            <i class="ph-bold ph-shopping-cart-simple"></i> <span class="cat-btn-text">' + price + ' / Buy Now</span>' +
                                                  '        </span>' +
-                                                 '        <span style="display: inline-flex; align-items: center; gap: 3px; background: #0077C8; color: #ffffff; padding: 1.5px 5.5px; border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 9px; box-shadow: 0 1.5px 4px rgba(0,119,200,0.2); white-space: nowrap; margin-left: 4px; font-family: Outfit, sans-serif;" onclick="event.stopPropagation(); handleViewDemoClick(\\\'' + cat.id + '\\\', \\\'pdf\\\')">' +
-                                                 '            <i class="ph-bold ph-eye" style="font-size: 9.5px;"></i> View Demo' +
+                                                 '        <span class="cat-btn-demo" onclick="event.stopPropagation(); handleViewDemoClick(\\\'' + cat.id + '\\\', \\\'pdf\\\')">' +
+                                                 '            <i class="ph-bold ph-eye"></i> <span class="cat-btn-text">View Demo</span>' +
                                                  '        </span>' +
                                                  ytBadgeHtml;
                         }
@@ -10173,33 +10832,59 @@ ${dynamicBookSchemas}
                         var ytBadgeHtml = "";
                         if (ytUrl && ytUrl.trim() !== "") {
                             var logoHtml = ytLogo ? '<img src="' + ytLogo + '" style="width: 10px; height: 10px; border-radius: 2px; object-fit: cover; vertical-align: middle;" onerror="this.style.display=\\\'none\\\'">' : '<i class="ph-fill ph-youtube-logo" style="font-size: 11px; color: #ffffff;"></i>';
-                            ytBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 3.5px; background: #FF0000; color: #ffffff; padding: 1.5px 6.5px; border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 9px; box-shadow: 0 1.5px 4px rgba(255,0,0,0.25); white-space: nowrap; margin-left: 4px; font-family: Outfit, sans-serif;" onclick="event.stopPropagation(); window.open(\\\'' + ytUrl.replace(/'/g, "\\'") + '\\\', \\\'_blank\\\')">' +
-                                          '            ' + logoHtml + ' ' + ytName +
+                            ytBadgeHtml = '        <span class="cat-btn-yt" onclick="event.stopPropagation(); window.open(\\\'' + ytUrl.replace(/'/g, "\\'") + '\\\', \\\'_blank\\\')">' +
+                                          '            ' + logoHtml + ' <span class="cat-btn-text">' + ytName + '</span>' +
                                           '        </span>';
                         }
-                        pdfStatusBadgeHtml = '        <span style="display: inline-flex; align-items: center; gap: 2.5px; color: var(--grey-text); font-size: 9.5px; font-weight: 850; white-space: nowrap;">' +
+                        pdfStatusBadgeHtml = '        <span class="cat-stat-item" style="color: var(--grey-text);">' +
                                              '            <i class="ph-bold ph-book-open" style="color: #9b59b6; font-size: 11px;"></i> Free Practice' +
                                              '        </span>' +
                                              ytBadgeHtml;
                     }
 
+                    var isLockedPaidPdf = cat.isPaid && !isCategoryUnlocked(cat);
+                    var pdfActionBtnsHtml = '';
+                    if (isLockedPaidPdf) {
+                        var price = cat.paymentAmount || (DB && DB.social && DB.social.premiumPrice) || "₹49";
+                        var ytUrl = cat.youtubeUrl || (DB && DB.social && DB.social.youtube) || "";
+                        var ytName = cat.youtubeName || (DB && DB.social && (DB.social.youtubeName || DB.social.youtubeChannelName)) || "YouTube";
+                        var ytLogo = cat.youtubeLogo || (DB && DB.social && DB.social.youtubeChannelLogo) || "";
+                        var ytBadge = "";
+                        if (ytUrl && ytUrl.trim() !== "") {
+                            var logoHtml = ytLogo ? '<img src="' + ytLogo + '" style="width: 10px; height: 10px; border-radius: 2px; object-fit: cover; vertical-align: middle;" onerror="this.style.display=\\\'none\\\'">' : '<i class="ph-fill ph-youtube-logo" style="font-size: 11px; color: #ffffff;"></i>';
+                            ytBadge = '        <span class="cat-btn-yt" onclick="event.stopPropagation(); window.open(\\\'' + ytUrl.replace(/'/g, "\\'") + '\\\', \\\'_blank\\\')">' +
+                                      '            ' + logoHtml + ' <span class="cat-btn-text">' + ytName + '</span>' +
+                                      '        </span>';
+                        }
+                        pdfActionBtnsHtml = '    <div class="cat-action-btns">' +
+                                            '        <span class="cat-btn-buy" onclick="event.stopPropagation(); handleBuyNowClick(\\\'' + cat.id + '\\\')">' +
+                                            '            <i class="ph-bold ph-shopping-cart-simple"></i> <span class="cat-btn-text">' + price + ' / Buy Now</span>' +
+                                            '        </span>' +
+                                            '        <span class="cat-btn-demo" onclick="event.stopPropagation(); handleViewDemoClick(\\\'' + cat.id + '\\\', \\\'pdf\\\')">' +
+                                            '            <i class="ph-bold ph-eye"></i> <span class="cat-btn-text">View Demo</span>' +
+                                            '        </span>' +
+                                            ytBadge +
+                                            '    </div>';
+                    }
+
+                    var pdfStatsPillHtml = '';
                     if (totalFiles === 0) {
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                        pdfStatsPillHtml = '    <div class="cat-details-pill cat-details-pill-soon">' +
+                                      '        <span class="cat-stat-item" style="color: #ef4444;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444;"></i> Coming Soon' +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.2); flex-shrink: 0;"></span>' +
-                                      pdfStatusBadgeHtml +
+                                      (!isLockedPaidPdf ? ('        <span class="cat-stat-divider"></span>' + pdfStatusBadgeHtml) : '') +
                                       '    </div>';
                     } else {
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: wrap; max-width: 100%;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9.5px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
+                        pdfStatsPillHtml = '    <div class="cat-details-pill">' +
+                                      '        <span class="cat-stat-item">' +
                                       '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> ' + totalFiles + ' PDFs' +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.2); flex-shrink: 0;"></span>' +
-                                      pdfStatusBadgeHtml +
+                                      (!isLockedPaidPdf ? ('        <span class="cat-stat-divider"></span>' + pdfStatusBadgeHtml) : '') +
                                       '    </div>';
                     }
+
+                    detailsHtml = '<div class="cat-meta-wrap">' + pdfStatsPillHtml + (isLockedPaidPdf ? pdfActionBtnsHtml : '') + '</div>';
                 }
 
                 catHtml += '<div class="outline-item-details">';
@@ -10914,23 +11599,23 @@ ${dynamicBookSchemas}
                     var progressIcon = (stats.attemptedTests === totalTests && totalTests > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
                     if (totalTests === 0) {
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                        detailsHtml = '    <div class="cat-details-pill cat-details-pill-soon">' +
+                                      '        <span class="cat-stat-item" style="color: #ef4444;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444;"></i> Coming Soon' +
                                       '        </span>' +
                                       '    </div>';
                     } else {
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-clipboard-text" style="color: #009CFC; font-size: 11px;"></i> ' + totalTests + ' ' + (totalTests === 1 ? 'Test' : 'Tests') +
+                        detailsHtml = '    <div class="cat-details-pill">' +
+                                      '        <span class="cat-stat-item">' +
+                                      '            <i class="ph-bold ph-clipboard-text" style="color: #009CFC;"></i> ' + totalTests + ' ' + (totalTests === 1 ? 'Test' : 'Tests') +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + totalHrsFormatted +
+                                      '        <span class="cat-stat-divider"></span>' +
+                                      '        <span class="cat-stat-item">' +
+                                      '            <i class="ph-bold ph-clock" style="color: #0077C8;"></i> ' + totalHrsFormatted +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
-                                      '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
+                                      '        <span class="cat-stat-divider"></span>' +
+                                      '        <span class="cat-stat-item" style="color: ' + progressColor + ';">' +
+                                      '            <i class="' + progressIcon + '"></i> ' + progressText +
                                       '        </span>' +
                                       '    </div>';
                     }
@@ -10941,19 +11626,19 @@ ${dynamicBookSchemas}
                     var progressIcon = (stats.readFiles === totalFiles && totalFiles > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
                     if (totalFiles === 0) {
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                        detailsHtml = '    <div class="cat-details-pill cat-details-pill-soon">' +
+                                      '        <span class="cat-stat-item" style="color: #ef4444;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444;"></i> Coming Soon' +
                                       '        </span>' +
                                       '    </div>';
                     } else {
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> ' + totalFiles + ' ' + (totalFiles === 1 ? 'PDF' : 'PDFs') +
+                        detailsHtml = '    <div class="cat-details-pill">' +
+                                      '        <span class="cat-stat-item">' +
+                                      '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c;"></i> ' + totalFiles + ' ' + (totalFiles === 1 ? 'PDF' : 'PDFs') +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
-                                      '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
+                                      '        <span class="cat-stat-divider"></span>' +
+                                      '        <span class="cat-stat-item" style="color: ' + progressColor + ';">' +
+                                      '            <i class="' + progressIcon + '"></i> ' + progressText +
                                       '        </span>' +
                                       '    </div>';
                     }
@@ -11060,17 +11745,17 @@ ${dynamicBookSchemas}
                     var attemptsColor = (attempts > 0) ? "#2ecc71" : "var(--grey-text)";
                     var attemptsIcon = (attempts > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
-                    detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-question" style="color: #009CFC; font-size: 11px;"></i> ' + totalQ + ' MCQ' +
+                    detailsHtml = '    <div class="cat-details-pill">' +
+                                  '        <span class="cat-stat-item">' +
+                                  '            <i class="ph-bold ph-question" style="color: #009CFC;"></i> ' + totalQ + ' MCQ' +
                                   '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + durationText +
+                                  '        <span class="cat-stat-divider"></span>' +
+                                  '        <span class="cat-stat-item">' +
+                                  '            <i class="ph-bold ph-clock" style="color: #0077C8;"></i> ' + durationText +
                                   '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + attemptsColor + '; white-space: nowrap;">' +
-                                  '            <i class="' + attemptsIcon + '" style="font-size: 11px;"></i> ' + attemptsText +
+                                  '        <span class="cat-stat-divider"></span>' +
+                                  '        <span class="cat-stat-item" style="color: ' + attemptsColor + ';">' +
+                                  '            <i class="' + attemptsIcon + '"></i> ' + attemptsText +
                                   '        </span>' +
                                   '    </div>';
                 } else {
@@ -11079,13 +11764,13 @@ ${dynamicBookSchemas}
                     var readColor = hasRead ? "#2ecc71" : "var(--grey-text)";
                     var readIcon = hasRead ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
-                    detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                  '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> PDF Document' +
+                    detailsHtml = '    <div class="cat-details-pill">' +
+                                  '        <span class="cat-stat-item">' +
+                                  '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c;"></i> PDF Document' +
                                   '        </span>' +
-                                  '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                  '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + readColor + '; white-space: nowrap;">' +
-                                  '            <i class="' + readIcon + '" style="font-size: 11px;"></i> ' + readText +
+                                  '        <span class="cat-stat-divider"></span>' +
+                                  '        <span class="cat-stat-item" style="color: ' + readColor + ';">' +
+                                  '            <i class="' + readIcon + '"></i> ' + readText +
                                   '        </span>' +
                                   '    </div>';
                 }
@@ -11256,23 +11941,23 @@ ${dynamicBookSchemas}
                         var progressIcon = (stats.attemptedTests === totalTests && totalTests > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
                         if (totalTests === 0) {
-                            detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
-                                          '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
-                                          '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                            detailsHtml = '    <div class="cat-details-pill cat-details-pill-soon">' +
+                                          '        <span class="cat-stat-item" style="color: #ef4444;">' +
+                                          '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444;"></i> Coming Soon' +
                                           '        </span>' +
                                           '    </div>';
                         } else {
-                            detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                          '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                          '            <i class="ph-bold ph-clipboard-text" style="color: #009CFC; font-size: 11px;"></i> ' + totalTests + ' ' + (totalTests === 1 ? 'Test' : 'Tests') +
+                            detailsHtml = '    <div class="cat-details-pill">' +
+                                          '        <span class="cat-stat-item">' +
+                                          '            <i class="ph-bold ph-clipboard-text" style="color: #009CFC;"></i> ' + totalTests + ' ' + (totalTests === 1 ? 'Test' : 'Tests') +
                                           '        </span>' +
-                                          '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                          '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                          '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + totalHrsFormatted +
+                                          '        <span class="cat-stat-divider"></span>' +
+                                          '        <span class="cat-stat-item">' +
+                                          '            <i class="ph-bold ph-clock" style="color: #0077C8;"></i> ' + totalHrsFormatted +
                                           '        </span>' +
-                                          '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                          '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
-                                          '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
+                                          '        <span class="cat-stat-divider"></span>' +
+                                          '        <span class="cat-stat-item" style="color: ' + progressColor + ';">' +
+                                          '            <i class="' + progressIcon + '"></i> ' + progressText +
                                           '        </span>' +
                                           '    </div>';
                         }
@@ -11283,19 +11968,19 @@ ${dynamicBookSchemas}
                         var progressIcon = (stats.readFiles === totalFiles && totalFiles > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
                         if (totalFiles === 0) {
-                            detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
-                                          '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
-                                          '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                            detailsHtml = '    <div class="cat-details-pill cat-details-pill-soon">' +
+                                          '        <span class="cat-stat-item" style="color: #ef4444;">' +
+                                          '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444;"></i> Coming Soon' +
                                           '        </span>' +
                                           '    </div>';
                         } else {
-                            detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                          '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                          '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> ' + totalFiles + ' ' + (totalFiles === 1 ? 'PDF' : 'PDFs') +
+                            detailsHtml = '    <div class="cat-details-pill">' +
+                                          '        <span class="cat-stat-item">' +
+                                          '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c;"></i> ' + totalFiles + ' ' + (totalFiles === 1 ? 'PDF' : 'PDFs') +
                                           '        </span>' +
-                                          '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                          '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + progressColor + '; white-space: nowrap;">' +
-                                          '            <i class="' + progressIcon + '" style="font-size: 11px;"></i> ' + progressText +
+                                          '        <span class="cat-stat-divider"></span>' +
+                                          '        <span class="cat-stat-item" style="color: ' + progressColor + ';">' +
+                                          '            <i class="' + progressIcon + '"></i> ' + progressText +
                                           '        </span>' +
                                           '    </div>';
                         }
@@ -11303,9 +11988,9 @@ ${dynamicBookSchemas}
                 } else if (type === 'test') {
                     var isUploaded = isTestUploaded(topic.test);
                     if (!isUploaded) {
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                        detailsHtml = '    <div class="cat-details-pill cat-details-pill-soon">' +
+                                      '        <span class="cat-stat-item" style="color: #ef4444;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444;"></i> Coming Soon' +
                                       '        </span>' +
                                       '    </div>';
                     } else {
@@ -11328,26 +12013,26 @@ ${dynamicBookSchemas}
                         var attemptsColor = (attempts > 0) ? "#2ecc71" : "var(--grey-text)";
                         var attemptsIcon = (attempts > 0) ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-question" style="color: #009CFC; font-size: 11px;"></i> ' + totalQ + ' MCQ' +
+                        detailsHtml = '    <div class="cat-details-pill">' +
+                                      '        <span class="cat-stat-item">' +
+                                      '            <i class="ph-bold ph-question" style="color: #009CFC;"></i> ' + totalQ + ' MCQ' +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-clock" style="color: #0077C8; font-size: 11px;"></i> ' + durationText +
+                                      '        <span class="cat-stat-divider"></span>' +
+                                      '        <span class="cat-stat-item">' +
+                                      '            <i class="ph-bold ph-clock" style="color: #0077C8;"></i> ' + durationText +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + attemptsColor + '; white-space: nowrap;">' +
-                                      '            <i class="' + attemptsIcon + '" style="font-size: 11px;"></i> ' + attemptsText +
+                                      '        <span class="cat-stat-divider"></span>' +
+                                      '        <span class="cat-stat-item" style="color: ' + attemptsColor + ';">' +
+                                      '            <i class="' + attemptsIcon + '"></i> ' + attemptsText +
                                       '        </span>' +
                                       '    </div>';
                     }
                 } else {
                     var isUploaded = isPdfUploaded(topic.pdf);
                     if (!isUploaded) {
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.18); padding: 2px 7px; border-radius: 6px; box-sizing: border-box;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 850; color: #ef4444; white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444; font-size: 11px;"></i> Coming Soon' +
+                        detailsHtml = '    <div class="cat-details-pill cat-details-pill-soon">' +
+                                      '        <span class="cat-stat-item" style="color: #ef4444;">' +
+                                      '            <i class="ph-bold ph-hourglass-simple" style="color: #ef4444;"></i> Coming Soon' +
                                       '        </span>' +
                                       '    </div>';
                     } else {
@@ -11357,13 +12042,13 @@ ${dynamicBookSchemas}
                         var readColor = hasRead ? "#2ecc71" : "var(--grey-text)";
                         var readIcon = hasRead ? "ph-fill ph-check-circle" : "ph-bold ph-circle-dashed";
 
-                        detailsHtml = '    <div style="display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.08); padding: 2px 6px; border-radius: 6px; box-sizing: border-box; flex-wrap: nowrap; max-width: 100%;">' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 850; color: var(--dark); white-space: nowrap;">' +
-                                      '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c; font-size: 11px;"></i> PDF Document' +
+                        detailsHtml = '    <div class="cat-details-pill">' +
+                                      '        <span class="cat-stat-item">' +
+                                      '            <i class="ph-bold ph-file-pdf" style="color: #e74c3c;"></i> PDF Document' +
                                       '        </span>' +
-                                      '        <span style="width: 1px; height: 9px; background: rgba(120, 120, 120, 0.15); flex-shrink: 0;"></span>' +
-                                      '        <span style="display: inline-flex; align-items: center; gap: 2.5px; font-size: 9px; font-weight: 850; color: ' + readColor + '; white-space: nowrap;">' +
-                                      '            <i class="' + readIcon + '" style="font-size: 11px;"></i> ' + readText +
+                                      '        <span class="cat-stat-divider"></span>' +
+                                      '        <span class="cat-stat-item" style="color: ' + readColor + ';">' +
+                                      '            <i class="' + readIcon + '"></i> ' + readText +
                                       '        </span>' +
                                       '    </div>';
                     }
@@ -15232,11 +15917,14 @@ ${dynamicBookSchemas}
                 }
 
                 if (isDark) {
+                    document.documentElement.classList.add("dark-mode");
                     document.body.classList.add("dark-mode");
                 } else {
+                    document.documentElement.classList.remove("dark-mode");
                     document.body.classList.remove("dark-mode");
                 }
                 updateThemeIcons(isDark);
+                updateThemeMetaColor(isDark);
 
                 // Listen to device theme changes if no override is saved in localStorage
                 if (!stored && window.matchMedia) {
@@ -15244,11 +15932,14 @@ ${dynamicBookSchemas}
                         if (!localStorage.getItem("_preemptive_theme_mode")) {
                             const newDark = e.matches;
                             if (newDark) {
+                                document.documentElement.classList.add("dark-mode");
                                 document.body.classList.add("dark-mode");
                             } else {
+                                document.documentElement.classList.remove("dark-mode");
                                 document.body.classList.remove("dark-mode");
                             }
                             updateThemeIcons(newDark);
+                            updateThemeMetaColor(newDark);
                         }
                     });
                 }
@@ -15862,12 +16553,196 @@ ${dynamicBookSchemas}
             }
         }
 
+        function updateThemeMetaColor(isDark) {
+            try {
+                var metaList = document.querySelectorAll('meta[name="theme-color"]');
+                metaList.forEach(function(m) {
+                    m.setAttribute("content", isDark ? "#000000" : "#ffffff");
+                });
+                var appleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+                if (appleMeta) {
+                    appleMeta.setAttribute("content", isDark ? "black" : "default");
+                }
+            } catch(e){}
+        }
+
         function handleToggleThemeMode() {
             const isDark = document.body.classList.toggle("dark-mode");
+            if (isDark) {
+                document.documentElement.classList.add("dark-mode");
+            } else {
+                document.documentElement.classList.remove("dark-mode");
+            }
             localStorage.setItem("_preemptive_theme_mode", isDark ? "dark" : "light");
             updateThemeIcons(isDark);
+            updateThemeMetaColor(isDark);
+        }
+
+        // -------------------------------------------------------------
+        // PWA Service Worker Registration & Install App Trigger
+        // -------------------------------------------------------------
+        var _deferredPwaPrompt = null;
+
+        function registerPwaServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                        console.log('[PWA] ServiceWorker successfully registered. Scope:', reg.scope);
+                    }).catch(function(err) {
+                        // Fallback to relative sw.js if rooted path is blocked in specific subfolder
+                        navigator.serviceWorker.register('sw.js').then(function(reg) {
+                            console.log('[PWA] ServiceWorker registered with relative scope:', reg.scope);
+                        }).catch(function(e) {
+                            console.log('[PWA] ServiceWorker note:', e);
+                        });
+                    });
+                } catch(err) {
+                    console.log('[PWA] Registration exception:', err);
+                }
+            }
+        }
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            registerPwaServiceWorker();
+        } else {
+            window.addEventListener('DOMContentLoaded', registerPwaServiceWorker);
+            window.addEventListener('load', registerPwaServiceWorker);
+        }
+
+        function showPwaModal() {
+            try {
+                var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+                if (isStandalone) return;
+
+                var modal = document.getElementById('pwaInstallModal');
+                if (modal && modal.style.display !== 'flex') {
+                    modal.style.display = 'flex';
+                }
+            } catch(e) {
+                console.error('[PWA] Modal display error:', e);
+            }
+        }
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            _deferredPwaPrompt = e;
+            console.log('[PWA] beforeinstallprompt captured successfully!');
+            showPwaModal();
+        });
+
+        window.addEventListener('appinstalled', function() {
+            console.log('[PWA] App successfully installed!');
+            _deferredPwaPrompt = null;
+            var modal = document.getElementById('pwaInstallModal');
+            if (modal) modal.style.display = 'none';
+        });
+
+        function schedulePwaPrompt() {
+            // Allow browser 1500ms to parse manifest & activate sw before opening modal
+            setTimeout(showPwaModal, 1500);
+        }
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            schedulePwaPrompt();
+        } else {
+            window.addEventListener('DOMContentLoaded', schedulePwaPrompt);
+        }
+
+        function handlePwaCancel() {
+            var modal = document.getElementById('pwaInstallModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function handlePwaInstall() {
+            var modal = document.getElementById('pwaInstallModal');
+            var helpEl = document.getElementById('pwaInstallHelp');
+            var installBtn = document.getElementById('pwaInstallBtn');
+
+            if (_deferredPwaPrompt) {
+                try {
+                    _deferredPwaPrompt.prompt();
+                    _deferredPwaPrompt.userChoice.then(function(choiceResult) {
+                        if (choiceResult && choiceResult.outcome === 'accepted') {
+                            console.log('[PWA] User accepted installation prompt');
+                            if (modal) modal.style.display = 'none';
+                        }
+                        _deferredPwaPrompt = null;
+                    }).catch(function(err) {
+                        console.error('[PWA] Prompt error:', err);
+                        if (modal) modal.style.display = 'none';
+                    });
+                } catch(err) {
+                    console.error('[PWA] Prompt execution exception:', err);
+                }
+                return;
+            }
+
+            // If prompt is not yet ready, show loading state and wait up to 1.6s
+            if (installBtn) {
+                installBtn.innerHTML = '<i class="ph-bold ph-spinner ph-spin" style="font-size: 16px;"></i> Opening...';
+            }
+
+            var checkCount = 0;
+            var promptInterval = setInterval(function() {
+                checkCount++;
+                if (_deferredPwaPrompt) {
+                    clearInterval(promptInterval);
+                    if (installBtn) installBtn.innerHTML = '<i class="ph-bold ph-download-simple" style="font-size: 16px;"></i> Install';
+                    try {
+                        _deferredPwaPrompt.prompt();
+                        _deferredPwaPrompt.userChoice.then(function(choiceResult) {
+                            if (choiceResult && choiceResult.outcome === 'accepted') {
+                                if (modal) modal.style.display = 'none';
+                            }
+                            _deferredPwaPrompt = null;
+                        });
+                    } catch(e) {
+                        console.error('[PWA] Prompt error:', e);
+                    }
+                    return;
+                }
+                if (checkCount >= 8) { // After 1.6s
+                    clearInterval(promptInterval);
+                    if (installBtn) installBtn.innerHTML = '<i class="ph-bold ph-download-simple" style="font-size: 16px;"></i> Install';
+                    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                    if (helpEl) {
+                        if (isIOS) {
+                            helpEl.innerHTML = '<div style="font-size: 12px; color: var(--primary, #009CFC); background: rgba(0,156,252,0.08); padding: 8px 10px; border-radius: 8px; margin-top: 8px; text-align: left; line-height: 1.4;">📱 <strong>iPhone/iPad:</strong> Tap bottom Share button (⎋) & tap <strong>"Add to Home Screen"</strong></div>';
+                        } else {
+                            helpEl.innerHTML = '<div style="font-size: 12px; color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px; margin-top: 8px; text-align: left; line-height: 1.4;">📲 <strong>Android / Chrome:</strong> Browser menu (3 dots <strong>⋮</strong> top-right) par tap karein aur <strong>"Install app"</strong> ya <strong>"Add to Home screen"</strong> select karein.</div>';
+                        }
+                        helpEl.style.display = 'block';
+                    }
+                }
+            }, 200);
         }
     </script>
+
+    <!-- PWA Install App Modal (Opens smoothly after page load) -->
+    <div id="pwaInstallModal" style="display: none; position: fixed; inset: 0; z-index: 99999999; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 16px;">
+        <div style="background: var(--light-grey, #ffffff); color: var(--dark, #172B3A); border-radius: 20px; max-width: 340px; width: 100%; box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.45); border: 1.5px solid var(--border-color, #e2e8f0); overflow: hidden; animation: pwaPopupSlide 0.28s cubic-bezier(0.16, 1, 0.3, 1); font-family: Outfit, sans-serif;">
+            <div style="padding: 24px 20px 14px; text-align: center;">
+                <div style="width: 64px; height: 64px; margin: 0 auto 12px; border-radius: 16px; overflow: hidden; background: #ffffff; box-shadow: 0 4px 14px rgba(0,0,0,0.12); border: 1.5px solid var(--border-color, #e2e8f0); display: flex; align-items: center; justify-content: center;">
+                    <img src="/icon-192.png" alt="${config.appName || 'Taiyariya'}" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.src='/logo.svg'">
+                </div>
+                <h3 style="margin: 0 0 6px; font-size: 18px; font-weight: 800; color: var(--dark, #172B3A); font-family: Outfit, sans-serif;">Install App</h3>
+                <p style="margin: 0; font-size: 13px; color: var(--grey-text, #667788); line-height: 1.45; font-family: Outfit, sans-serif;">
+                    Install <strong>${config.appName || 'Taiyariya'}</strong> on your device for fast access & offline practice!
+                </p>
+                <div id="pwaInstallHelp" style="display: none;"></div>
+            </div>
+            <div style="display: flex; gap: 10px; padding: 14px 18px 18px; border-top: 1px solid var(--border-color, rgba(0,0,0,0.08));">
+                <button id="pwaCancelBtn" onclick="handlePwaCancel()" style="flex: 1; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--border-color, #cbd5e1); background: rgba(0,0,0,0.04); color: var(--grey-text, #475569); font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: Outfit, sans-serif; transition: all 0.2s;">
+                    Cancel
+                </button>
+                <button id="pwaInstallBtn" onclick="handlePwaInstall()" style="flex: 1; padding: 11px 14px; border-radius: 12px; border: none; background: var(--primary, #009CFC); color: #ffffff; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: Outfit, sans-serif; box-shadow: 0 4px 14px rgba(0, 156, 252, 0.35); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <i class="ph-bold ph-download-simple" style="font-size: 16px;"></i> Install
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>`;
 }
