@@ -1531,24 +1531,16 @@ ${dynamicBookSchemas}
             overflow: hidden;
             margin-bottom: 25px;
             position: relative;
-            background: #0c0c0b;
+            background: transparent;
             border: 1.5px solid var(--border-color);
             box-shadow: 0 16px 36px -8px rgba(255, 184, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.04);
-            /* Force GPU layer clipping for WebKit / Chrome desktop compatibility */
             transform: translateZ(0);
-            -webkit-mask-image: -webkit-radial-gradient(white, black);
             isolation: isolate;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .slider-container::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 100%);
-            z-index: 9;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            display: none !important;
         }
 
         .slider-container:hover {
@@ -1562,6 +1554,8 @@ ${dynamicBookSchemas}
             height: 100%;
             transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
             border-radius: 20px;
+            background: transparent;
+            will-change: transform;
         }
 
         .slide-item {
@@ -1575,42 +1569,30 @@ ${dynamicBookSchemas}
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            background: #000000;
+            background: transparent;
             border-radius: 20px;
         }
 
         .slide-item-blur {
-            background-size: cover;
-            background-position: center;
-            filter: blur(20px) brightness(0.4);
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.8;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            display: none !important;
         }
 
         .slide-item-img {
             width: 100%;
             height: 100%;
             object-fit: cover !important;
+            object-position: center !important;
             z-index: 2;
             position: relative;
             pointer-events: none;
-            border-radius: 20px;
+            border-radius: inherit;
+            display: block;
             transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* Premium cinematic zoom on slide hover */
         .slide-item:hover .slide-item-img {
-            transform: scale(1.05);
-        }
-        .slide-item:hover .slide-item-blur {
-            transform: scale(1.08);
+            transform: scale(1.04);
         }
 
         .slider-dots {
@@ -1644,49 +1626,17 @@ ${dynamicBookSchemas}
             box-shadow: 0 0 10px rgba(255, 184, 0, 0.6);
         }
 
-        /* Premium Glassmorphic Slider Navigation Arrows */
-        .slider-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 18px;
-            cursor: pointer;
-            z-index: 15;
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: auto;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-        }
-
+        /* Slider Navigation Arrows - Completely removed as requested for clean banner interaction */
+        .slider-arrow,
+        .slider-arrow-left,
+        .slider-arrow-right,
         .slider-container:hover .slider-arrow {
-            opacity: 1;
-        }
-
-        .slider-arrow:hover {
-            background: var(--primary);
-            color: #111111;
-            transform: translateY(-50%) scale(1.08);
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(255, 184, 0, 0.4);
-        }
-
-        .slider-arrow-left {
-            left: 12px;
-        }
-
-        .slider-arrow-right {
-            right: 12px;
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
         }
 
         /* Layout Cards */
@@ -4417,10 +4367,55 @@ ${dynamicBookSchemas}
                 gap: 2px !important;
             }
             
-            /* Dynamic sliding banners on narrow screens */
-            .slider-container {
+            /* Dynamic sliding banners on narrow screens - Zero black sides */
+            .slider-container,
+            #scr-home .slider-container {
+                width: 100% !important;
+                aspect-ratio: 21 / 9 !important;
                 border-radius: 14px !important;
                 margin-bottom: 16px !important;
+                background: transparent !important;
+                border: 1px solid var(--border-color) !important;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+                overflow: hidden !important;
+                -webkit-mask-image: none !important;
+                mask-image: none !important;
+            }
+            .slider-container::after,
+            #scr-home .slider-container::after {
+                display: none !important;
+            }
+            .slides-wrapper,
+            #scr-home .slides-wrapper {
+                border-radius: 14px !important;
+                width: 100% !important;
+                height: 100% !important;
+                background: transparent !important;
+            }
+            .slide-item,
+            #scr-home .slide-item {
+                border-radius: 14px !important;
+                background: transparent !important;
+                width: 100% !important;
+                min-width: 100% !important;
+                height: 100% !important;
+                aspect-ratio: 21 / 9 !important;
+                overflow: hidden !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .slide-item-blur,
+            #scr-home .slide-item-blur {
+                display: none !important;
+            }
+            .slide-item-img,
+            #scr-home .slide-item-img {
+                border-radius: 14px !important;
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+                object-position: center !important;
+                display: block !important;
             }
             .dot {
                 width: 5px !important;
@@ -4772,13 +4767,14 @@ ${dynamicBookSchemas}
                 border: 1.5px solid var(--border-color) !important;
                 overflow: hidden !important;
                 position: relative !important;
-                background: #000000 !important;
+                background: transparent !important;
             }
             #scr-home .slides-wrapper {
                 aspect-ratio: 21 / 9 !important;
                 width: 100% !important;
                 height: 100% !important;
                 border-radius: 24px !important;
+                background: transparent !important;
             }
             #scr-home .slide-item {
                 aspect-ratio: 21 / 9 !important;
@@ -4791,7 +4787,7 @@ ${dynamicBookSchemas}
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
-                background: #000000 !important;
+                background: transparent !important;
             }
             #scr-home .slide-item-img {
                 width: 100% !important;
@@ -6018,7 +6014,7 @@ ${dynamicBookSchemas}
                 <i class="ph ph-exam" style="font-size: 38px; color: var(--primary);"></i>
             </div>
             <h2 id="instExTitle" style="font-weight: 900; margin: 0 0 6px; font-size: 21px; color: var(--dark); letter-spacing: -0.3px;">--</h2>
-            <span style="font-size: 11px; text-transform: uppercase; color: var(--grey-text); font-weight: bold; letter-spacing: 1px; background: var(--light-grey); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border-color);">Online Test Portal</span>
+            <span id="instPortalBadge" style="font-size: 11px; text-transform: uppercase; color: var(--grey-text); font-weight: bold; letter-spacing: 1px; background: var(--light-grey); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border-color);">Online Test Portal</span>
         </div>
 
         <div class="instructions-layout-wrapper">
@@ -9241,29 +9237,99 @@ ${dynamicBookSchemas}
         let _demoCategories = {};
 
         function isDemoFreeTest(testId, rootCat) {
-            if (!rootCat || !testId) return false;
+            if (!testId) return false;
+            if (typeof testId === 'object') {
+                if (testId.isDemo === true || testId.isFree === true) return true;
+                testId = testId.id;
+            }
+            if (!testId) return false;
+            if (!rootCat) {
+                rootCat = findRootCategoryForNode(testId, 'test') || _activeCategoryNodeForUrl;
+            }
+            if (!rootCat) return false;
+
             var firstTestId = null;
+            var isExplicitFree = false;
             function findFirst(n) {
-                if (!n || firstTestId) return;
+                if (!n || isExplicitFree) return;
                 if (n.test && n.test.id) {
-                    firstTestId = n.test.id;
-                    return;
+                    if (n.test.id === testId && (n.test.isDemo === true || n.test.isFree === true)) {
+                        isExplicitFree = true;
+                        return;
+                    }
+                    if (!firstTestId) {
+                        firstTestId = n.test.id;
+                    }
                 }
                 if (n.subCategories && Array.isArray(n.subCategories)) {
                     for (var i = 0; i < n.subCategories.length; i++) {
                         findFirst(n.subCategories[i]);
-                        if (firstTestId) return;
+                        if (isExplicitFree) return;
                     }
                 }
                 if (n.topics && Array.isArray(n.topics)) {
                     for (var j = 0; j < n.topics.length; j++) {
                         findFirst(n.topics[j]);
-                        if (firstTestId) return;
+                        if (isExplicitFree) return;
                     }
                 }
             }
             findFirst(rootCat);
+            if (isExplicitFree) return true;
             return firstTestId === testId;
+        }
+
+        function isTestLocked(test, rootCat) {
+            if (!test) return false;
+            var testId = (typeof test === 'object') ? test.id : test;
+            var testObj = (typeof test === 'object') ? test : null;
+
+            if (!rootCat) {
+                rootCat = findRootCategoryForNode(testId, 'test');
+            }
+
+            // Active coupon bypasses all test locks
+            if (_hasActiveCouponGrant) return false;
+
+            // Free demo test in category is NEVER locked!
+            if (isDemoFreeTest(testId, rootCat)) {
+                return false;
+            }
+
+            // If root category is paid and not unlocked by student
+            if (rootCat && rootCat.isPaid && !isCategoryUnlocked(rootCat)) {
+                return true;
+            }
+
+            // If test itself is marked paid
+            if (testObj && testObj.isPaid) {
+                if (rootCat && isCategoryUnlocked(rootCat)) {
+                    return false;
+                }
+                return true;
+            }
+
+            // Check if test attempt limits are depleted
+            if (testObj) {
+                const isUnlimited = Boolean(
+                    testObj.unlimitedAttempts === true ||
+                    testObj.freeAttempts === 0 ||
+                    testObj.freeAttempts === -1 ||
+                    testObj.freeAttempts === 'unlimited' ||
+                    (!testObj.isPaid && (testObj.unlimitedAttempts !== false || testObj.freeAttempts === 0 || testObj.freeAttempts === undefined || testObj.freeAttempts === null))
+                );
+                if (!isUnlimited) {
+                    let maxAttempts = typeof testObj.freeAttempts === 'number' ? testObj.freeAttempts : 1;
+                    if (maxAttempts > 0) {
+                        const attempts = parseInt(localStorage.getItem("attempts_test_" + testId) || "0", 10);
+                        if (attempts >= maxAttempts) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         function subHasDemoFreeTest(sub, rootCat) {
@@ -9293,28 +9359,44 @@ ${dynamicBookSchemas}
         }
 
         function isDemoFreePdf(pdfId, rootCat) {
-            if (!rootCat || !pdfId) return false;
+            if (!pdfId) return false;
+            if (typeof pdfId === 'object' && pdfId.id) {
+                if (pdfId.isDemo === true || pdfId.isFree === true) return true;
+                pdfId = pdfId.id;
+            }
+            if (!rootCat) {
+                rootCat = findRootCategoryForNode(pdfId, 'pdf');
+            }
+            if (!rootCat) return false;
+
             var firstPdfId = null;
+            var isExplicitFree = false;
             function findFirst(n) {
-                if (!n || firstPdfId) return;
+                if (!n || isExplicitFree) return;
                 if (n.pdf && n.pdf.id) {
-                    firstPdfId = n.pdf.id;
-                    return;
+                    if (n.pdf.id === pdfId && (n.pdf.isDemo === true || n.pdf.isFree === true)) {
+                        isExplicitFree = true;
+                        return;
+                    }
+                    if (!firstPdfId) {
+                        firstPdfId = n.pdf.id;
+                    }
                 }
                 if (n.subCategories && Array.isArray(n.subCategories)) {
                     for (var i = 0; i < n.subCategories.length; i++) {
                         findFirst(n.subCategories[i]);
-                        if (firstPdfId) return;
+                        if (isExplicitFree) return;
                     }
                 }
                 if (n.topics && Array.isArray(n.topics)) {
                     for (var j = 0; j < n.topics.length; j++) {
                         findFirst(n.topics[j]);
-                        if (firstPdfId) return;
+                        if (isExplicitFree) return;
                     }
                 }
             }
             findFirst(rootCat);
+            if (isExplicitFree) return true;
             return firstPdfId === pdfId;
         }
 
@@ -9580,6 +9662,11 @@ ${dynamicBookSchemas}
             if (!isItemScheduledVisible(item)) {
                 return false;
             }
+
+            // Free demo test bypasses all student login and email restrictions!
+            if (item.test && (item.test.isDemo === true || item.test.isFree === true || isDemoFreeTest(item.test, _activeCategoryNodeForUrl))) {
+                return true;
+            }
             
             // 2. Email restriction check (Node itself, or nested test, or nested pdf, or ancestors)
             var nodeOnlyUsers = (item.onlyUsers || "");
@@ -9636,12 +9723,17 @@ ${dynamicBookSchemas}
             return true;
         }
 
-        // Initialize Carousel
+        // Initialize Carousel with Seamless Infinite Looping
         function launchSlidersCarousel() {
             const container = document.getElementById("studentSliderBlock");
             const wrapper = document.getElementById("studentSlidesWrapper");
             const dots = document.getElementById("studentSliderDots");
             if (!container || !wrapper || !dots) return;
+
+            if (_sliderIntervalId) {
+                clearInterval(_sliderIntervalId);
+                _sliderIntervalId = null;
+            }
 
             wrapper.innerHTML = "";
             dots.innerHTML = "";
@@ -9654,108 +9746,146 @@ ${dynamicBookSchemas}
                 return;
             }
 
-            activeSliders.forEach((slide, idx) => {
+            // Helper to build a slide item
+            function createSlideNode(slide, isClone) {
                 const slideItem = document.createElement("div");
-                slideItem.className = "slide-item";
+                slideItem.className = "slide-item" + (isClone ? " slide-clone" : "");
 
                 var initSrc = enhanceImageUrlQuality((window.__imgCache && window.__imgCache[slide.image]) || slide.image);
 
-                // Create ambient blurred background
-                const blurBg = document.createElement("div");
-                blurBg.className = "slide-item-blur";
-                blurBg.style.backgroundImage = "url('" + initSrc + "')";
-                slideItem.appendChild(blurBg);
-
-                // Create main non-stretched, non-cropped image
                 const img = document.createElement("img");
                 img.className = "slide-item-img";
-                img.loading = idx === 0 ? "eager" : "lazy";
+                img.loading = isClone ? "lazy" : "eager";
                 img.decoding = "async";
                 img.src = initSrc;
                 img.setAttribute("data-original-src", slide.image);
-                
                 slideItem.appendChild(img);
 
                 slideItem.onclick = () => {
-                    if (slide.link && slide.link !== "#") window.open(slide.link, '_blank');
+                    if (!isDragging && Math.abs(currentX - startX) < 8) {
+                        if (slide.link && slide.link !== "#") window.open(slide.link, '_blank');
+                    }
                 };
-                
-                wrapper.appendChild(slideItem);
+                return slideItem;
+            }
+
+            if (activeSliders.length === 1) {
+                wrapper.appendChild(createSlideNode(activeSliders[0], false));
+                wrapper.style.transform = "translateX(0%)";
+                wrapper.style.transition = "none";
+                let prevBtn = container.querySelector(".slider-arrow-left");
+                let nextBtn = container.querySelector(".slider-arrow-right");
+                if (prevBtn) prevBtn.style.display = "none";
+                if (nextBtn) nextBtn.style.display = "none";
+                dots.style.display = "none";
+                return;
+            }
+
+            // Create Clones for Smooth Infinite Loop:
+            // Structure: [Clone of Last Slide, Slide 0, Slide 1, ... Slide N-1, Clone of Slide 0]
+            const lastSlideClone = createSlideNode(activeSliders[activeSliders.length - 1], true);
+            wrapper.appendChild(lastSlideClone);
+
+            activeSliders.forEach((slide, idx) => {
+                const slideNode = createSlideNode(slide, false);
+                wrapper.appendChild(slideNode);
 
                 const dot = document.createElement("div");
                 dot.className = "dot" + (idx === 0 ? " active" : "");
                 dot.style.cursor = "pointer";
                 dot.onclick = () => {
-                    goToSlide(idx);
+                    if (isTransitioning) return;
+                    goToDOMSlide(idx + 1);
                     resetTimer();
                 };
                 dots.appendChild(dot);
             });
 
-            // Create or hook premium navigation arrows
-            let prevBtn = container.querySelector(".slider-arrow-left");
-            let nextBtn = container.querySelector(".slider-arrow-right");
-            if (!prevBtn) {
-                prevBtn = document.createElement("div");
-                prevBtn.className = "slider-arrow slider-arrow-left";
-                prevBtn.innerHTML = '<i class="ph-bold ph-caret-left"></i>';
-                container.appendChild(prevBtn);
-            }
-            if (!nextBtn) {
-                nextBtn = document.createElement("div");
-                nextBtn.className = "slider-arrow slider-arrow-right";
-                nextBtn.innerHTML = '<i class="ph-bold ph-caret-right"></i>';
-                container.appendChild(nextBtn);
-            }
+            const firstSlideClone = createSlideNode(activeSliders[0], true);
+            wrapper.appendChild(firstSlideClone);
 
-            if (activeSliders.length <= 1) {
-                prevBtn.style.display = "none";
-                nextBtn.style.display = "none";
-                dots.style.display = "none";
-            } else {
-                prevBtn.style.display = "flex";
-                nextBtn.style.display = "flex";
-                dots.style.display = "flex";
-            }
+            // Ensure all old arrow elements are removed for clean touch experience
+            container.querySelectorAll(".slider-arrow").forEach(el => el.remove());
+            dots.style.display = "flex";
 
-            let currentSlideIdx = 0;
+            // State: currentDOMIndex starts at 1 (real Slide 0)
+            let currentDOMIndex = 1;
+            let isTransitioning = false;
 
-            function goToSlide(idx) {
-                if (activeSliders.length === 0) return;
-                if (idx < 0) idx = activeSliders.length - 1;
-                if (idx >= activeSliders.length) idx = 0;
-                currentSlideIdx = idx;
+            // Set initial non-animated position to Slide 0
+            wrapper.style.transition = "none";
+            wrapper.style.transform = "translateX(-100%)";
+            wrapper.offsetHeight; // force reflow
+            wrapper.style.transition = "transform 0.75s cubic-bezier(0.25, 1, 0.5, 1)";
 
-                // Corrected translation on container block dimensions for exact slide centering
-                const translatePercent = -(currentSlideIdx * 100);
-                wrapper.style.transform = "translateX(" + translatePercent + "%)";
-
+            function updateDots(activeIdx) {
                 const dotElements = dots.querySelectorAll(".dot");
                 dotElements.forEach((d, id) => {
-                    if (id === currentSlideIdx) d.classList.add("active");
+                    if (id === activeIdx) d.classList.add("active");
                     else d.classList.remove("active");
                 });
             }
 
-            prevBtn.onclick = (e) => {
-                e.stopPropagation();
-                goToSlide(currentSlideIdx - 1);
-                resetTimer();
-            };
+            function goToDOMSlide(targetDOMIndex, withTransition) {
+                if (typeof withTransition === "undefined") withTransition = true;
+                currentDOMIndex = targetDOMIndex;
 
-            nextBtn.onclick = (e) => {
-                e.stopPropagation();
-                goToSlide(currentSlideIdx + 1);
-                resetTimer();
-            };
+                if (withTransition) {
+                    isTransitioning = true;
+                    wrapper.style.transition = "transform 0.75s cubic-bezier(0.25, 1, 0.5, 1)";
+                } else {
+                    wrapper.style.transition = "none";
+                }
 
-            // Auto transition slideshow timer
+                const translatePercent = -(currentDOMIndex * 100);
+                wrapper.style.transform = "translateX(" + translatePercent + "%)";
+
+                // Map DOM index to actual dot index (0 .. activeSliders.length - 1)
+                let dotIdx = 0;
+                if (currentDOMIndex === 0) {
+                    dotIdx = activeSliders.length - 1;
+                } else if (currentDOMIndex === activeSliders.length + 1) {
+                    dotIdx = 0;
+                } else {
+                    dotIdx = currentDOMIndex - 1;
+                }
+                updateDots(dotIdx);
+            }
+
+            // Seamless wrap-around after transition ends
+            wrapper.addEventListener("transitionend", () => {
+                isTransitioning = false;
+                // If we slid forward to the Clone of First Slide at the end:
+                if (currentDOMIndex === activeSliders.length + 1) {
+                    currentDOMIndex = 1;
+                    wrapper.style.transition = "none";
+                    wrapper.style.transform = "translateX(-100%)";
+                    wrapper.offsetHeight; // force reflow
+                    wrapper.style.transition = "transform 0.75s cubic-bezier(0.25, 1, 0.5, 1)";
+                }
+                // If we slid backward to the Clone of Last Slide at the beginning:
+                else if (currentDOMIndex === 0) {
+                    currentDOMIndex = activeSliders.length;
+                    wrapper.style.transition = "none";
+                    wrapper.style.transform = "translateX(-" + (activeSliders.length * 100) + "%)";
+                    wrapper.offsetHeight; // force reflow
+                    wrapper.style.transition = "transform 0.75s cubic-bezier(0.25, 1, 0.5, 1)";
+                }
+
+                if (!isDragging && !_sliderIntervalId) {
+                    startTimer();
+                }
+            });
+
+            // Smooth Continuous Auto Transition slideshow timer (Mast sa slide hote rahe)
             function startTimer() {
                 if (activeSliders.length > 1) {
+                    if (_sliderIntervalId) clearInterval(_sliderIntervalId);
                     _sliderIntervalId = setInterval(() => {
-                        const nextIdx = (currentSlideIdx + 1) % activeSliders.length;
-                        goToSlide(nextIdx);
-                    }, 2000);
+                        if (!isDragging && !isTransitioning) {
+                            goToDOMSlide(currentDOMIndex + 1);
+                        }
+                    }, 3000);
                 }
             }
 
@@ -9764,8 +9894,14 @@ ${dynamicBookSchemas}
                 startTimer();
             }
 
-            if (_sliderIntervalId) clearInterval(_sliderIntervalId);
             startTimer();
+
+            // Resume autoplay on visibility change
+            document.addEventListener("visibilitychange", () => {
+                if (!document.hidden && !isDragging) {
+                    startTimer();
+                }
+            });
 
             // Mobile Swiping and Desktop Mouse Drag Gesture Controls
             let startX = 0;
@@ -9783,6 +9919,7 @@ ${dynamicBookSchemas}
 
             function handleStart(clientX) {
                 if (activeSliders.length <= 1) return;
+                if (isTransitioning) return;
                 startX = clientX;
                 currentX = clientX;
                 isDragging = true;
@@ -9795,39 +9932,31 @@ ${dynamicBookSchemas}
                 if (!isDragging) return;
                 currentX = clientX;
                 const diffX = currentX - startX;
-
-                // Calculate the pixel offset relative to the current live slide index
-                const currentSlideOffsetPercent = -(currentSlideIdx * 100);
-                const currentOffsetPx = (currentSlideOffsetPercent / 100) * containerWidth;
-                const newOffsetPx = currentOffsetPx + diffX;
-
-                // Translate pixels back to percentage constraints
-                const newOffsetPercent = (newOffsetPx / containerWidth) * 100;
-
+                const currentOffsetPercent = -(currentDOMIndex * 100);
+                const newOffsetPercent = currentOffsetPercent + (diffX / containerWidth) * 100;
                 wrapper.style.transform = "translateX(" + newOffsetPercent + "%)";
             }
 
             function handleEnd() {
                 if (!isDragging) return;
                 isDragging = false;
-                wrapper.style.transition = ""; // Restore premium CSS ease-in-out properties
-
                 const diffX = currentX - startX;
-                const threshold = containerWidth * 0.18; // 18% min translation swipe trigger bounds
+                const threshold = containerWidth * 0.15; // 15% swipe threshold
 
-                if (Math.abs(diffX) > threshold) {
-                    if (diffX > 0) {
-                        goToSlide(currentSlideIdx - 1);
-                    } else {
-                        goToSlide(currentSlideIdx + 1);
-                    }
+                if (diffX < -threshold) {
+                    // Swiped left -> Smooth forward slide
+                    goToDOMSlide(currentDOMIndex + 1);
+                } else if (diffX > threshold) {
+                    // Swiped right -> Smooth backward slide
+                    goToDOMSlide(currentDOMIndex - 1);
                 } else {
-                    goToSlide(currentSlideIdx);
+                    // Snap back smoothly
+                    goToDOMSlide(currentDOMIndex);
                 }
                 startTimer();
             }
 
-            // Register event listeners
+            // Register touch & mouse event listeners
             container.addEventListener("touchstart", (e) => {
                 handleStart(e.touches[0].clientX);
             }, { passive: true });
@@ -9837,6 +9966,7 @@ ${dynamicBookSchemas}
             }, { passive: true });
 
             container.addEventListener("touchend", handleEnd, { passive: true });
+            container.addEventListener("touchcancel", handleEnd, { passive: true });
 
             container.addEventListener("mousedown", (e) => {
                 handleStart(e.clientX);
@@ -9852,9 +9982,9 @@ ${dynamicBookSchemas}
                 if (isDragging) handleEnd();
             });
 
-            container.addEventListener("mouseleave", () => {
-                if (isDragging) handleEnd();
-            });
+            window.__resetStudentSlider = () => {
+                goToDOMSlide(1, false);
+            };
         }
 
         // Setup Notices scrolling board
@@ -10133,16 +10263,13 @@ ${dynamicBookSchemas}
                 updateHistoryAndUrl(null, null, null, 'home');
                 try {
                     // Re-sync slider if initialized
-                    var sWrapper = document.getElementById("studentSlidesWrapper");
-                    if (sWrapper) {
-                        sWrapper.style.transform = "translateX(0%)";
-                    }
-                    var firstDot = document.querySelector("#studentSliderDots .dot");
-                    if (firstDot) {
-                        document.querySelectorAll("#studentSliderDots .dot").forEach((d, i) => {
-                            if (i === 0) d.classList.add("active");
-                            else d.classList.remove("active");
-                        });
+                    if (typeof window.__resetStudentSlider === "function") {
+                        window.__resetStudentSlider();
+                    } else {
+                        var sWrapper = document.getElementById("studentSlidesWrapper");
+                        if (sWrapper) {
+                            sWrapper.style.transform = "translateX(-100%)";
+                        }
                     }
                 } catch(e) {}
             } else if (tabId === 'tests') {
@@ -11487,14 +11614,18 @@ ${dynamicBookSchemas}
                 const desc = type === 'test' ? "Primary category-level test assessment" : "Primary category-level study manual";
                 const icon = type === 'test' ? "ph ph-sparkle" : "ph ph-file-pdf";
                 
-                var isDemoMode = _demoCategories[cat.id];
                 var isFreeTest = false;
-                if (isDemoMode) {
-                    if (type === 'test' && cat.test && isDemoFreeTest(cat.test.id, cat)) {
-                        isFreeTest = true;
-                    } else if (type === 'pdf' && cat.pdf && isDemoFreePdf(cat.pdf.id, cat)) {
-                        isFreeTest = true;
-                    }
+                if (type === 'test' && cat.test && isDemoFreeTest(cat.test.id, cat)) {
+                    isFreeTest = true;
+                } else if (type === 'pdf' && cat.pdf && isDemoFreePdf(cat.pdf.id, cat)) {
+                    isFreeTest = true;
+                }
+
+                var isLocked = false;
+                if (type === 'test' && cat.test) {
+                    isLocked = !isFreeTest && isTestLocked(cat.test, cat);
+                } else if (type === 'pdf' && cat.pdf) {
+                    isLocked = !isFreeTest && ((cat.isPaid && !isCategoryUnlocked(cat)) || cat.pdf.isPaid);
                 }
 
                 var isUploaded = (type === 'test') ? isTestUploaded(cat.test) : isPdfUploaded(cat.pdf);
@@ -11504,8 +11635,12 @@ ${dynamicBookSchemas}
                         showCustomAlert("Coming Soon", "Yeh content abhi upload nahi hai. Coming Soon!");
                         return;
                     }
-                    if (isDemoMode && !isFreeTest) {
-                        showCategoryPaymentScreen(cat);
+                    if (isLocked) {
+                        if (cat.isPaid) {
+                            showCategoryPaymentScreen(cat);
+                        } else {
+                            showGeneralPremiumPaymentScreen();
+                        }
                         return;
                     }
                     if (cat.test && !isItemScheduledVisible(cat.test)) {
@@ -11526,15 +11661,15 @@ ${dynamicBookSchemas}
                                      '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #ef4444; font-size: 9.5px; font-weight: 850; background: rgba(239, 68, 68, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2); font-family: Outfit, sans-serif;"><i class="ph-bold ph-hourglass-simple" style="font-size: 10px;"></i> Coming Soon</span>' +
                                      '    ' + label +
                                      '</h4>';
-                } else if (isDemoMode) {
-                    if (isFreeTest) {
-                        badgeLabelHtml = '<h4 class="outline-item-title" style="color: var(--primary); font-weight:800; display: flex; align-items: center; gap: 6px;">' +
-                                         '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9.5px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); font-family: Outfit, sans-serif;"><i class="ph-bold ph-gift" style="font-size: 10px;"></i> Free Demo</span>' +
-                                         '    ' + label +
-                                         '</h4>';
-                    } else {
-                        rightIconHtml = '<i class="ph-fill ph-lock" style="color: #ef4444; font-size: 18px;"></i>';
-                    }
+                } else if (isFreeTest) {
+                    badgeLabelHtml = '<h4 class="outline-item-title" style="color: var(--primary); font-weight:800; display: flex; align-items: center; gap: 6px;">' +
+                                     '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9.5px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); font-family: Outfit, sans-serif;"><i class="ph-bold ph-gift" style="font-size: 10px;"></i> Free Demo</span>' +
+                                     '    ' + label +
+                                     '</h4>';
+                }
+
+                if (isLocked) {
+                    rightIconHtml = '<i class="ph-fill ph-lock" style="color: #ef4444; font-size: 18px;"></i>';
                 }
 
                 directCard.innerHTML = 
@@ -11565,19 +11700,22 @@ ${dynamicBookSchemas}
             }
 
             visibleSubs.forEach((sub) => {
-                var isDemoMode = _demoCategories[cat.id];
                 var isFreeTestSub = false;
-                if (isDemoMode) {
-                    if (type === 'test' && subHasDemoFreeTest(sub, cat)) {
-                        isFreeTestSub = true;
-                    } else if (type === 'pdf' && subHasDemoFreePdf(sub, cat)) {
-                        isFreeTestSub = true;
-                    }
+                if (type === 'test' && subHasDemoFreeTest(sub, cat)) {
+                    isFreeTestSub = true;
+                } else if (type === 'pdf' && subHasDemoFreePdf(sub, cat)) {
+                    isFreeTestSub = true;
                 }
 
                 const card = document.createElement("div");
                 card.className = "outline-item-card";
-                card.onclick = () => handleSelectSubcategoryNode(sub, type);
+                card.onclick = () => {
+                    if (cat.isPaid && !isCategoryUnlocked(cat) && !isFreeTestSub) {
+                        showCategoryPaymentScreen(cat);
+                        return;
+                    }
+                    handleSelectSubcategoryNode(sub, type);
+                };
                 var initSrc = (window.__imgCache && window.__imgCache[sub.image]) || sub.image || "";
                 
                 var subHtml = "";
@@ -11646,7 +11784,7 @@ ${dynamicBookSchemas}
 
                 var labelHtml = '<h4 class="outline-item-title">' + sub.name + '</h4>';
                 var rightIconHtml = '<i class="ph ph-caret-right" style="color: var(--primary);"></i>';
-                if (isDemoMode) {
+                if (cat.isPaid && !isCategoryUnlocked(cat)) {
                     if (isFreeTestSub) {
                         labelHtml = '<h4 class="outline-item-title" style="display: flex; align-items: center; gap: 6px;">' +
                                     '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); font-family: Outfit, sans-serif;"><i class="ph-bold ph-gift" style="font-size: 10px;"></i> Free Demo</span>' +
@@ -11787,14 +11925,20 @@ ${dynamicBookSchemas}
                 }
 
                 var rootCat = _activeCategoryNodeForUrl;
-                var isDemoMode = rootCat && _demoCategories[rootCat.id];
                 var isFreeTest = false;
-                if (isDemoMode) {
+                if (rootCat) {
                     if (type === 'test' && _activeSubcategoryNodeForUrl.test && isDemoFreeTest(_activeSubcategoryNodeForUrl.test.id, rootCat)) {
                         isFreeTest = true;
                     } else if (type === 'pdf' && _activeSubcategoryNodeForUrl.pdf && isDemoFreePdf(_activeSubcategoryNodeForUrl.pdf.id, rootCat)) {
                         isFreeTest = true;
                     }
+                }
+
+                var isLocked = false;
+                if (type === 'test' && _activeSubcategoryNodeForUrl.test) {
+                    isLocked = !isFreeTest && isTestLocked(_activeSubcategoryNodeForUrl.test, rootCat);
+                } else if (type === 'pdf' && _activeSubcategoryNodeForUrl.pdf) {
+                    isLocked = !isFreeTest && ((rootCat && rootCat.isPaid && !isCategoryUnlocked(rootCat)) || _activeSubcategoryNodeForUrl.pdf.isPaid);
                 }
 
                 var isUploaded = (type === 'test') ? isTestUploaded(_activeSubcategoryNodeForUrl.test) : isPdfUploaded(_activeSubcategoryNodeForUrl.pdf);
@@ -11804,8 +11948,12 @@ ${dynamicBookSchemas}
                         showCustomAlert("Coming Soon", "Yeh content abhi upload nahi hai. Coming Soon!");
                         return;
                     }
-                    if (isDemoMode && !isFreeTest) {
-                        showCategoryPaymentScreen(rootCat);
+                    if (isLocked) {
+                        if (rootCat && rootCat.isPaid) {
+                            showCategoryPaymentScreen(rootCat);
+                        } else {
+                            showGeneralPremiumPaymentScreen();
+                        }
                         return;
                     }
                     if (_activeSubcategoryNodeForUrl.test && !isItemScheduledVisible(_activeSubcategoryNodeForUrl.test)) {
@@ -11825,7 +11973,7 @@ ${dynamicBookSchemas}
                                      '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #ef4444; font-size: 9.5px; font-weight: 850; background: rgba(239, 68, 68, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2); font-family: Outfit, sans-serif;"><i class="ph-bold ph-hourglass-simple" style="font-size: 10px;"></i> Coming Soon</span>' +
                                      '    ' + _activeSubcategoryNodeForUrl.name +
                                      '</h4>';
-                } else if (isDemoMode && isFreeTest) {
+                } else if (isFreeTest) {
                     badgeLabelHtml = '<h4 class="outline-item-title" style="display: flex; align-items: center; gap: 6px;">' +
                                      '    <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9.5px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); font-family: Outfit, sans-serif;"><i class="ph-bold ph-gift" style="font-size: 10px;"></i> Free Demo</span>' +
                                      '    ' + _activeSubcategoryNodeForUrl.name +
@@ -11837,7 +11985,7 @@ ${dynamicBookSchemas}
                 cardHtml += detailsHtml;
                 cardHtml += '</div>';
 
-                if (isDemoMode && !isFreeTest) {
+                if (isLocked) {
                     cardHtml += '<i class="ph-fill ph-lock" style="color: #ef4444; font-size: 18px; margin-right: 4px;"></i>';
                 } else {
                     cardHtml += '<i class="ph ph-caret-right" style="color: var(--primary);"></i>';
@@ -11898,19 +12046,44 @@ ${dynamicBookSchemas}
             }
 
             visibleTopics.forEach((topic) => {
-                var isDemoMode = _activeCategoryNodeForUrl && _demoCategories[_activeCategoryNodeForUrl.id];
+                var rootCat = _activeCategoryNodeForUrl;
                 var isFreeTest = false;
-                if (isDemoMode) {
-                    if (type === 'test' && topic.test && isDemoFreeTest(topic.test.id, _activeCategoryNodeForUrl)) {
+                if (rootCat) {
+                    if (type === 'test' && topic.test && isDemoFreeTest(topic.test.id, rootCat)) {
                         isFreeTest = true;
-                    } else if (type === 'pdf' && topic.pdf && isDemoFreePdf(topic.pdf.id, _activeCategoryNodeForUrl)) {
+                    } else if (type === 'pdf' && topic.pdf && isDemoFreePdf(topic.pdf.id, rootCat)) {
                         isFreeTest = true;
                     }
                 }
 
+                var isLocked = false;
+                if (type === 'test' && topic.test && !isFreeTest) {
+                    isLocked = isTestLocked(topic.test, rootCat);
+                } else if (type === 'pdf' && topic.pdf && !isFreeTest) {
+                    isLocked = (rootCat && rootCat.isPaid && !isCategoryUnlocked(rootCat)) || topic.pdf.isPaid;
+                }
+
                 const card = document.createElement("div");
                 card.className = "outline-item-card";
-                card.onclick = () => handleSelectTopicNode(topic, type);
+                card.onclick = () => {
+                    if (topic.topics && topic.topics.length > 0) {
+                        if (rootCat && rootCat.isPaid && !isCategoryUnlocked(rootCat) && !subHasDemoFreeTest(topic, rootCat)) {
+                            showCategoryPaymentScreen(rootCat);
+                            return;
+                        }
+                        handleSelectTopicNode(topic, type);
+                        return;
+                    }
+                    if (isLocked) {
+                        if (rootCat && rootCat.isPaid) {
+                            showCategoryPaymentScreen(rootCat);
+                        } else {
+                            showGeneralPremiumPaymentScreen();
+                        }
+                        return;
+                    }
+                    handleSelectTopicNode(topic, type);
+                };
 
                 let iconClass = "ph ph-exam";
                 if (topic.topics && topic.topics.length > 0) {
@@ -12065,7 +12238,7 @@ ${dynamicBookSchemas}
                                  '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #ef4444; font-size: 9.5px; font-weight: 850; background: rgba(239, 68, 68, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2); font-family: Outfit, sans-serif;"><i class="ph-bold ph-hourglass-simple" style="font-size: 10px;"></i> Coming Soon</span>' +
                                  '        ' + topic.name +
                                  '    </h4>';
-                } else if (isDemoMode && isFreeTest) {
+                } else if (isFreeTest) {
                     topicHtml += '    <h4 class="outline-item-title" style="display: flex; align-items: center; gap: 6px;">' +
                                  '        <span style="display: inline-flex; align-items: center; gap: 4px; color: #2ecc71; font-size: 9.5px; font-weight: 850; background: rgba(46, 204, 113, 0.08); padding: 1.5px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.15); font-family: Outfit, sans-serif;"><i class="ph-bold ph-gift" style="font-size: 10px;"></i> Free Demo</span>' +
                                  '        ' + topic.name +
@@ -12077,8 +12250,12 @@ ${dynamicBookSchemas}
                 topicHtml += '</div>';
 
                 if (topic.topics && topic.topics.length > 0) {
-                    topicHtml += '<i class="ph ph-folder" style="color: #f1c40f; font-size: 18px;"></i>';
-                } else if (isDemoMode && !isFreeTest) {
+                    if (rootCat && rootCat.isPaid && !isCategoryUnlocked(rootCat) && !subHasDemoFreeTest(topic, rootCat)) {
+                        topicHtml += '<i class="ph-fill ph-lock" style="color: #ef4444; font-size: 18px; margin-right: 4px;"></i>';
+                    } else {
+                        topicHtml += '<i class="ph ph-folder" style="color: #f1c40f; font-size: 18px;"></i>';
+                    }
+                } else if (isLocked) {
                     topicHtml += '<i class="ph-fill ph-lock" style="color: #ef4444; font-size: 18px; margin-right: 4px;"></i>';
                 } else {
                     topicHtml += '<i class="ph ph-caret-right" style="color: var(--primary);"></i>';
@@ -12132,18 +12309,39 @@ ${dynamicBookSchemas}
 
         // Checking tests or PDFs direct launch
         function handleVerifyDirectMeta(node, type) {
-            var rootCat = findRootCategoryForNode(node.id, type);
-            if (rootCat && rootCat.isPaid && !isCategoryUnlocked(rootCat)) {
-                if (_demoCategories[rootCat.id] && type === 'test' && node.test && isDemoFreeTest(node.test.id, rootCat)) {
-                    // Bypass for the free demo test!
-                } else if (_demoCategories[rootCat.id] && type === 'pdf' && node.pdf && isDemoFreePdf(node.pdf.id, rootCat)) {
-                    // Bypass for the free demo pdf!
-                } else {
-                    showCategoryPaymentScreen(rootCat);
+            var nodeTestId = (node && node.test) ? node.test.id : null;
+            var rootCat = findRootCategoryForNode(node.id, type) || (nodeTestId ? findRootCategoryForNode(nodeTestId, type) : null) || _activeCategoryNodeForUrl;
+            var isDemo = false;
+
+            if (type === 'test' && node.test) {
+                isDemo = isDemoFreeTest(node.test, rootCat);
+                if (isDemo) {
+                    // Free demo test bypasses locks!
+                } else if (isTestLocked(node.test, rootCat)) {
+                    if (rootCat && rootCat.isPaid) {
+                        showCategoryPaymentScreen(rootCat);
+                    } else {
+                        showGeneralPremiumPaymentScreen();
+                    }
                     return;
                 }
+            } else if (type === 'pdf' && node.pdf) {
+                var isDemoPdf = isDemoFreePdf(node.pdf.id, rootCat);
+                if (isDemoPdf) {
+                    // Free demo PDF bypasses locks!
+                } else if ((rootCat && rootCat.isPaid && !isCategoryUnlocked(rootCat)) || node.pdf.isPaid) {
+                    if (rootCat && rootCat.isPaid) {
+                        showCategoryPaymentScreen(rootCat);
+                    } else {
+                        showGeneralPremiumPaymentScreen();
+                    }
+                    return;
+                }
+            } else if (!isDemo && rootCat && rootCat.isPaid && !isCategoryUnlocked(rootCat)) {
+                showCategoryPaymentScreen(rootCat);
+                return;
             }
-            if (!isItemVisibleToStudent(node)) {
+            if (!isDemo && !isItemVisibleToStudent(node)) {
                 showCustomAlert("Resource Restricted", "This resource is restricted or not currently available for your account.");
                 return;
             }
@@ -12165,12 +12363,37 @@ ${dynamicBookSchemas}
                     if (node && node.id) {
                         localStorage.setItem("pdf_read_" + node.id, "true");
                     }
-                    window.open(pdfData.url, '_blank');
+                    var finalUrl = pdfData.url;
+                    if (finalUrl && finalUrl.startsWith('data:application/pdf;base64,')) {
+                        try {
+                            var byteCharacters = atob(finalUrl.split(',')[1]);
+                            var byteNumbers = new Array(byteCharacters.length);
+                            for (var i = 0; i < byteCharacters.length; i++) {
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }
+                            var byteArray = new Uint8Array(byteNumbers);
+                            var blob = new Blob([byteArray], { type: 'application/pdf' });
+                            finalUrl = URL.createObjectURL(blob);
+                        } catch(e) {
+                            console.warn("Error converting base64 to blob", e);
+                        }
+                    }
+                    window.open(finalUrl, '_blank');
                 });
             } else {
                 const testData = node.test;
                 if (!testData || !isTestUploaded(testData)) {
                     showCustomAlert("Coming Soon", "Yeh Test abhi upload nahi hai. Coming Soon!");
+                    return;
+                }
+
+                var isDemoTest = isDemoFreeTest(testData, rootCat);
+                if (!isDemoTest && isTestLocked(testData, rootCat)) {
+                    if (rootCat && rootCat.isPaid) {
+                        showCategoryPaymentScreen(rootCat);
+                    } else {
+                        showGeneralPremiumPaymentScreen();
+                    }
                     return;
                 }
 
@@ -12181,6 +12404,21 @@ ${dynamicBookSchemas}
                 document.getElementById("instExTitle").innerText = testData.title || node.name;
                 document.getElementById("instExDuration").innerText = testData.duration;
                 
+                var portalBadge = document.getElementById("instPortalBadge");
+                if (portalBadge) {
+                    if (isDemoTest) {
+                        portalBadge.innerHTML = 'Free Demo Test';
+                        portalBadge.style.color = '#15803d';
+                        portalBadge.style.background = '#dcfce7';
+                        portalBadge.style.borderColor = '#86efac';
+                    } else {
+                        portalBadge.innerHTML = 'ONLINE TEST PORTAL';
+                        portalBadge.style.color = 'var(--grey-text)';
+                        portalBadge.style.background = 'var(--light-grey)';
+                        portalBadge.style.borderColor = 'var(--border-color)';
+                    }
+                }
+
                 let qCount = testData.questionsCount || Math.max(testData.questionsEn.length, testData.questionsHi.length);
                 Object.values(testData.questionsOther || {}).forEach(arr => {
                     if (arr && arr.length > qCount) {
@@ -12204,7 +12442,7 @@ ${dynamicBookSchemas}
                 const availableCoupons = collectAllAvailableCouponsForActiveTest();
 
                 if (couponPanel) {
-                    if (availableCoupons.length > 0) {
+                    if (!isDemoTest && availableCoupons.length > 0) {
                         couponPanel.style.display = "block";
                         checkAndRestoreAppliedCoupon();
                     } else {
@@ -12475,15 +12713,19 @@ ${dynamicBookSchemas}
                 setTimeout(resolve, 1000);
             });
 
-            var testRootCat = _activeTest ? findRootCategoryForNode(_activeTest.id, 'test') : null;
-            if (testRootCat && testRootCat.isPaid && !isCategoryUnlocked(testRootCat)) {
-                if (_demoCategories[testRootCat.id] && _activeTest && isDemoFreeTest(_activeTest.id, testRootCat)) {
-                    // Bypass for the free demo test!
-                } else {
-                    hideOverlay();
+            var testRootCat = _activeTest ? (findRootCategoryForNode(_activeTest.id, 'test') || _activeCategoryNodeForUrl) : _activeCategoryNodeForUrl;
+            var isFreeDemo = Boolean(_activeTest && isDemoFreeTest(_activeTest, testRootCat));
+
+            if (isFreeDemo) {
+                // Free demo test completely bypasses payment and lock restrictions!
+            } else if (isTestLocked(_activeTest, testRootCat)) {
+                hideOverlay();
+                if (testRootCat && testRootCat.isPaid) {
                     showCategoryPaymentScreen(testRootCat);
-                    return;
+                } else {
+                    showGeneralPremiumPaymentScreen();
                 }
+                return;
             }
             // If the test has no questions loaded in memory, fetch on demand when starting test!
             var qEnCount = (_activeTest && _activeTest.questionsEn) ? _activeTest.questionsEn.length : 0;
@@ -12559,87 +12801,77 @@ ${dynamicBookSchemas}
                 }
             }
             
-            // Verify access rules
-            // 0. Premium Gated rules if the test or its category is marked Paid/Premium
-            var isGatedByCat = false;
-            var testRootCat = _activeTest ? findRootCategoryForNode(_activeTest.id, 'test') : null;
-            if (testRootCat && testRootCat.isPaid && !isCategoryUnlocked(testRootCat)) {
-                if (_demoCategories[testRootCat.id] && _activeTest && isDemoFreeTest(_activeTest.id, testRootCat)) {
-                    isGatedByCat = false; // Bypass for free demo test!
-                } else {
-                    isGatedByCat = true;
-                }
-            }
-            if ((_activeTest.isPaid || isGatedByCat) && !_hasActiveCouponGrant) {
-                if (isGatedByCat) {
-                    hideOverlay();
-                    showCategoryPaymentScreen(testRootCat);
-                    return;
-                }
-                if (!_studentLoggedInUser) {
-                    hideOverlay();
-                    showCustomAlert("Authentication Required", "This is a Paid / Premium Mock Test. Student authorization is required. Redirecting to portal.", function() {
-                        handleTabNavigation('acc');
-                    });
-                    return;
-                }
-            }
-
-            // 1. Specific User Emails restriction check
-            if (_activeTest.onlyUsers && _activeTest.onlyUsers.trim() && !_hasActiveCouponGrant) {
-                const allowedUsers = _activeTest.onlyUsers.split(/[\\n,]+/).map(s => s.trim().toLowerCase()).filter(s => s);
-                if (allowedUsers.length > 0) {
-                    if (!_studentLoggedInUser) {
-                        hideOverlay();
-                        alert("Secure examination. You must log-in to continue.");
-                        handleTabNavigation('acc');
-                        return;
-                    }
-                    const isAllowed = allowedUsers.includes(_studentLoggedInUser.emailOrMobile.toLowerCase());
-                    if (!isAllowed) {
-                        hideOverlay();
-                        alert("Access Denied! Your student credentials are not approved for this premium exam. Contact Taiyariya.");
-                        return;
-                    }
-                }
-            }
-
-            // 2. Premium Locking Check via Attempt depletion
-            // Coupon grants bypass
-            const attemptCountKey = "attempts_test_" + _activeTest.id;
+            // Local registered attempts tracker
+            const attemptCountKey = "attempts_test_" + (_activeTest ? _activeTest.id : "default");
             let currentAttempts = parseInt(localStorage.getItem(attemptCountKey) || "0");
 
-            // Check if test has unlimited attempts or is free with unlimited access
-            const isUnlimitedAttemptsTest = Boolean(
-                _activeTest.unlimitedAttempts === true ||
-                _activeTest.freeAttempts === 0 ||
-                _activeTest.freeAttempts === -1 ||
-                _activeTest.freeAttempts === 'unlimited' ||
-                (!_activeTest.isPaid && (_activeTest.unlimitedAttempts !== false || _activeTest.freeAttempts === 0 || _activeTest.freeAttempts === undefined || _activeTest.freeAttempts === null))
-            );
-
-            if (!isUnlimitedAttemptsTest && !_studentLoggedInUser) { // If student is NOT fully logged-in and test is NOT unlimited, enforce standard strict limit gating
-                let maximumFreeAttempts = typeof _activeTest.freeAttempts === 'number' ? _activeTest.freeAttempts : 1;
-                if (maximumFreeAttempts <= 0) {
-                    maximumFreeAttempts = Infinity;
-                }
-                
-                // Check if active voucher is registered
-                let activeAttemptsAllowed = maximumFreeAttempts;
-                if (_hasActiveCouponGrant) {
-                    if (_hasActiveCouponGrant.maxAttempts === 'unlimited') {
-                        activeAttemptsAllowed = Infinity;
+            // Verify access rules (Free demo never requires payment, never requires login, never locks out)
+            if (!isFreeDemo) {
+                // 0. Premium Gated rules if the test or its category is marked Paid/Premium
+                var isGatedByCat = Boolean(testRootCat && testRootCat.isPaid && !isCategoryUnlocked(testRootCat));
+                if ((_activeTest.isPaid || isGatedByCat) && !_hasActiveCouponGrant) {
+                    hideOverlay();
+                    if (testRootCat && testRootCat.isPaid) {
+                        showCategoryPaymentScreen(testRootCat);
                     } else {
-                        const count = parseInt(_hasActiveCouponGrant.maxAttempts);
-                        if (!isNaN(count)) activeAttemptsAllowed += count;
+                        showGeneralPremiumPaymentScreen();
+                    }
+                    return;
+                }
+
+                // 1. Specific User Emails restriction check
+                if (_activeTest.onlyUsers && _activeTest.onlyUsers.trim() && !_hasActiveCouponGrant) {
+                    const allowedUsers = _activeTest.onlyUsers.split(/[\\n,]+/).map(s => s.trim().toLowerCase()).filter(s => s);
+                    if (allowedUsers.length > 0) {
+                        if (!_studentLoggedInUser) {
+                            hideOverlay();
+                            alert("Secure examination. You must log-in to continue.");
+                            handleTabNavigation('acc');
+                            return;
+                        }
+                        const isAllowed = allowedUsers.includes(_studentLoggedInUser.emailOrMobile.toLowerCase());
+                        if (!isAllowed) {
+                            hideOverlay();
+                            alert("Access Denied! Your student credentials are not approved for this premium exam. Contact Taiyariya.");
+                            return;
+                        }
                     }
                 }
 
-                if (currentAttempts >= activeAttemptsAllowed) {
-                    // Block and push payment
-                    hideOverlay();
-                    showGeneralPremiumPaymentScreen();
-                    return;
+                // 2. Premium Locking Check via Attempt depletion
+                const isUnlimitedAttemptsTest = Boolean(
+                    _activeTest.unlimitedAttempts === true ||
+                    _activeTest.freeAttempts === 0 ||
+                    _activeTest.freeAttempts === -1 ||
+                    _activeTest.freeAttempts === 'unlimited' ||
+                    (!_activeTest.isPaid && (_activeTest.unlimitedAttempts !== false || _activeTest.freeAttempts === 0 || _activeTest.freeAttempts === undefined || _activeTest.freeAttempts === null))
+                );
+
+                if (!isUnlimitedAttemptsTest) {
+                    let maximumFreeAttempts = typeof _activeTest.freeAttempts === 'number' ? _activeTest.freeAttempts : 1;
+                    if (maximumFreeAttempts <= 0) {
+                        maximumFreeAttempts = Infinity;
+                    }
+                    
+                    let activeAttemptsAllowed = maximumFreeAttempts;
+                    if (_hasActiveCouponGrant) {
+                        if (_hasActiveCouponGrant.maxAttempts === 'unlimited') {
+                            activeAttemptsAllowed = Infinity;
+                        } else {
+                            const count = parseInt(_hasActiveCouponGrant.maxAttempts);
+                            if (!isNaN(count)) activeAttemptsAllowed += count;
+                        }
+                    }
+
+                    if (currentAttempts >= activeAttemptsAllowed) {
+                        hideOverlay();
+                        if (testRootCat && testRootCat.isPaid) {
+                            showCategoryPaymentScreen(testRootCat);
+                        } else {
+                            showGeneralPremiumPaymentScreen();
+                        }
+                        return;
+                    }
                 }
             }
 

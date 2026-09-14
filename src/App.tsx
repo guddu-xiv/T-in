@@ -48,7 +48,8 @@ import {
   Palette,
   Check,
   Edit3,
-  ArrowLeft
+  ArrowLeft,
+  ExternalLink
 } from "lucide-react";
 import { AppConfig, CategoryNode, SubCategoryNode, TopicNode, StudentUser, NotificationItem, SliderItem, TestMeta, PDFMeta, ParsedQuestion } from "./types";
 import { parseTestText, parseTestTextWithMeta, ParsedTestMeta } from "./utils/parser";
@@ -579,6 +580,7 @@ export default function App() {
   const [customLangText, setCustomLangText] = useState<string>("");
   const [showAddLangInput, setShowAddLangInput] = useState<boolean>(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [showMcqInPdfMode, setShowMcqInPdfMode] = useState<boolean>(false);
 
   // Analytics, Logs, and Backups states (Features 26, 27, 28)
   const [studentAnalytics, setStudentAnalytics] = useState<Record<string, any>>({});
@@ -673,6 +675,14 @@ export default function App() {
         .then((res) => res.json())
         .then((data) => setBackupsList(data))
         .catch((err) => console.error("Error listing backups", err));
+    } else if (activeTab === "pdfs") {
+      setEditNodeCategoryContext("pdf");
+      setEditingNodeId(null);
+      setEditingNodeType(null);
+    } else if (activeTab === "tests") {
+      setEditNodeCategoryContext("test");
+      setEditingNodeId(null);
+      setEditingNodeType(null);
     }
   }, [activeTab]);
 
@@ -1542,7 +1552,7 @@ export default function App() {
   };
 
   const handleMoveCategory = (id: string, treeType: "test" | "pdf", direction: "up" | "down") => {
-    const isTest = treeType === "test" || appConfig.testCategories?.some(c => c.id === id);
+    const isTest = treeType === "test";
     const list = isTest ? [...(appConfig.testCategories || [])] : [...(appConfig.pdfCategories || [])];
     const index = list.findIndex(c => c.id === id);
     if (index === -1) return;
@@ -1562,10 +1572,10 @@ export default function App() {
   };
 
   const handleMoveSubCategory = (catId: string, subId: string, treeType: "test" | "pdf", direction: "up" | "down") => {
-    const isTest = treeType === "test" || appConfig.testCategories?.some(c => c.id === catId || c.subCategories?.some(s => s.id === subId));
+    const isTest = treeType === "test";
     const categories = isTest ? [...(appConfig.testCategories || [])] : [...(appConfig.pdfCategories || [])];
     const updated = categories.map(cat => {
-      if (cat.id !== catId && !cat.subCategories?.some(s => s.id === subId)) return cat;
+      if (cat.id !== catId) return cat;
       const list = [...(cat.subCategories || [])];
       const index = list.findIndex(s => s.id === subId);
       if (index === -1) return cat;
@@ -1587,7 +1597,7 @@ export default function App() {
   };
 
   const handleMoveTopic = (catId: string, subId: string, topicId: string, treeType: "test" | "pdf", direction: "up" | "down") => {
-    const isTest = treeType === "test" || appConfig.testCategories?.some(c => c.id === catId);
+    const isTest = treeType === "test";
     const categories = isTest ? [...(appConfig.testCategories || [])] : [...(appConfig.pdfCategories || [])];
 
     const reorderTopicsInList = (list: TopicNode[]): { list: TopicNode[]; found: boolean } => {
@@ -1638,8 +1648,10 @@ export default function App() {
     const newId = "cat_" + Date.now();
     const newCat: CategoryNode = {
       id: newId,
-      name: "New Category Catalog",
-      image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=200",
+      name: treeType === "pdf" ? "New PDF Category" : "New Exam Category",
+      image: treeType === "pdf" 
+        ? "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=200" 
+        : "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=200",
       subCategories: [],
       test: null,
       pdf: null,
@@ -1662,12 +1674,14 @@ export default function App() {
     setEditingNodeId(newId);
     setEditingNodeType("category");
     setEditNodeCategoryContext(treeType);
+    setMobileTestView("editor");
   };
 
   const handleAddSubCategoryNode = (catId: string, treeType: "test" | "pdf") => {
+    const newSubId = "sub_" + Date.now();
     const newSub: SubCategoryNode = {
-      id: "sub_" + Date.now(),
-      name: "New Sub-Category Section",
+      id: newSubId,
+      name: treeType === "pdf" ? "New PDF Subject / Folder" : "New Sub-Category Section",
       image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=200",
       topics: [],
       test: null,
@@ -1692,16 +1706,26 @@ export default function App() {
       saveState({ ...appConfig, pdfCategories: updated });
     }
 
-    // Auto expand
+    // Auto expand and select
     setExpandedCats(prev => ({ ...prev, [catId]: true }));
+    setEditingNodeId(newSubId);
+    setEditingNodeType("subcategory");
+    setEditNodeCategoryContext(treeType);
+    setMobileTestView("editor");
   };
 
   const handleAddTopicNode = (catId: string, subId: string, treeType: "test" | "pdf") => {
+    const newTopicId = "topic_" + Date.now();
     const newTopic: TopicNode = {
-      id: "topic_" + Date.now(),
-      name: "New Topic / Lesson File",
+      id: newTopicId,
+      name: treeType === "pdf" ? "New PDF Document" : "New Topic / Lesson File",
       test: null,
-      pdf: null
+      pdf: treeType === "pdf" ? {
+        id: "pdf_" + Date.now(),
+        title: "New PDF Document",
+        url: "",
+        isPaid: false
+      } : null
     };
 
     const targetCats = treeType === "test" ? (appConfig.testCategories || []) : (appConfig.pdfCategories || []);
@@ -1728,16 +1752,26 @@ export default function App() {
       saveState({ ...appConfig, pdfCategories: updated });
     }
 
-    // Auto expand
+    // Auto expand and select
     setExpandedSubs(prev => ({ ...prev, [subId]: true }));
+    setEditingNodeId(newTopicId);
+    setEditingNodeType("topic");
+    setEditNodeCategoryContext(treeType);
+    setMobileTestView("editor");
   };
 
   const handleAddSubTopicNode = (catId: string, subId: string, parentTopicId: string, treeType: "test" | "pdf") => {
+    const newTopicId = "topic_" + Date.now();
     const newTopic: TopicNode = {
-      id: "topic_" + Date.now(),
-      name: "New Sub-Topic / Lesson File",
+      id: newTopicId,
+      name: treeType === "pdf" ? "New PDF Document" : "New Sub-Topic / Lesson File",
       test: null,
-      pdf: null,
+      pdf: treeType === "pdf" ? {
+        id: "pdf_" + Date.now(),
+        title: "New PDF Document",
+        url: "",
+        isPaid: false
+      } : null,
       topics: []
     };
 
@@ -1784,6 +1818,10 @@ export default function App() {
     }
 
     setExpandedSubs(prev => ({ ...prev, [parentTopicId]: true }));
+    setEditingNodeId(newTopicId);
+    setEditingNodeType("topic");
+    setEditNodeCategoryContext(treeType);
+    setMobileTestView("editor");
   };
 
   // Node editing state modifications inside nested loops
@@ -1960,8 +1998,9 @@ export default function App() {
 
     const defaultPDF: PDFMeta = {
       id: "pdf_" + Date.now(),
-      title: "Important Study Document File",
-      url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+      title: activeNodeData?.name && !activeNodeData.name.includes("New Topic") && !activeNodeData.name.includes("New PDF") ? activeNodeData.name : "Study Material Notes",
+      url: "",
+      isPaid: false
     };
 
     const updated = targetCats.map(cat => {
@@ -2107,20 +2146,33 @@ export default function App() {
   ) => {
     const targetCats = treeType === "test" ? appConfig.testCategories : appConfig.pdfCategories;
 
+    const ensurePdf = (existing: PDFMeta | null | undefined): PDFMeta => {
+      if (existing) {
+        return { ...existing, [key]: value };
+      }
+      return {
+        id: "pdf_" + Date.now(),
+        title: activeNodeData?.name || "Study Material Document",
+        url: "",
+        isPaid: false,
+        [key]: value
+      };
+    };
+
     const updated = targetCats.map(cat => {
-      if (type === "category" && cat.id === nodeId && cat.pdf) {
-        return { ...cat, pdf: { ...cat.pdf, [key]: value } };
+      if (type === "category" && cat.id === nodeId) {
+        return { ...cat, pdf: ensurePdf(cat.pdf) };
       }
 
       const updatedSubs = cat.subCategories.map(sub => {
-        if (type === "subcategory" && sub.id === nodeId && sub.pdf) {
-          return { ...sub, pdf: { ...sub.pdf, [key]: value } };
+        if (type === "subcategory" && sub.id === nodeId) {
+          return { ...sub, pdf: ensurePdf(sub.pdf) };
         }
 
         const updatePdfPropRecursive = (topics: TopicNode[]): TopicNode[] => {
           return (topics || []).map(top => {
-            if (top.id === nodeId && top.pdf) {
-              return { ...top, pdf: { ...top.pdf, [key]: value } };
+            if (top.id === nodeId) {
+              return { ...top, pdf: ensurePdf(top.pdf) };
             }
             if (top.topics && top.topics.length > 0) {
               return {
@@ -2147,6 +2199,34 @@ export default function App() {
     }
   };
 
+  const handlePdfFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      alert("Please select a valid PDF file.");
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      alert("File is larger than 8MB. For larger PDFs, please upload to Google Drive or a CDN and paste the link.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64Url = event.target?.result as string;
+      if (base64Url && editingNodeId && editingNodeType) {
+        if (!activeNodeData?.pdf) {
+          handleTogglePDFSettingsOnNode(editingNodeId, editingNodeType, editNodeCategoryContext, true);
+        }
+        handleUpdateNodePDFProperty(editingNodeId, editingNodeType, editNodeCategoryContext, "url", base64Url);
+        const cleanName = file.name.replace(/\.pdf$/i, "").trim();
+        if (cleanName && (!activeNodeData?.pdf?.title || activeNodeData.pdf.title === "Important Study Document File" || activeNodeData.pdf.title === "New PDF Document")) {
+          handleUpdateNodePDFProperty(editingNodeId, editingNodeType, editNodeCategoryContext, "title", cleanName);
+        }
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleDeleteNodeItem = (
     nodeId: string,
     type: "category" | "subcategory" | "topic",
@@ -2157,75 +2237,77 @@ export default function App() {
       if (!confirm("Are you sure you want to remove this node and all of its resources?")) return;
     }
 
-    // 1. Process test categories
-    let updatedTestCats = [...(appConfig.testCategories || [])];
-    if (type === "category") {
-      updatedTestCats = updatedTestCats.filter(cat => cat.id !== nodeId);
-    } else if (type === "subcategory") {
-      updatedTestCats = updatedTestCats.map(cat => {
-        const filteredSubs = (cat.subCategories || []).filter(sub => sub.id !== nodeId);
-        return { ...cat, subCategories: filteredSubs };
-      });
-    } else if (type === "topic") {
-      updatedTestCats = updatedTestCats.map(cat => {
-        const updatedSubs = (cat.subCategories || []).map(sub => {
-          const filterTopicRecursive = (topics: TopicNode[]): TopicNode[] => {
-            return (topics || [])
-              .filter(tp => tp.id !== nodeId)
-              .map(tp => {
-                if (tp.topics && tp.topics.length > 0) {
-                  return {
-                    ...tp,
-                    topics: filterTopicRecursive(tp.topics)
-                  };
-                }
-                return tp;
-              });
-          };
-          const filteredTopics = filterTopicRecursive(sub.topics || []);
-          return { ...sub, topics: filteredTopics };
+    if (treeType === "test") {
+      let updatedTestCats = [...(appConfig.testCategories || [])];
+      if (type === "category") {
+        updatedTestCats = updatedTestCats.filter(cat => cat.id !== nodeId);
+      } else if (type === "subcategory") {
+        updatedTestCats = updatedTestCats.map(cat => {
+          const filteredSubs = (cat.subCategories || []).filter(sub => sub.id !== nodeId);
+          return { ...cat, subCategories: filteredSubs };
         });
-        return { ...cat, subCategories: updatedSubs };
+      } else if (type === "topic") {
+        const filterTopicRecursive = (topics: TopicNode[]): TopicNode[] => {
+          return (topics || [])
+            .filter(tp => tp.id !== nodeId)
+            .map(tp => {
+              if (tp.topics && tp.topics.length > 0) {
+                return {
+                  ...tp,
+                  topics: filterTopicRecursive(tp.topics)
+                };
+              }
+              return tp;
+            });
+        };
+        updatedTestCats = updatedTestCats.map(cat => {
+          const updatedSubs = (cat.subCategories || []).map(sub => {
+            const filteredTopics = filterTopicRecursive(sub.topics || []);
+            return { ...sub, topics: filteredTopics };
+          });
+          return { ...cat, subCategories: updatedSubs };
+        });
+      }
+      saveState({
+        ...appConfig,
+        testCategories: updatedTestCats
+      });
+    } else {
+      let updatedPdfCats = [...(appConfig.pdfCategories || [])];
+      if (type === "category") {
+        updatedPdfCats = updatedPdfCats.filter(cat => cat.id !== nodeId);
+      } else if (type === "subcategory") {
+        updatedPdfCats = updatedPdfCats.map(cat => {
+          const filteredSubs = (cat.subCategories || []).filter(sub => sub.id !== nodeId);
+          return { ...cat, subCategories: filteredSubs };
+        });
+      } else if (type === "topic") {
+        const filterTopicRecursive = (topics: TopicNode[]): TopicNode[] => {
+          return (topics || [])
+            .filter(tp => tp.id !== nodeId)
+            .map(tp => {
+              if (tp.topics && tp.topics.length > 0) {
+                return {
+                  ...tp,
+                  topics: filterTopicRecursive(tp.topics)
+                };
+              }
+              return tp;
+            });
+        };
+        updatedPdfCats = updatedPdfCats.map(cat => {
+          const updatedSubs = (cat.subCategories || []).map(sub => {
+            const filteredTopics = filterTopicRecursive(sub.topics || []);
+            return { ...sub, topics: filteredTopics };
+          });
+          return { ...cat, subCategories: updatedSubs };
+        });
+      }
+      saveState({
+        ...appConfig,
+        pdfCategories: updatedPdfCats
       });
     }
-
-    // 2. Process pdf categories
-    let updatedPdfCats = [...(appConfig.pdfCategories || [])];
-    if (type === "category") {
-      updatedPdfCats = updatedPdfCats.filter(cat => cat.id !== nodeId);
-    } else if (type === "subcategory") {
-      updatedPdfCats = updatedPdfCats.map(cat => {
-        const filteredSubs = (cat.subCategories || []).filter(sub => sub.id !== nodeId);
-        return { ...cat, subCategories: filteredSubs };
-      });
-    } else if (type === "topic") {
-      updatedPdfCats = updatedPdfCats.map(cat => {
-        const updatedSubs = (cat.subCategories || []).map(sub => {
-          const filterTopicRecursive = (topics: TopicNode[]): TopicNode[] => {
-            return (topics || [])
-              .filter(tp => tp.id !== nodeId)
-              .map(tp => {
-                if (tp.topics && tp.topics.length > 0) {
-                  return {
-                    ...tp,
-                    topics: filterTopicRecursive(tp.topics)
-                  };
-                }
-                return tp;
-              });
-          };
-          const filteredTopics = filterTopicRecursive(sub.topics || []);
-          return { ...sub, topics: filteredTopics };
-        });
-        return { ...cat, subCategories: updatedSubs };
-      });
-    }
-
-    saveState({
-      ...appConfig,
-      testCategories: updatedTestCats,
-      pdfCategories: updatedPdfCats
-    });
 
     if (editingNodeId === nodeId) setEditingNodeId(null);
     setDeleteConfirmId(null);
@@ -4611,6 +4693,134 @@ FILES LIST IN THIS BUNDLE:
 
   const activeNodeData = findActiveNodeData();
 
+  const renderPdfSettingsBlock = (node: any) => {
+    if (!node || !editingNodeId || !editingNodeType) return null;
+    return (
+      <div className="border-2 border-sky-200 rounded-2xl p-4 sm:p-5 bg-sky-50/50 space-y-4 shadow-xs">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-sky-100 flex items-center justify-center text-sky-600 shadow-2xs">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-xs sm:text-sm font-black text-slate-800 block">PDF Study Material Notes</span>
+              <span className="text-[10px] text-sky-700 font-medium">Attach PDF notes for students to read or download</span>
+            </div>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={node.pdf !== null}
+              onChange={(e) => handleTogglePDFSettingsOnNode(editingNodeId, editingNodeType, editNodeCategoryContext, e.target.checked)}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
+          </label>
+        </div>
+
+        {node.pdf ? (
+          <div className="pt-3 border-t border-sky-100 space-y-4">
+            {/* Title */}
+            <div>
+              <label className="text-[10px] font-black uppercase text-slate-700 tracking-wider block mb-1">
+                PDF Document Title
+              </label>
+              <input
+                type="text"
+                value={node.pdf.title || ""}
+                onChange={(e) => handleUpdateNodePDFProperty(editingNodeId, editingNodeType, editNodeCategoryContext, "title", e.target.value)}
+                placeholder="e.g. Complete Subject Notes Chapter 1"
+                className="w-full bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none font-semibold text-slate-800 shadow-2xs"
+              />
+            </div>
+
+            {/* PDF URL and Upload options */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-[10px] font-black uppercase text-slate-700 tracking-wider">
+                  Document Drive / CDN Link Address (URL)
+                </label>
+                {node.pdf.url && (
+                  <a
+                    href={node.pdf.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[10px] font-bold text-sky-600 hover:text-sky-800 flex items-center gap-1 hover:underline"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    <span>Test / Open PDF</span>
+                  </a>
+                )}
+              </div>
+
+              <input
+                type="text"
+                value={node.pdf.url || ""}
+                onChange={(e) => handleUpdateNodePDFProperty(editingNodeId, editingNodeType, editNodeCategoryContext, "url", e.target.value)}
+                placeholder="Paste direct PDF URL or Google Drive link (e.g. https://...)"
+                className="w-full bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none font-mono text-[11px] text-slate-800 shadow-2xs"
+              />
+
+              {/* Upload file directly helper */}
+              <div className="flex items-center gap-2 pt-1 flex-wrap">
+                <label className="cursor-pointer bg-white hover:bg-sky-50 border border-sky-300 text-sky-700 text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow-2xs">
+                  <Upload className="w-3 h-3" />
+                  <span>Upload PDF from Device (Max 8MB)</span>
+                  <input
+                    type="file"
+                    accept="application/pdf,.pdf"
+                    onChange={handlePdfFileUpload}
+                    className="hidden"
+                  />
+                </label>
+                <span className="text-[9px] text-gray-500">or paste any public Google Drive or CDN link</span>
+              </div>
+            </div>
+
+            {/* Access mode and Schedule */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white p-3.5 rounded-xl border border-sky-100 shadow-2xs">
+              <div>
+                <label className="text-[9px] font-black uppercase text-slate-600 tracking-wider block font-semibold mb-1">
+                  Access Mode
+                </label>
+                <select
+                  value={node.pdf.isPaid ? "paid" : "free"}
+                  onChange={(e) => handleUpdateNodePDFProperty(editingNodeId, editingNodeType, editNodeCategoryContext, "isPaid", e.target.value === "paid")}
+                  className="w-full bg-slate-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs outline-none font-bold text-slate-800"
+                >
+                  <option value="free">🔓 FREE for all students</option>
+                  <option value="paid">🔒 Paid Subscription only</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[9px] font-black uppercase text-slate-600 tracking-wider block font-semibold mb-1">
+                  Schedule Availability (Optional)
+                </label>
+                <input
+                  type="datetime-local"
+                  value={node.pdf.scheduledAt || ""}
+                  onChange={(e) => handleUpdateNodePDFProperty(editingNodeId, editingNodeType, editNodeCategoryContext, "scheduledAt", e.target.value)}
+                  className="w-full bg-slate-50 border border-gray-200 rounded-lg px-2 py-1 text-xs outline-none text-slate-700 font-medium"
+                />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-5 bg-white/80 border border-dashed border-sky-200 rounded-xl">
+            <p className="text-xs text-slate-500 font-medium">No PDF attached to this node yet.</p>
+            <button
+              type="button"
+              onClick={() => handleTogglePDFSettingsOnNode(editingNodeId, editingNodeType, editNodeCategoryContext, true)}
+              className="mt-2.5 text-xs font-bold text-white bg-sky-500 hover:bg-sky-600 px-3.5 py-1.5 rounded-lg shadow-xs cursor-pointer inline-flex items-center gap-1.5 transition-all"
+            >
+              <Plus className="w-3.5 h-3.5" /> Attach PDF Document
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderTopicsRecursive = (topics: TopicNode[], catId: string, subId: string, depth = 0): React.ReactNode => {
     return (
       <div className={`space-y-1.5 ${depth > 0 ? "ml-1 sm:ml-3 border-l-2 border-gray-200 pl-1.5 sm:pl-2.5 mt-1" : ""}`}>
@@ -4643,7 +4853,7 @@ FILES LIST IN THIS BUNDLE:
                   {top.topics && top.topics.length > 0 ? (
                     <FolderOpen className={`w-4 h-4 text-amber-500 transition-transform ${expandedSubs[top.id] ? "scale-110" : ""}`} />
                   ) : (
-                    <FileText className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                    <FileText className={`w-3.5 h-3.5 shrink-0 ${top.pdf ? "text-sky-600" : "text-gray-400"}`} />
                   )}
                 </button>
                 <span
@@ -4654,7 +4864,23 @@ FILES LIST IN THIS BUNDLE:
 
                 <div className="flex items-center gap-1 shrink-0 ml-auto sm:ml-0">
                   {top.test && <span className="text-[8px] bg-[#009CFC]/15 text-[#009CFC] px-1.5 py-0.5 rounded-full font-bold">Exam</span>}
-                  {top.pdf && <span className="text-[8px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded-full font-bold border border-sky-100">PDF</span>}
+                  {top.pdf && (
+                    <span className="text-[8px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded-full font-bold border border-sky-100 flex items-center gap-1">
+                      PDF
+                      {top.pdf.url && (
+                        <a
+                          href={top.pdf.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-sky-600 hover:text-sky-900"
+                          title="Open PDF in new tab"
+                        >
+                          <ExternalLink className="w-2.5 h-2.5 inline" />
+                        </a>
+                      )}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -4819,6 +5045,15 @@ FILES LIST IN THIS BUNDLE:
                 type="button"
                 onClick={() => {
                   setActiveTab(tab.id);
+                  if (tab.id === "pdfs") {
+                    setEditNodeCategoryContext("pdf");
+                    setEditingNodeId(null);
+                    setEditingNodeType(null);
+                  } else if (tab.id === "tests") {
+                    setEditNodeCategoryContext("test");
+                    setEditingNodeId(null);
+                    setEditingNodeType(null);
+                  }
                   setMobileMenuOpen(false);
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
@@ -4920,7 +5155,7 @@ FILES LIST IN THIS BUNDLE:
           </button>
 
           <button
-            onClick={() => { setActiveTab("tests"); setEditNodeCategoryContext("test"); setMobileMenuOpen(false); }}
+            onClick={() => { setActiveTab("tests"); setEditNodeCategoryContext("test"); setEditingNodeId(null); setEditingNodeType(null); setMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
               activeTab === "tests" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
             }`}
@@ -4930,12 +5165,12 @@ FILES LIST IN THIS BUNDLE:
           </button>
 
           <button
-            onClick={() => { setActiveTab("pdfs"); setEditNodeCategoryContext("pdf"); setMobileMenuOpen(false); }}
+            onClick={() => { setActiveTab("pdfs"); setEditNodeCategoryContext("pdf"); setEditingNodeId(null); setEditingNodeType(null); setMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
               activeTab === "pdfs" ? "bg-[#F4F7FA] text-[#009CFC]" : "text-gray-500 hover:bg-gray-50"
             }`}
           >
-            <FileSpreadsheet className="w-4.5 h-4.5" />
+            <FileText className="w-4.5 h-4.5 text-sky-500" />
             <span>PDFs Catalog Library</span>
           </button>
 
@@ -5845,53 +6080,86 @@ FILES LIST IN THIS BUNDLE:
                   <h3 className="text-base font-bold text-gray-900 uppercase tracking-wider">
                     {editNodeCategoryContext === "test" ? "Mock Exams Tree Hierarchy" : "PDF Resources Tree"}
                   </h3>
-                  <p className="text-[11px] text-gray-500 mt-0.5 font-medium">Click node elements layout to configure questions parsed tests or PDF keys on panel.</p>
+                  <p className="text-[11px] text-gray-500 mt-0.5 font-medium">
+                    {editNodeCategoryContext === "test"
+                      ? "Click node elements to configure questions, tests, or attached materials."
+                      : "Manage PDF categories, subjects, and study material documents for students."}
+                  </p>
                 </div>
                 <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-                  <button
-                    onClick={() => {
-                      setUpdaterTargetNodeId(editingNodeId || (appConfig.testCategories[0]?.id || ""));
-                      setUpdaterTargetNodeType(editingNodeType || "category");
-                      setUpdaterModalOpen(true);
-                    }}
-                    className="flex-1 sm:flex-initial justify-center bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-[11px] font-bold px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-500/20 transition-all active:scale-95"
-                    title="Update test questions, edit existing questions, or bulk update .txt files"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>⚡ Update Test .txt (Bulk & Individual)</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setSourceModalState({
-                        isOpen: true,
-                        nodeId: editingNodeId || (appConfig.testCategories[0]?.id || ""),
-                        nodeTitle: activeNodeData?.name || "Bulk Test Splitter",
-                        type: editingNodeType || "category",
-                        lang: qEditLang || "en",
-                        treeType: editNodeCategoryContext || "test",
-                        parsedQuestions: [],
-                        sourceInput: "",
-                        fileName: "",
-                        meta: {}
-                      });
-                    }}
-                    className="flex-1 sm:flex-initial justify-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-[11px] font-bold px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/20 transition-all active:scale-95"
-                    title="Upload bulk .txt file (e.g. 395 questions) and auto-split into sets"
-                  >
-                    <Split className="w-3.5 h-3.5" />
-                    <span>⚡ Bulk Set Splitter (.txt)</span>
-                  </button>
+                  {editNodeCategoryContext === "test" && (
+                    <>
+                      <button
+                        onClick={() => {
+                          setUpdaterTargetNodeId(editingNodeId || (appConfig.testCategories[0]?.id || ""));
+                          setUpdaterTargetNodeType(editingNodeType || "category");
+                          setUpdaterModalOpen(true);
+                        }}
+                        className="flex-1 sm:flex-initial justify-center bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-[11px] font-bold px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-500/20 transition-all active:scale-95"
+                        title="Update test questions, edit existing questions, or bulk update .txt files"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>⚡ Update Test .txt (Bulk & Individual)</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSourceModalState({
+                            isOpen: true,
+                            nodeId: editingNodeId || (appConfig.testCategories[0]?.id || ""),
+                            nodeTitle: activeNodeData?.name || "Bulk Test Splitter",
+                            type: editingNodeType || "category",
+                            lang: qEditLang || "en",
+                            treeType: editNodeCategoryContext || "test",
+                            parsedQuestions: [],
+                            sourceInput: "",
+                            fileName: "",
+                            meta: {}
+                          });
+                        }}
+                        className="flex-1 sm:flex-initial justify-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-[11px] font-bold px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/20 transition-all active:scale-95"
+                        title="Upload bulk .txt file (e.g. 395 questions) and auto-split into sets"
+                      >
+                        <Split className="w-3.5 h-3.5" />
+                        <span>⚡ Bulk Set Splitter (.txt)</span>
+                      </button>
+                    </>
+                  )}
                   <button
                     onClick={() => handleAddRootCategoryNode(editNodeCategoryContext)}
-                    className="bg-[#111827] hover:bg-black text-white text-[10px] font-bold px-3.5 py-2.5 rounded-xl uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-md transition-all active:scale-95"
+                    className={`${editNodeCategoryContext === "pdf" ? "bg-sky-600 hover:bg-sky-700" : "bg-[#111827] hover:bg-black"} text-white text-[10px] sm:text-[11px] font-bold px-4 py-2.5 rounded-xl uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-md transition-all active:scale-95`}
                   >
-                    <Plus className="w-3.5 h-3.5" /> Category
+                    <Plus className="w-3.5 h-3.5" /> {editNodeCategoryContext === "pdf" ? "Add PDF Category" : "Category"}
                   </button>
                 </div>
               </div>
 
               {/* TREE STRUCTURE IMPLEMENTATION */}
               <div className="space-y-4 max-h-[70vh] lg:max-h-[60vh] overflow-y-auto pr-1">
+                {(editNodeCategoryContext === "test" ? appConfig.testCategories : appConfig.pdfCategories).length === 0 && (
+                  <div className="text-center py-12 px-4 border-2 border-dashed border-gray-200 rounded-2xl bg-white space-y-3">
+                    <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto">
+                      <FileText className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-800">
+                        {editNodeCategoryContext === "pdf" ? "No PDF Categories Created Yet" : "No Exam Categories Created Yet"}
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                        {editNodeCategoryContext === "pdf"
+                          ? "Create your first PDF category (e.g. 'Class Notes', 'Blackbook PDFs', or 'Subject Guides') to start organizing study materials."
+                          : "Create your first exam category to begin adding mock tests and practice question sets."}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleAddRootCategoryNode(editNodeCategoryContext)}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all cursor-pointer"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>{editNodeCategoryContext === "pdf" ? "Create First PDF Category" : "Create First Exam Category"}</span>
+                    </button>
+                  </div>
+                )}
                 {(editNodeCategoryContext === "test" ? appConfig.testCategories : appConfig.pdfCategories).map((cat) => (
                   <div key={cat.id} className="border border-gray-200 rounded-2xl overflow-hidden bg-slate-50 shadow-xs">
                     
@@ -6457,21 +6725,43 @@ FILES LIST IN THIS BUNDLE:
                     
                     <div className="flex flex-col gap-3">
                       
+                      {/* PDF DOCUMENT SETTINGS (shown first when in PDF context) */}
+                      {editNodeCategoryContext === "pdf" && renderPdfSettingsBlock(activeNodeData)}
+
                       {/* MCQ EXAM SETTINGS */}
                       <div className="border border-gray-150 rounded-xl p-4 bg-slate-50 space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
-                            <BookOpen className="w-4 h-4 text-emerald-500" /> Embedded MCQ Exam Test
-                          </span>
-                          <input
-                            type="checkbox"
-                            checked={activeNodeData.test !== null}
-                            onChange={(e) => handleToggleTestSettingsOnNode(editingNodeId, editingNodeType!, editNodeCategoryContext, e.target.checked)}
-                            className="w-4 h-4 rounded text-[#009CFC] accent-[#009CFC] cursor-pointer focus:ring-[#009CFC]"
-                          />
+                          <div className="flex items-center gap-2">
+                            <BookOpen className="w-4 h-4 text-emerald-500" />
+                            <div>
+                              <span className="text-xs font-extrabold text-slate-800 block">
+                                {editNodeCategoryContext === "pdf" ? "Attach Practice MCQ Exam (Optional)" : "Embedded MCQ Exam Test"}
+                              </span>
+                              {editNodeCategoryContext === "pdf" && (
+                                <span className="text-[10px] text-gray-500">Optional online test questions for this PDF document</span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {editNodeCategoryContext === "pdf" && activeNodeData.test && (
+                              <button
+                                type="button"
+                                onClick={() => setShowMcqInPdfMode(!showMcqInPdfMode)}
+                                className="text-[10px] font-bold text-[#009CFC] hover:underline cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs"
+                              >
+                                {showMcqInPdfMode ? "Hide Questions" : "Show Questions"}
+                              </button>
+                            )}
+                            <input
+                              type="checkbox"
+                              checked={activeNodeData.test !== null}
+                              onChange={(e) => handleToggleTestSettingsOnNode(editingNodeId, editingNodeType!, editNodeCategoryContext, e.target.checked)}
+                              className="w-4 h-4 rounded text-[#009CFC] accent-[#009CFC] cursor-pointer focus:ring-[#009CFC]"
+                            />
+                          </div>
                         </div>
 
-                        {activeNodeData.test && (
+                        {activeNodeData.test && (editNodeCategoryContext === "test" || showMcqInPdfMode) && (
                           <div className="pt-3 border-t border-gray-200 space-y-4">
                             
                             <div>
@@ -7619,67 +7909,8 @@ FILES LIST IN THIS BUNDLE:
                       </div>
 
 
-                      {/* PDF DOCUMENT SETTINGS */}
-                      <div className="border border-gray-150 rounded-xl p-4 bg-slate-50 space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
-                            <FileSpreadsheet className="w-4 h-4 text-sky-500" /> Linked PDF Material File
-                          </span>
-                          <input
-                            type="checkbox"
-                            checked={activeNodeData.pdf !== null}
-                            onChange={(e) => handleTogglePDFSettingsOnNode(editingNodeId, editingNodeType!, editNodeCategoryContext, e.target.checked)}
-                            className="w-4 h-4 rounded text-[#009CFC] accent-[#009CFC] cursor-pointer focus:ring-[#009CFC]"
-                          />
-                        </div>
-
-                        {activeNodeData.pdf && (
-                          <div className="pt-3 border-t border-gray-200 space-y-3">
-                            <div>
-                              <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">PDF Resource Name</label>
-                              <input
-                                type="text"
-                                value={activeNodeData.pdf.title}
-                                onChange={(e) => handleUpdateNodePDFProperty(editingNodeId, editingNodeType!, editNodeCategoryContext, "title", e.target.value)}
-                                className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-xs focus:border-[#009CFC] focus:ring-1 focus:ring-[#009CFC] outline-none font-semibold text-slate-800"
-                              />
-                            </div>
-                            <div>
-                              <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Document Drive / CDN Link Address (URL)</label>
-                              <input
-                                type="text"
-                                value={activeNodeData.pdf.url}
-                                onChange={(e) => handleUpdateNodePDFProperty(editingNodeId, editingNodeType!, editNodeCategoryContext, "url", e.target.value)}
-                                className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-xs focus:border-[#009CFC] focus:ring-1 focus:ring-[#009CFC] outline-none font-semibold text-slate-800"
-                              />
-                              <p className="text-[8px] text-gray-400 mt-1">Embed absolute link targets (google drives or pdf static locations).</p>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3 bg-[#009CFC]/5 p-3 rounded-lg border border-[#009CFC]/10">
-                              <div>
-                                <label className="text-[9px] font-black uppercase text-[#009CFC] tracking-wider block font-semibold">Access Mode</label>
-                                <select
-                                  value={activeNodeData.pdf.isPaid ? "paid" : "free"}
-                                  onChange={(e) => handleUpdateNodePDFProperty(editingNodeId, editingNodeType!, editNodeCategoryContext, "isPaid", e.target.value === "paid")}
-                                  className="w-full mt-1 bg-white border border-gray-200 rounded px-2.5 py-1.5 text-xs outline-none font-bold"
-                                >
-                                  <option value="free">{"\ud83d\udd13"} FREE</option>
-                                  <option value="paid">{"\ud83d\udd12"} Paid Membership</option>
-                                </select>
-                              </div>
-                              <div>
-                                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider block font-semibold">Schedule Availability</label>
-                                <input
-                                  type="datetime-local"
-                                  value={activeNodeData.pdf.scheduledAt || ""}
-                                  onChange={(e) => handleUpdateNodePDFProperty(editingNodeId, editingNodeType!, editNodeCategoryContext, "scheduledAt", e.target.value)}
-                                  className="w-full mt-1 bg-white border border-gray-200 rounded px-2 py-1 text-xs outline-none"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                      {/* PDF DOCUMENT SETTINGS (shown here when in Test context) */}
+                      {editNodeCategoryContext === "test" && renderPdfSettingsBlock(activeNodeData)}
 
                     </div>
                   </div>
